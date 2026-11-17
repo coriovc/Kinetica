@@ -1658,6 +1658,524 @@
             background: var(--neon-red);
         }
 
+        /* Carrusel en Abanico (Revisiones) sin recuadro negro */
+        .review-fan-carousel {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 14px 12px 8px;
+            margin-bottom: 0.75rem;
+            user-select: none;
+        }
+
+        .review-fan-stage {
+            position: relative;
+            width: 100%;
+            max-width: 420px;
+            height: 270px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            perspective: 1000px;
+        }
+
+        .review-fan-card {
+            position: absolute;
+            width: 210px;
+            height: 250px;
+            border-radius: 16px;
+            overflow: hidden;
+            background: var(--card-bg, #18181b);
+            border: 2px solid rgba(255, 255, 255, 0.22);
+            box-shadow: 0 10px 26px rgba(0, 0, 0, 0.22);
+            transition: transform 0.48s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.38s ease, box-shadow 0.38s ease, border-color 0.3s ease;
+            will-change: transform, opacity;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .review-fan-card .review-fan-badge {
+            opacity: 0;
+            transform: translateX(-50%) translateY(6px);
+            transition: opacity 0.25s ease, transform 0.25s ease;
+        }
+
+        .review-fan-card.is-active .review-fan-badge {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        .review-fan-card.is-single {
+            width: 270px;
+            height: 255px;
+        }
+
+        .review-fan-card.is-active {
+            border-color: rgba(255, 255, 255, 0.45);
+            box-shadow: 0 16px 36px rgba(0, 0, 0, 0.32);
+        }
+
+        .review-fan-card.is-active:hover {
+            transform: translateX(0) translateY(-4px) rotate(0deg) scale(1.03) !important;
+        }
+
+        .review-fan-card img,
+        .review-fan-card video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            pointer-events: none;
+        }
+
+        .review-fan-badge {
+            position: absolute;
+            bottom: 8px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.65);
+            backdrop-filter: blur(6px);
+            color: #fff;
+            font-size: 0.72rem;
+            font-weight: 700;
+            padding: 3px 10px;
+            border-radius: 999px;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            pointer-events: none;
+            white-space: nowrap;
+        }
+
+        .review-fan-nav-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            background: var(--card-bg, rgba(255, 255, 255, 0.9));
+            color: var(--text-main, #111);
+            border: 1px solid var(--card-border, rgba(0, 0, 0, 0.12));
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 1.15rem;
+            font-weight: 700;
+            z-index: 30;
+            transition: all 0.2s ease;
+        }
+
+        .review-fan-nav-btn:hover {
+            background: var(--neon-red);
+            border-color: var(--neon-red);
+            color: #fff;
+            transform: translateY(-50%) scale(1.08);
+        }
+
+        .review-fan-nav-prev { left: 4px; }
+        .review-fan-nav-next { right: 4px; }
+
+        /* Barra flotante debajo del Modal Carrusel */
+        #mediaLightboxModal .lightbox-dialog {
+            width: min(92vw, 1040px);
+            height: 88dvh;
+            max-height: 88dvh;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+            transform: scale(0.93) translateY(12px);
+            opacity: 0;
+            transition: transform 0.32s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.28s ease;
+        }
+
+        #mediaLightboxModal.active .lightbox-dialog {
+            transform: scale(1) translateY(0);
+            opacity: 1;
+        }
+
+        @keyframes lightboxSlideNext {
+            from {
+                opacity: 0.15;
+                transform: translateX(36px) scale(0.97);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0) scale(1);
+            }
+        }
+
+        @keyframes lightboxSlidePrev {
+            from {
+                opacity: 0.15;
+                transform: translateX(-36px) scale(0.97);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0) scale(1);
+            }
+        }
+
+        @keyframes lightboxZoomFade {
+            from {
+                opacity: 0.2;
+                transform: scale(0.96);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .lightbox-anim-next {
+            animation: lightboxSlideNext 0.34s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        .lightbox-anim-prev {
+            animation: lightboxSlidePrev 0.34s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        .lightbox-anim-zoom {
+            animation: lightboxZoomFade 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        .lightbox-carousel-stage {
+            position: relative;
+            width: 100%;
+            flex: 1 1 auto;
+            min-height: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            padding: 0 56px;
+            box-sizing: border-box;
+        }
+
+        .lightbox-carousel-stage img,
+        .lightbox-carousel-stage video {
+            max-width: 100% !important;
+            max-height: 100% !important;
+            width: auto;
+            height: auto;
+            object-fit: contain;
+        }
+
+        #lightbox-image {
+            cursor: zoom-in;
+            transition: transform 0.2s cubic-bezier(0.22, 1, 0.36, 1);
+            transform-origin: center center;
+            user-select: none;
+            -webkit-user-drag: none;
+        }
+
+        #lightbox-image.is-zoomed {
+            cursor: grab;
+        }
+
+        #lightbox-image.is-panning {
+            cursor: grabbing;
+            transition: none;
+        }
+
+        .lightbox-nav-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.16);
+            backdrop-filter: blur(8px);
+            color: #fff;
+            border: 1px solid rgba(255, 255, 255, 0.28);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 1.4rem;
+            font-weight: 700;
+            z-index: 15;
+            transition: all 0.2s ease;
+        }
+
+        .lightbox-nav-btn:hover {
+            background: var(--neon-red);
+            border-color: var(--neon-red);
+            transform: translateY(-50%) scale(1.08);
+        }
+
+        .lightbox-nav-prev { left: 8px; }
+        .lightbox-nav-next { right: 8px; }
+
+        .lightbox-floating-actions {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 8px;
+            padding: 8px 14px;
+            border-radius: 999px;
+            background: rgba(24, 24, 27, 0.85);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
+            margin-top: 4px;
+        }
+
+        .lightbox-floating-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 7px 14px;
+            border-radius: 999px;
+            border: 1px solid rgba(255, 255, 255, 0.16);
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+            font-size: 0.8rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .lightbox-floating-btn:hover {
+            background: rgba(255, 255, 255, 0.22);
+            transform: translateY(-1px);
+        }
+
+        .lightbox-floating-btn.is-primary {
+            background: var(--neon-red);
+            border-color: var(--neon-red);
+        }
+
+        .lightbox-floating-btn.is-primary:hover {
+            filter: brightness(1.1);
+        }
+
+        .lightbox-floating-btn.is-danger {
+            color: #fca5a5;
+            border-color: rgba(239, 68, 68, 0.4);
+            background: rgba(239, 68, 68, 0.15);
+        }
+
+        .lightbox-floating-btn.is-danger:hover {
+            background: #ef4444;
+            color: #fff;
+        }
+
+        /* Dropzone Drag & Drop + Ctrl+V */
+        .media-dropzone {
+            border: 2px dashed rgba(220, 38, 38, 0.45);
+            border-radius: 16px;
+            padding: 2rem 1.25rem;
+            text-align: center;
+            background: rgba(220, 38, 38, 0.04);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .media-dropzone.drag-over {
+            border-color: var(--neon-red);
+            background: rgba(220, 38, 38, 0.12);
+            transform: scale(1.01);
+        }
+
+        .drop-paste-preview-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
+            gap: 10px;
+            margin-top: 1rem;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .drop-paste-preview-item {
+            position: relative;
+            aspect-ratio: 1;
+            border-radius: 10px;
+            overflow: hidden;
+            border: 1px solid var(--card-border);
+            background: #111;
+        }
+
+        .drop-paste-preview-item img,
+        .drop-paste-preview-item video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .drop-paste-remove-btn {
+            position: absolute;
+            top: 4px;
+            right: 4px;
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            background: rgba(0, 0, 0, 0.75);
+            color: #fff;
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 0.75rem;
+        }
+
+        /* Lista para reordenar */
+        .reorder-media-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            max-height: 52dvh;
+            overflow-y: auto;
+            margin-bottom: 1rem;
+        }
+
+        .reorder-media-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 10px;
+            border-radius: 12px;
+            border: 1px solid var(--card-border);
+            background: rgba(255, 255, 255, 0.03);
+            cursor: grab;
+            transition: background 0.15s ease, transform 0.15s ease;
+        }
+
+        .reorder-media-item.dragging {
+            opacity: 0.5;
+            background: rgba(220, 38, 38, 0.1);
+        }
+
+        /* Time Line: Mitad Brief (botón) + Mitad Subir Arte (Drag & Drop / Ctrl+V) */
+        .tl-split-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.85rem;
+            margin-bottom: 0.85rem;
+        }
+
+        @media (max-width: 768px) {
+            .tl-split-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .tl-brief-card-btn {
+            border-radius: 12px;
+            padding: 0.95rem 1rem;
+            cursor: pointer;
+            text-align: left;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
+            min-height: 155px;
+        }
+
+        .tl-brief-card-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            filter: brightness(0.98);
+        }
+
+        .tl-upload-dropzone {
+            border: 2px dashed rgba(220, 38, 38, 0.4);
+            border-radius: 12px;
+            padding: 1rem;
+            background: rgba(220, 38, 38, 0.03);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            cursor: pointer;
+            min-height: 155px;
+            transition: all 0.2s ease;
+            outline: none;
+        }
+
+        .tl-upload-dropzone:hover,
+        .tl-upload-dropzone:focus,
+        .tl-upload-dropzone.drag-over {
+            border-color: var(--neon-red);
+            background: rgba(220, 38, 38, 0.09);
+            transform: translateY(-2px);
+        }
+
+        .tl-card-inner {
+            transition: filter 0.42s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.42s ease, transform 0.42s cubic-bezier(0.22, 1, 0.36, 1);
+            transform: translateZ(0) scale(1);
+            backface-visibility: hidden;
+            will-change: filter, opacity, transform;
+        }
+
+        .tl-card-inner.is-blurred {
+            filter: blur(8px);
+            opacity: 0.72;
+            transform: translateZ(0) scale(0.992);
+            pointer-events: none;
+            user-select: none;
+        }
+
+        .tl-start-design-overlay {
+            position: absolute;
+            inset: 0;
+            z-index: 6;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            background: rgba(15, 23, 42, 0.14);
+            border-radius: inherit;
+            padding: 1.25rem;
+            text-align: center;
+            opacity: 1;
+            transform: translateZ(0) scale(1);
+            transition: opacity 0.34s ease, transform 0.34s cubic-bezier(0.22, 1, 0.36, 1);
+            will-change: opacity, transform;
+        }
+
+        .tl-start-design-overlay.is-leaving {
+            opacity: 0;
+            transform: translateZ(0) scale(0.95);
+            pointer-events: none;
+        }
+
+        .tl-start-design-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 0.85rem 1.65rem;
+            border-radius: 999px;
+            border: 1px solid rgba(59, 130, 246, 0.45);
+            background: linear-gradient(135deg, #2563eb, #3b82f6);
+            color: #ffffff;
+            font-size: 0.95rem;
+            font-weight: 800;
+            cursor: pointer;
+            box-shadow: 0 10px 26px rgba(37, 99, 235, 0.35);
+            transition: transform 0.18s ease, box-shadow 0.18s ease, filter 0.18s ease;
+        }
+
+        .tl-start-design-btn:hover {
+            transform: translateY(-2px) scale(1.02);
+            box-shadow: 0 14px 30px rgba(37, 99, 235, 0.48);
+            filter: brightness(1.06);
+        }
+
         .carousel-thumb-btn {
             border: 2px solid transparent;
             border-radius: 6px;
@@ -3463,7 +3981,7 @@
                         <h2 style="font-size: 1.25rem;">Kinetica</h2>
                         <p
                             style="font-size: 0.7rem; color: var(--text-muted); text-transform: uppercase; font-weight: 600;">
-                            Workspace V.1.20.1</p>
+                            Workspace V.1.21.21</p>
                     </div>
                 </div>
                 <!-- Botón contraer en la barra lateral sólo icono -->
@@ -4364,6 +4882,8 @@
                             class="material-symbols-rounded">power</span> Servidor</button>
                     <button class="config-tab-btn" onclick="switchConfigTab('legal', this)"><span
                             class="material-symbols-rounded">gavel</span> Cumplimiento Legal</button>
+                    <button class="config-tab-btn" onclick="switchConfigTab('trash', this)"><span
+                            class="material-symbols-rounded">delete_sweep</span> Papelera <span id="cfg-tab-trash-badge" style="display:none; background:rgba(220,38,38,0.16); color:var(--neon-red); border:1px solid rgba(220,38,38,0.35); font-size:0.7rem; font-weight:800; padding:1px 7px; border-radius:999px; margin-left:4px;">0</span></button>
                 </div>
 
                 <!-- TAB 1: Gestión de Marcas -->
@@ -4764,6 +5284,59 @@
                                     </thead>
                                     <tbody id="cfg-contact-quotes-tbody">
                                         <tr><td colspan="6" class="text-muted" style="text-align:center;">Sin cotizaciones cargadas.</td></tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TAB 8: Papelera de Imágenes -->
+                <div class="config-panel" id="cfg-panel-trash">
+                    <div class="dashboard-grid">
+                        <div class="col-12 glass-panel">
+                            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.9rem; margin-bottom: 1rem;">
+                                <div style="display: flex; align-items: center; gap: 12px;">
+                                    <span class="material-symbols-rounded" style="font-size: 2.5rem; color: var(--neon-red);">delete_sweep</span>
+                                    <div>
+                                        <h2 style="font-size: 1.35rem; margin: 0 0 2px 0;">Papelera de Imágenes</h2>
+                                        <p class="text-muted" style="font-size: 0.84rem; margin: 0;">
+                                            Todas las imágenes y videos de las piezas ordenados por fecha de carga.
+                                        </p>
+                                    </div>
+                                </div>
+                                <div style="display: flex; align-items: center; gap: 0.65rem; flex-wrap: wrap;">
+                                    <button type="button" class="btn-float btn-secondary" onclick="renderSettingsTrashList()" title="Actualizar lista">
+                                        <span class="material-symbols-rounded">sync</span> Refrescar
+                                    </button>
+                                    <button type="button" class="btn-float" id="btn-empty-trash-5m" onclick="emptyTrashMedia('older_5_months')"
+                                        style="background: rgba(245, 158, 11, 0.14); color: #f59e0b; border: 1px solid rgba(245, 158, 11, 0.4);">
+                                        <span class="material-symbols-rounded">history</span> Vaciar más viejas de 5 meses
+                                    </button>
+                                    <button type="button" class="btn-float" id="btn-empty-trash-all" onclick="emptyTrashMedia('all')"
+                                        style="background: linear-gradient(135deg, #dc2626, #991b1b); color: #ffffff; border: 1px solid rgba(239, 68, 68, 0.55); box-shadow: 0 4px 14px rgba(220, 38, 38, 0.25);">
+                                        <span class="material-symbols-rounded">delete_forever</span> Vaciar toda la papelera
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div id="cfg-trash-summary" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.75rem; padding: 0.7rem 1rem; border-radius: 10px; background: rgba(150, 150, 150, 0.06); border: 1px solid var(--card-border); margin-bottom: 1rem; font-size: 0.84rem;">
+                                <span class="text-muted">Cargando imágenes de piezas...</span>
+                            </div>
+
+                            <div class="table-container" style="max-height: 540px; overflow-y: auto;">
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>Vista Previa</th>
+                                            <th>Archivo</th>
+                                            <th>Marca y Pieza</th>
+                                            <th>Fecha</th>
+                                            <th style="text-align: right;">Acción</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="cfg-trash-table-body">
+                                        <tr><td colspan="5" class="text-muted" style="text-align: center; padding: 1.5rem;">Abre esta pestaña para ver las imágenes...</td></tr>
                                     </tbody>
                                 </table>
                             </div>
@@ -6751,23 +7324,186 @@
                 </div>
             </div>
 
-            <!-- Modal Lightbox Pantalla Completa para Imágenes y Videos -->
+            <!-- Modal Lightbox Pantalla Completa con Carrusel y Botones Flotantes -->
             <div class="modal-overlay" id="mediaLightboxModal" style="background: rgba(0,0,0,0.92); z-index: 100000;"
                 onclick="if(event.target === this) closeMediaLightbox()">
                 <div class="lightbox-dialog">
                     <div
                         style="width: 100%; display: flex; justify-content: space-between; align-items: center; gap: 10px; color: #fff;">
-                        <div id="lightbox-title"
-                            style="font-size: 1rem; font-weight: 700; text-shadow: 0 2px 4px rgba(0,0,0,0.8); min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
-                            Material Multimedia</div>
-                        <button class="btn-float btn-secondary btn-close-round" onclick="closeMediaLightbox()"
-                            style="padding: 0.4rem 0.6rem; background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.25); color: #fff; border-radius: 50%; flex-shrink: 0;"><span
-                                class="material-symbols-rounded">close</span></button>
+                        <div style="display: flex; align-items: center; gap: 10px; min-width: 0;">
+                            <span id="lightbox-counter"
+                                style="display: none; font-size: 0.78rem; font-weight: 800; background: var(--neon-red); color: #fff; padding: 3px 10px; border-radius: 999px; flex-shrink: 0;">1 / 1</span>
+                            <div id="lightbox-title"
+                                style="font-size: 1rem; font-weight: 700; text-shadow: 0 2px 4px rgba(0,0,0,0.8); min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
+                                Material Multimedia</div>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 6px; flex-shrink: 0;">
+                            <div id="lightbox-zoom-controls"
+                                style="display: none; align-items: center; gap: 4px; background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.2); border-radius: 999px; padding: 2px 6px;">
+                                <button type="button" onclick="changeLightboxZoom(-0.5)" title="Alejar"
+                                    style="background: none; border: none; color: #fff; cursor: pointer; display: inline-flex; align-items: center; padding: 2px;">
+                                    <span class="material-symbols-rounded" style="font-size: 1.05rem;">zoom_out</span>
+                                </button>
+                                <span id="lightbox-zoom-label" onclick="resetLightboxZoom()" title="Restablecer zoom"
+                                    style="font-size: 0.75rem; font-weight: 700; min-width: 38px; text-align: center; cursor: pointer; user-select: none;">100%</span>
+                                <button type="button" onclick="changeLightboxZoom(0.5)" title="Acercar"
+                                    style="background: none; border: none; color: #fff; cursor: pointer; display: inline-flex; align-items: center; padding: 2px;">
+                                    <span class="material-symbols-rounded" style="font-size: 1.05rem;">zoom_in</span>
+                                </button>
+                            </div>
+                            <button class="btn-float btn-secondary btn-close-round" onclick="closeMediaLightbox()"
+                                style="padding: 0.4rem 0.6rem; background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.25); color: #fff; border-radius: 50%; flex-shrink: 0;"><span
+                                    class="material-symbols-rounded">close</span></button>
+                        </div>
                     </div>
-                    <img id="lightbox-image" src="" alt="Vista previa"
-                        style="max-width: 100%; max-height: 78dvh; object-fit: contain; border-radius: 10px; box-shadow: 0 10px 40px rgba(0,0,0,0.8); display: none; margin: 0 auto;">
-                    <video id="lightbox-video" src="" controls playsinline
-                        style="max-width: 100%; max-height: 78dvh; border-radius: 10px; box-shadow: 0 10px 40px rgba(0,0,0,0.8); display: none; margin: 0 auto;"></video>
+
+                    <div class="lightbox-carousel-stage">
+                        <button type="button" id="lightbox-prev-btn" class="lightbox-nav-btn lightbox-nav-prev"
+                            style="display: none;" onclick="navigateLightbox(-1)" title="Anterior">‹</button>
+                        <img id="lightbox-image" src="" alt="Vista previa"
+                            style="max-width: 100%; max-height: 70dvh; object-fit: contain; border-radius: 12px; box-shadow: 0 10px 40px rgba(0,0,0,0.8); display: none; margin: 0 auto;">
+                        <video id="lightbox-video" src="" controls playsinline
+                            style="max-width: 100%; max-height: 70dvh; border-radius: 12px; box-shadow: 0 10px 40px rgba(0,0,0,0.8); display: none; margin: 0 auto;"></video>
+                        <button type="button" id="lightbox-next-btn" class="lightbox-nav-btn lightbox-nav-next"
+                            style="display: none;" onclick="navigateLightbox(1)" title="Siguiente">›</button>
+                    </div>
+
+                    <!-- Miniaturas del carrusel en el modal -->
+                    <div id="lightbox-thumbs-row" class="carousel-dots-row"
+                        style="display: none; border-radius: 12px; max-width: 100%; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.12);">
+                    </div>
+
+                    <!-- Botones flotantes debajo del carrusel -->
+                    <div id="lightbox-floating-actions" class="lightbox-floating-actions" style="display: none;">
+                        <button type="button" class="lightbox-floating-btn is-primary"
+                            onclick="openDropPasteModal('append')" title="Añadir otra foto o video">
+                            <span class="material-symbols-rounded" style="font-size: 1.05rem;">add_photo_alternate</span>
+                            Añadir otra foto
+                        </button>
+                        <button type="button" id="lightbox-reorder-btn" class="lightbox-floating-btn"
+                            onclick="openReorderMediaModal()" title="Ordenar las imágenes del carrusel">
+                            <span class="material-symbols-rounded" style="font-size: 1.05rem;">swap_vert</span>
+                            Ordenar
+                        </button>
+                        <button type="button" class="lightbox-floating-btn"
+                            onclick="openDropPasteModal('replace')" title="Sustituir la imagen actual">
+                            <span class="material-symbols-rounded" style="font-size: 1.05rem;">sync</span>
+                            Sustituir
+                        </button>
+                        <button type="button" class="lightbox-floating-btn is-danger"
+                            onclick="deleteCurrentLightboxMedia()" title="Eliminar esta imagen">
+                            <span class="material-symbols-rounded" style="font-size: 1.05rem;">delete</span>
+                            Eliminar
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modal para Arrastrar o Pegar (Ctrl+V) Nueva Imagen y Subir -->
+            <div class="modal-overlay" id="mediaDropPasteModal" style="z-index: 100010;"
+                onclick="if(event.target === this) closeDropPasteModal()">
+                <div class="modal-content glass-panel" style="max-width: 520px; width: 92%;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                        <div>
+                            <h3 id="drop-paste-modal-title" style="margin: 0; font-size: 1.15rem; font-weight: 800; display: flex; align-items: center; gap: 6px;">
+                                <span class="material-symbols-rounded">add_photo_alternate</span> Añadir otra foto
+                            </h3>
+                            <p id="drop-paste-modal-subtitle" class="text-muted" style="margin: 2px 0 0 0; font-size: 0.8rem;">
+                                Arrastra tus imágenes, haz clic para buscar o presiona <strong>Ctrl + V</strong> para pegar
+                            </p>
+                        </div>
+                        <button type="button" class="btn-float btn-secondary btn-close-round" onclick="closeDropPasteModal()"
+                            style="padding: 4px 10px; font-size: 0.85rem;">
+                            <span class="material-symbols-rounded">close</span>
+                        </button>
+                    </div>
+
+                    <div id="media-dropzone" class="media-dropzone" onclick="document.getElementById('drop-paste-file-input').click()">
+                        <div style="font-size: 2.3rem; color: var(--neon-red); margin-bottom: 0.35rem;">
+                            <span class="material-symbols-rounded" style="font-size: 2.5rem;">cloud_upload</span>
+                        </div>
+                        <div style="font-weight: 700; font-size: 0.95rem; color: var(--text-main); margin-bottom: 4px;">
+                            Arrastra la imagen aquí o presiona Ctrl + V
+                        </div>
+                        <div style="font-size: 0.78rem; color: var(--text-muted);">
+                            También puedes hacer clic aquí para seleccionar desde tu equipo (máx. 25MB c/u)
+                        </div>
+                    </div>
+
+                    <input type="file" id="drop-paste-file-input" accept="image/*,video/*" multiple style="display: none;"
+                        onchange="handleDropPasteFileInput(event)">
+
+                    <div id="drop-paste-preview-list" class="drop-paste-preview-grid" style="display: none;"></div>
+
+                    <div style="display: flex; justify-content: flex-end; gap: 8px; margin-top: 1.25rem;">
+                        <button type="button" class="btn-float btn-secondary" onclick="closeDropPasteModal()">Cancelar</button>
+                        <button type="button" id="drop-paste-submit-btn" class="btn-float btn-primary" disabled
+                            onclick="submitDropPasteMedia()">Subir</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modal para Reordenar Imágenes del Carrusel -->
+            <div class="modal-overlay" id="mediaReorderModal" style="z-index: 100010;"
+                onclick="if(event.target === this) closeReorderMediaModal()">
+                <div class="modal-content glass-panel" style="max-width: 480px; width: 92%;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                        <div>
+                            <h3 style="margin: 0; font-size: 1.15rem; font-weight: 800; display: flex; align-items: center; gap: 6px;">
+                                <span class="material-symbols-rounded">swap_vert</span> Ordenar Imágenes
+                            </h3>
+                            <p class="text-muted" style="margin: 2px 0 0 0; font-size: 0.8rem;">
+                                Arrastra o usa las flechas para cambiar el orden del carrusel
+                            </p>
+                        </div>
+                        <button type="button" class="btn-float btn-secondary btn-close-round" onclick="closeReorderMediaModal()"
+                            style="padding: 4px 10px; font-size: 0.85rem;">
+                            <span class="material-symbols-rounded">close</span>
+                        </button>
+                    </div>
+
+                    <div id="reorder-media-list" class="reorder-media-list"></div>
+
+                    <div style="display: flex; justify-content: flex-end; gap: 8px;">
+                        <button type="button" class="btn-float btn-secondary" onclick="closeReorderMediaModal()">Cancelar</button>
+                        <button type="button" class="btn-float btn-primary" onclick="saveReorderMediaModal()">Guardar Orden</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modal de Confirmación para Enviar a Revisión -->
+            <div class="modal-overlay" id="sendToReviewConfirmModal" style="z-index: 100020;"
+                onclick="if(event.target === this) closeSendToReviewConfirmModal()">
+                <div class="modal-content glass-panel" style="max-width: 470px; width: 92%;">
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; margin-bottom: 0.85rem;">
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <div style="width: 40px; height: 40px; border-radius: 12px; background: rgba(168, 85, 247, 0.14); border: 1px solid rgba(168, 85, 247, 0.35); display: flex; align-items: center; justify-content: center; color: #a855f7; flex-shrink: 0;">
+                                <span class="material-symbols-rounded" style="font-size: 1.35rem;">thumbs_up_down</span>
+                            </div>
+                            <div>
+                                <h3 style="margin: 0; font-size: 1.1rem; font-weight: 800; color: var(--text-main);">
+                                    ¿Enviar a Revisión?
+                                </h3>
+                                <p id="send-review-piece-meta" class="text-muted" style="margin: 2px 0 0 0; font-size: 0.78rem;"></p>
+                            </div>
+                        </div>
+                        <button type="button" class="btn-float btn-secondary btn-close-round" onclick="closeSendToReviewConfirmModal()"
+                            style="padding: 4px 10px; font-size: 0.85rem;">
+                            <span class="material-symbols-rounded">close</span>
+                        </button>
+                    </div>
+
+                    <p id="send-review-confirm-desc" style="font-size: 0.85rem; color: var(--text-main); line-height: 1.5; margin: 0 0 0.85rem 0;"></p>
+
+                    <div id="send-review-preview-strip" style="display: none; grid-template-columns: repeat(auto-fill, minmax(74px, 1fr)); gap: 8px; max-height: 170px; overflow-y: auto; padding: 8px; border-radius: 10px; background: rgba(150, 150, 150, 0.06); border: 1px solid var(--card-border); margin-bottom: 1rem;"></div>
+
+                    <div style="display: flex; justify-content: flex-end; gap: 8px; margin-top: 0.5rem;">
+                        <button type="button" class="btn-float btn-secondary" id="send-review-cancel-btn" onclick="closeSendToReviewConfirmModal()">Cancelar</button>
+                        <button type="button" class="btn-float btn-primary" id="send-review-confirm-btn" onclick="confirmSendToReview()" style="display: inline-flex; align-items: center; gap: 6px;">
+                            <span class="material-symbols-rounded" style="font-size: 1rem;">send</span>
+                            Enviar a Revisión
+                        </button>
+                    </div>
                 </div>
             </div>
 
@@ -7964,12 +8700,32 @@
                     ? escapeHtml(p.copy.trim())
                     : '<em style="color:var(--text-muted); font-size:0.82rem;">Sin copy de publicación registrado.</em>';
 
+                const isNotStarted = desState === 'Pendiente';
+
                 streamHtml += `
-                <div class="timeline-item" style="animation-delay: ${Math.min(index * 0.05, 0.4)}s;">
+                <div class="timeline-item" data-tl-piece-id="${p.id}" style="animation-delay: ${Math.min(index * 0.05, 0.4)}s;">
                     <div class="timeline-marker" style="border: 2px solid ${statusColor}; color: ${statusColor}; box-shadow: 0 0 10px ${statusColor}40;" title="${desState}">
                         ${markerIcon}
                     </div>
-                    <div class="timeline-card" style="--card-accent-color: ${statusColor}; border: 2px solid ${statusBorder}; border-left: 6px solid ${statusColor}; box-shadow: ${cardShadow}; ${cardAnim}">
+                    <div class="timeline-card" style="position: relative; overflow: hidden; --card-accent-color: ${statusColor}; border: 2px solid ${statusBorder}; border-left: 6px solid ${statusColor}; box-shadow: ${cardShadow}; ${isNotStarted ? '' : cardAnim}">
+                        ${isNotStarted ? `
+                        <div class="tl-start-design-overlay">
+                            <div style="display: flex; flex-direction: column; align-items: center; gap: 6px; max-width: 520px; background: var(--card-bg, rgba(255,255,255,0.92)); border: 1px solid var(--card-border); padding: 0.75rem 1.25rem; border-radius: 14px; box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);">
+                                <div style="display: inline-flex; align-items: center; gap: 8px; font-size: 0.85rem; font-weight: 800; color: var(--neon-red);">
+                                    ${logoHtml}
+                                    <span>${escapeHtml(p.brandName)}</span>
+                                </div>
+                                <div style="font-size: 1.05rem; font-weight: 800; color: var(--text-main); line-height: 1.3;">
+                                    ${escapeHtml(p.topic || 'Sin título')}
+                                </div>
+                            </div>
+                            <button type="button" class="tl-start-design-btn" onclick="startDesigningTimelinePiece(${p.id})">
+                                <span class="material-symbols-rounded" style="font-size: 1.2rem;">draw</span>
+                                Empezar a diseñarlo
+                            </button>
+                        </div>
+                        ` : ''}
+                        <div class="tl-card-inner ${isNotStarted ? 'is-blurred' : ''}">
                         <!-- Fila Superior: Marca, Entrega, Urgencia y Formato -->
                         <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.6rem; margin-bottom: 0.9rem; padding-bottom: 0.75rem; border-bottom: 1px solid var(--card-border);">
                             <div style="display: flex; align-items: center; gap: 10px;">
@@ -7989,9 +8745,9 @@
                                 <span style="font-size: 0.75rem; font-weight: 700; padding: 3px 10px; border-radius: 20px; ${formatStyle}">
                                     ${formatIcon} ${escapeHtml(p.format)}
                                 </span>
-                                <span style="font-size: 0.75rem; font-weight: 600; padding: 3px 8px; border-radius: 20px; background: rgba(150,150,150,0.08); color: var(--text-muted); border: 1px solid var(--card-border);">
-                                    Pilar: ${escapeHtml(p.type || 'General')}
-                                </span>
+                                <button type="button" class="btn-float btn-secondary" style="padding: 0.3rem 0.5rem; font-size: 0.78rem; color: #ef4444; display: inline-flex; align-items: center; justify-content: center;" onclick="deletePiece(${p.id})" title="Eliminar Pieza">
+                                    <span class="material-symbols-rounded" style="font-size: 1.05rem;">delete</span>
+                                </button>
                             </div>
                         </div>
 
@@ -8002,35 +8758,51 @@
                             </h3>
                         </div>
 
-                        <!-- Tarjeta de REQUERIMIENTO GRÁFICO PARA EL DISEÑADOR <span class="material-symbols-rounded">person</span>‍<span class="material-symbols-rounded">palette</span> (Sin espacios en blanco iniciales) -->
-                        <div style="background: ${statusBg}; border: 1.5px solid ${statusBorder}; border-radius: 12px; padding: 1rem; margin-bottom: 0.85rem; position: relative;">
-                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; flex-wrap: wrap; gap: 6px;">
-                                <div style="display: flex; align-items: center; gap: 6px;">
-                                    <span style="font-size: 1.15rem;"><span class="material-symbols-rounded">gesture</span></span>
-                                    <strong style="color: ${statusColor}; font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.5px;">Requerimiento Gráfico del Diseñador</strong>
+                        <!-- Mitad Izquierda: Brief (Botón) | Mitad Derecha: Subir Arte (Drag & Drop / Ctrl+V) -->
+                        <div class="tl-split-grid">
+                            <div class="tl-brief-card-btn" role="button" tabindex="0"
+                                 style="background: ${statusBg}; border: 1.5px solid ${statusBorder};"
+                                 onclick="openPieceGraphicBrief(${p.id})"
+                                 onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openPieceGraphicBrief(${p.id});}"
+                                 title="Clic para abrir el Brief completo">
+                                <div>
+                                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; gap: 6px;">
+                                        <div style="display: flex; align-items: center; gap: 6px;">
+                                            <span style="font-size: 1.1rem;"><span class="material-symbols-rounded">gesture</span></span>
+                                            <strong style="color: ${statusColor}; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.5px;">Requerimiento del Diseñador</strong>
+                                        </div>
+                                        <span class="material-symbols-rounded" style="font-size: 1rem; color: ${statusColor};">open_in_new</span>
+                                    </div>
+                                    <div style="font-size: 0.85rem; line-height: 1.5; color: var(--text-main); white-space: pre-line; max-height: 105px; overflow-y: auto;">${graphicSnippet}</div>
+                                </div>
+                                <div style="margin-top: 8px; font-size: 0.72rem; font-weight: 700; color: ${statusColor}; display: flex; align-items: center; gap: 4px;">
+                                    <span class="material-symbols-rounded" style="font-size: 0.95rem;">page_menu_ios</span> Clic para ver Brief completo
                                 </div>
                             </div>
-                            <div style="font-size: 0.88rem; line-height: 1.55; color: var(--text-main); white-space: pre-line; max-height: 150px; overflow-y: auto;">${graphicSnippet}</div>
+
+                            <div class="tl-upload-dropzone" tabindex="0"
+                                 onclick="triggerUploadPieceMedia(${p.id}, false, true)"
+                                 onmouseenter="hoveredTimelineUploadPieceId = ${p.id}"
+                                 onmouseleave="if(hoveredTimelineUploadPieceId === ${p.id}) hoveredTimelineUploadPieceId = null"
+                                 onfocus="hoveredTimelineUploadPieceId = ${p.id}"
+                                 onblur="if(hoveredTimelineUploadPieceId === ${p.id}) hoveredTimelineUploadPieceId = null"
+                                 ondragover="event.preventDefault(); this.classList.add('drag-over')"
+                                 ondragleave="this.classList.remove('drag-over')"
+                                 ondrop="event.preventDefault(); this.classList.remove('drag-over'); if(event.dataTransfer && event.dataTransfer.files && event.dataTransfer.files.length){ uploadTimelineFilesToPiece(${p.id}, event.dataTransfer.files); }"
+                                 title="Arrastra el arte aquí, haz clic para seleccionar o presiona Ctrl+V para pegar">
+                                <span class="material-symbols-rounded" style="font-size: 2.1rem; color: var(--neon-red); margin-bottom: 6px;">cloud_upload</span>
+                                <div style="font-weight: 800; font-size: 0.88rem; color: var(--text-main); margin-bottom: 4px;">
+                                    Subir Arte Creado
+                                </div>
+                                <div style="font-size: 0.76rem; color: var(--text-muted); line-height: 1.4; max-width: 240px;">
+                                    Arrastra tu imagen/video aquí, haz clic para buscar o presiona <strong>Ctrl + V</strong> para pegar
+                                </div>
+                            </div>
                         </div>
 
-                        <!-- Tarjeta de Copy de Publicación 
-                        <div style="background: rgba(150,150,150,0.04); border: 1px solid var(--card-border); border-radius: 10px; padding: 0.85rem; margin-bottom: 1rem;">
-                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
-                                <span style="font-size: 0.78rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; display: flex; align-items: center; gap: 4px;">
-                                    <span><span class="material-symbols-rounded">edit_note</span></span> Copy del Post
-                                </span>
-                                <button type="button" class="btn-float btn-secondary" style="padding: 2px 8px; font-size: 0.7rem;" onclick="copyTextToClipboard('${escapeQuote(p.copy || '')}')">
-                                    <span class="material-symbols-rounded">assignment</span> Copiar
-                                </button>
-                            </div>
-                            <div style="font-size: 0.82rem; line-height: 1.45; color: var(--text-main); max-height: 80px; overflow-y: auto;">
-                                ${copySnippet}
-                            </div>
-                        </div>-->
-
-                        <!-- Barra de Control del Diseñador: Estado de Diseño & Acciones -->
-                        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.75rem; background: rgba(150,150,150,0.05); padding: 0.85rem 1rem; border-radius: 10px; border: 1px solid var(--card-border);">
-                            <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+                        <!-- Barra de Control del Diseñador Centrada -->
+                        <div style="display: flex; justify-content: center; align-items: center; flex-wrap: wrap; gap: 0.75rem; background: rgba(150,150,150,0.05); padding: 0.85rem 1rem; border-radius: 10px; border: 1px solid var(--card-border);">
+                            <div style="display: flex; align-items: center; justify-content: center; gap: 12px; flex-wrap: wrap;">
                                 <div style="display: flex; align-items: center; gap: 6px;">
                                     <span style="font-size: 0.8rem; font-weight: 700; color: var(--text-muted);">Estado Diseñador:</span>
                                     ${(() => {
@@ -8055,20 +8827,7 @@
                                     Diseñador: <strong style="color: var(--neon-red);">${escapeHtml(p.brandDesigner)}</strong> | CM: <strong>${escapeHtml(p.brandCm)}</strong>
                                 </div>
                             </div>
-                            <div style="display: flex; align-items: center; gap: 6px; flex-wrap: wrap;">
-                                <button type="button" class="btn-float btn-primary" style="padding: 0.35rem 0.75rem; font-size: 0.78rem;" onclick="triggerUploadPieceMedia(${p.id}, false)" title="Subir artes listos y enviar a Revisión">
-                                    <span class="material-symbols-rounded">upload</span> Subir Arte
-                                </button>
-                                <button class="btn-float btn-secondary" style="padding: 0.35rem 0.55rem; font-size: 0.78rem;" onclick="openPieceGraphicBrief(${p.id})" title="Ver Requerimiento Gráfico">
-                                    <span class="material-symbols-rounded">page_menu_ios</span>Ver Brief Completo
-                                </button>
-                                <button class="btn-float btn-secondary" style="padding: 0.35rem 0.55rem; font-size: 0.78rem;" onclick="openEditPieceModal(${p.id})" title="Modificar Pieza">
-                                    <span class="material-symbols-rounded">edit</span> Modificar
-                                </button>
-                                <button class="btn-float btn-secondary" style="padding: 0.35rem 0.55rem; font-size: 0.78rem; color: #ef4444;" onclick="deletePiece(${p.id})" title="Eliminar Pieza">
-                                    <span class="material-symbols-rounded">delete</span>
-                                </button>
-                            </div>
+                        </div>
                         </div>
                     </div>
                 </div>
@@ -8096,7 +8855,49 @@
             renderTimeline();
         }
 
+        async function startDesigningTimelinePiece(id) {
+            const itemEl = document.querySelector(`.timeline-item[data-tl-piece-id="${id}"]`);
+            if (itemEl) {
+                const overlay = itemEl.querySelector('.tl-start-design-overlay');
+                const inner = itemEl.querySelector('.tl-card-inner');
+                const statusBtn = itemEl.querySelector('.tl-status-btn');
+                const marker = itemEl.querySelector('.timeline-marker');
+
+                if (overlay) {
+                    overlay.classList.add('is-leaving');
+                    setTimeout(() => {
+                        if (overlay.parentNode) overlay.remove();
+                    }, 360);
+                }
+                if (inner) {
+                    requestAnimationFrame(() => {
+                        inner.classList.remove('is-blurred');
+                    });
+                }
+                if (statusBtn) {
+                    statusBtn.setAttribute('onclick', `toggleTimelineStatusDropdown(this, ${id}, 'En Proceso', event)`);
+                    statusBtn.innerHTML = `
+                        <span class="material-symbols-rounded" style="font-size:17px; color:#3b82f6;">draw</span>
+                        <span>Diseñando</span>
+                        <span class="material-symbols-rounded" style="font-size:16px; color:var(--text-muted);">expand_more</span>
+                    `;
+                }
+                if (marker) {
+                    marker.setAttribute('title', 'En Proceso');
+                    marker.innerHTML = '<span class="material-symbols-rounded">gesture</span>';
+                }
+            }
+            await updateStatus(id, 'designer_design', 'En Proceso', { skipTimelineRender: true });
+        }
+
         async function updateTimelineItemStatus(id, value) {
+            if (value === 'Listo') {
+                const piece = findPieceById(id);
+                if (!piece || piece.designer_design !== 'Listo') {
+                    openSendToReviewConfirmModal({ mode: 'status', pieceId: id });
+                    return;
+                }
+            }
             await updateStatus(id, 'designer_design', value);
             renderTimeline();
             renderReviews();
@@ -8459,7 +9260,7 @@
                     ? escapeHtml(rawGraphic)
                     : '<em style="color:var(--text-muted); font-size:0.85rem;">Sin descripción gráfica registrada.</em>';
 
-                // Representación Multimedia (Carrusel para 1 o varios elementos)
+                // Representación Multimedia (Carrusel en Abanico dentro de la tarjeta, sin recuadro negro)
                 const mediaList = getPieceMediaList(p);
                 let mediaHtml = '';
 
@@ -8469,81 +9270,80 @@
                     if (activeIdx < 0) activeIdx = mediaList.length - 1;
                     carouselCurrentSlide[p.id] = activeIdx;
 
-                    const currentItem = mediaList[activeIdx];
-                    const isVideo = currentItem.type === 'video' || (currentItem.url && (currentItem.url.includes('video/') || currentItem.url.endsWith('.mp4') || currentItem.url.endsWith('.webm') || currentItem.url.endsWith('.mov')));
+                    const fanCardsHtml = mediaList.map((m, idx) => {
+                        const isMVideo = m.type === 'video' || (m.url && (m.url.includes('video/') || m.url.endsWith('.mp4') || m.url.endsWith('.webm') || m.url.endsWith('.mov')));
+                        let rel = idx - activeIdx;
+                        if (mediaList.length > 2) {
+                            if (rel > mediaList.length / 2) rel -= mediaList.length;
+                            if (rel < -mediaList.length / 2) rel += mediaList.length;
+                        }
 
-                    // Miniaturas o indicadores si hay más de 1 elemento
-                    let indicatorsHtml = '';
-                    if (mediaList.length > 1) {
-                        indicatorsHtml = `
-                        <div class="carousel-dots-row">
-                            ${mediaList.map((m, idx) => {
-                            const isMVideo = m.type === 'video' || (m.url && (m.url.includes('video/') || m.url.endsWith('.mp4')));
-                            return `
-                                    <button type="button" class="carousel-thumb-btn ${idx === activeIdx ? 'active' : ''}" onclick="setCarouselSlide(${p.id}, ${idx})" title="${escapeHtml(m.name || 'Elemento ' + (idx + 1))}">
-                                        ${isMVideo ? `
-                                            <div style="width:100%; height:100%; background:#222; display:flex; align-items:center; justify-content:center; color:#fff; font-size:0.75rem;"><span class="material-symbols-rounded">movie</span></div>
-                                        ` : `
-                                            <img src="${m.url}" alt="${escapeHtml(m.name || '')}">
-                                        `}
-                                    </button>
-                                `;
-                        }).join('')}
-                        </div>
-                    `;
-                    }
+                        let transformStyle = '';
+                        let zIndex = 10;
+                        let opacity = 1;
+                        let pointerEvents = 'auto';
+
+                        if (rel === 0) {
+                            transformStyle = 'translateX(0px) translateY(0px) rotate(0deg) scale(1)';
+                            zIndex = 20;
+                            opacity = 1;
+                        } else if (rel === -1) {
+                            transformStyle = 'translateX(-64px) translateY(8px) rotate(-9deg) scale(0.88)';
+                            zIndex = 15;
+                            opacity = 0.92;
+                        } else if (rel === 1) {
+                            transformStyle = 'translateX(64px) translateY(8px) rotate(9deg) scale(0.88)';
+                            zIndex = 15;
+                            opacity = 0.92;
+                        } else if (rel === -2) {
+                            transformStyle = 'translateX(-114px) translateY(18px) rotate(-16deg) scale(0.76)';
+                            zIndex = 10;
+                            opacity = 0.72;
+                        } else if (rel === 2) {
+                            transformStyle = 'translateX(114px) translateY(18px) rotate(16deg) scale(0.76)';
+                            zIndex = 10;
+                            opacity = 0.72;
+                        } else {
+                            transformStyle = `translateX(${rel < 0 ? -135 : 135}px) translateY(24px) rotate(${rel < 0 ? -20 : 20}deg) scale(0.65)`;
+                            zIndex = 1;
+                            opacity = 0;
+                            pointerEvents = 'none';
+                        }
+
+                        const clickAction = rel === 0
+                            ? `openMediaLightbox('${escapeQuote(m.url)}', '${escapeQuote(p.topic)} - ${escapeQuote(m.name || 'Arte ' + (idx + 1))}', ${p.id}, ${idx})`
+                            : `setCarouselSlide(${p.id}, ${idx})`;
+
+                        return `
+                            <div class="review-fan-card ${mediaList.length === 1 ? 'is-single' : ''} ${rel === 0 ? 'is-active' : ''}"
+                                 data-fan-idx="${idx}"
+                                 style="transform: ${transformStyle}; z-index: ${zIndex}; opacity: ${opacity}; pointer-events: ${pointerEvents};"
+                                 onclick="${clickAction}"
+                                 title="${rel === 0 ? 'Clic para abrir carrusel completo y gestionar fotos' : escapeHtml(m.name || 'Ver foto ' + (idx + 1))}">
+                                ${isMVideo ? `
+                                    <video src="${m.url}" muted playsinline></video>
+                                    <div style="position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.25); pointer-events: none;">
+                                        <span class="material-symbols-rounded" style="font-size: 2.5rem; color: #fff; text-shadow: 0 2px 8px rgba(0,0,0,0.6);">play_circle</span>
+                                    </div>
+                                ` : `
+                                    <img src="${m.url}" alt="${escapeHtml(m.name || p.topic)}">
+                                `}
+                                <div class="review-fan-badge">
+                                    <span class="material-symbols-rounded" style="font-size: 0.9rem;">open_in_full</span>
+                                    ${mediaList.length > 1 ? `${idx + 1} / ${mediaList.length}` : 'Ver y gestionar'}
+                                </div>
+                            </div>
+                        `;
+                    }).join('');
 
                     mediaHtml = `
-                    <div class="review-carousel-container" id="carousel-box-${p.id}">
-                        <!-- Barra Superior del Carrusel -->
-                        <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.5rem 0.85rem; background: rgba(20,20,20,0.9); border-bottom: 1px solid rgba(255,255,255,0.08);">
-                            <div style="display: flex; align-items: center; gap: 8px;">
-                                <span style="font-size: 0.78rem; font-weight: 700; color: #fff; background: var(--neon-red); padding: 2px 8px; border-radius: 6px;">
-                                    ${activeIdx + 1} / ${mediaList.length}
-                                </span>
-                                <span style="font-size: 0.8rem; color: #e5e7eb; font-weight: 600;">
-                                    ${escapeHtml(currentItem.name || 'Arte ' + (activeIdx + 1))}
-                                </span>
-                            </div>
-                            <button type="button" class="btn-float btn-secondary" style="padding: 2px 8px; font-size: 0.72rem; display: inline-flex; align-items: center; gap: 4px;" onclick="triggerUploadPieceMedia(${p.id}, true)" title="Subir más imágenes o videos a este carrusel">
-                                <span><span class="material-symbols-rounded">add</span></span> Agregar Más
-                            </button>
-                        </div>
-
-                        <!-- Escenario de Visualización con Flechas de Navegación -->
-                        <div class="review-carousel-stage">
+                    <div class="review-fan-carousel" id="carousel-box-${p.id}">
+                        <div class="review-fan-stage">
                             ${mediaList.length > 1 ? `
-                                <button type="button" class="carousel-nav-btn carousel-nav-prev" onclick="changeCarouselSlide(${p.id}, -1)" title="Elemento anterior">‹</button>
-                                <button type="button" class="carousel-nav-btn carousel-nav-next" onclick="changeCarouselSlide(${p.id}, 1)" title="Elemento siguiente">›</button>
+                                <button type="button" class="review-fan-nav-btn review-fan-nav-prev" onclick="event.stopPropagation(); changeCarouselSlide(${p.id}, -1)" title="Anterior">‹</button>
+                                <button type="button" class="review-fan-nav-btn review-fan-nav-next" onclick="event.stopPropagation(); changeCarouselSlide(${p.id}, 1)" title="Siguiente">›</button>
                             ` : ''}
-
-                            ${isVideo ? `
-                                <video src="${currentItem.url}" controls playsinline style="width: 100%; max-height: 420px; display: block;"></video>
-                            ` : `
-                                <img src="${currentItem.url}" alt="${escapeHtml(p.topic)}" onclick="openMediaLightbox('${escapeQuote(currentItem.url)}', '${escapeQuote(p.topic)} - ${escapeQuote(currentItem.name || '')}')" title="Clic para Pantalla Completa">
-                                <div style="position: absolute; bottom: 8px; right: 8px; background: rgba(0,0,0,0.75); backdrop-filter: blur(4px); color: #fff; padding: 4px 10px; border-radius: 8px; font-size: 0.75rem; font-weight: 700; pointer-events: none;">
-                                    <span class="material-symbols-rounded">search</span> Clic para Pantalla Completa
-                                </div>
-                            `}
-                        </div>
-
-                        <!-- Miniaturas de Navegación -->
-                        ${indicatorsHtml}
-
-                        <!-- Barra de Acciones del Elemento (Editar, Resubir, Eliminar) -->
-                        <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.5rem 0.85rem; background: rgba(18,18,18,0.95); border-top: 1px solid rgba(255,255,255,0.08); flex-wrap: wrap; gap: 6px;">
-                            <span style="font-size: 0.72rem; color: #9ca3af;">Gestionar este elemento:</span>
-                            <div style="display: flex; gap: 6px; align-items: center;">
-                                <button type="button" class="btn-float btn-secondary" style="padding: 3px 8px; font-size: 0.72rem; display: inline-flex; align-items: center; gap: 3px;" onclick="openEditMediaModal(${p.id}, ${activeIdx})" title="Editar, rotar o renombrar este arte">
-                                    <span><span class="material-symbols-rounded">edit</span></span> Editar
-                                </button>
-                                <button type="button" class="btn-float btn-secondary" style="padding: 3px 8px; font-size: 0.72rem; display: inline-flex; align-items: center; gap: 3px;" onclick="triggerReplacePieceMedia(${p.id}, ${activeIdx})" title="Reemplazar / resubir solo este elemento">
-                                    <span><span class="material-symbols-rounded">sync</span></span> Resubir
-                                </button>
-                                <button type="button" class="btn-float btn-secondary" style="padding: 3px 8px; font-size: 0.72rem; color: #ef4444; border-color: rgba(239,68,68,0.3); display: inline-flex; align-items: center; gap: 3px;" onclick="deletePieceMediaItem(${p.id}, ${activeIdx})" title="Eliminar este elemento del carrusel">
-                                    <span><span class="material-symbols-rounded">delete</span></span> Eliminar
-                                </button>
-                            </div>
+                            ${fanCardsHtml}
                         </div>
                     </div>
                 `;
@@ -8603,18 +9403,11 @@
                         <!-- VISUALIZACIÓN MULTIMEDIA (IMÁGENES O VIDEOS) -->
                         ${mediaHtml}
 
-                        <!-- REQUERIMIENTO GRÁFICO DEL DISEÑADOR (SIN ESPACIO INICIAL) -->
-                        <div style="background: ${statusBg}; border: 1.5px solid ${statusBorder}; border-radius: 12px; padding: 0.9rem 1rem; margin-bottom: 0.85rem; position: relative;">
-                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; flex-wrap: wrap; gap: 6px;">
-                                <div style="display: flex; align-items: center; gap: 6px;">
-                                    <span style="font-size: 1.1rem;"><span class="material-symbols-rounded">gesture</span></span>
-                                    <strong style="color: ${statusColor}; font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.5px;">Requerimiento Gráfico del Diseñador</strong>
-                                </div>
-                                <button type="button" class="btn-float btn-secondary" style="padding: 2px 8px; font-size: 0.72rem;" onclick="openPieceGraphicBrief(${p.id})">
-                                    <span class="material-symbols-rounded">page_menu_ios</span> Ver Brief
-                                </button>
-                            </div>
-                            <div style="font-size: 0.88rem; line-height: 1.55; color: var(--text-main); white-space: pre-line; max-height: 140px; overflow-y: auto;">${graphicSnippet}</div>
+                        <!-- BOTÓN VER BRIEF -->
+                        <div style="display: flex; justify-content: flex-end; margin-bottom: 0.75rem;">
+                            <button type="button" class="btn-float btn-secondary" style="padding: 5px 12px; font-size: 0.78rem; display: inline-flex; align-items: center; gap: 6px;" onclick="openPieceGraphicBrief(${p.id})">
+                                <span class="material-symbols-rounded">page_menu_ios</span> Ver Brief
+                            </button>
                         </div>
 
                         <!-- BOTONES DE REVISIÓN O ACCIONES PARA PIEZAS APROBADAS -->
@@ -8791,9 +9584,76 @@
         let pendingUploadPieceId = null;
         let pendingUploadIsAppend = false;
 
-        function triggerUploadPieceMedia(pieceId, isAppend = false) {
+        function readAndOptimizeMediaFile(file) {
+            return new Promise((resolve, reject) => {
+                const isVideo = (file.type && file.type.startsWith('video/')) || /\.(mp4|mov|webm)$/i.test(file.name || '');
+                const isSkipCompress = isVideo || file.type === 'image/gif' || file.type === 'image/svg+xml' || /\.(gif|svg)$/i.test(file.name || '');
+
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    const originalDataUrl = e.target.result;
+                    if (isSkipCompress || !(file.type.startsWith('image/') || /\.(png|jpe?g|webp|bmp)$/i.test(file.name || ''))) {
+                        resolve(originalDataUrl);
+                        return;
+                    }
+
+                    const img = new Image();
+                    img.onload = () => {
+                        try {
+                            const maxDim = 2048;
+                            let targetW = img.naturalWidth || img.width;
+                            let targetH = img.naturalHeight || img.height;
+                            if (!targetW || !targetH) {
+                                resolve(originalDataUrl);
+                                return;
+                            }
+                            if (targetW > maxDim || targetH > maxDim) {
+                                const ratio = Math.min(maxDim / targetW, maxDim / targetH);
+                                targetW = Math.round(targetW * ratio);
+                                targetH = Math.round(targetH * ratio);
+                            }
+
+                            const canvas = document.createElement('canvas');
+                            canvas.width = targetW;
+                            canvas.height = targetH;
+                            const ctx = canvas.getContext('2d');
+                            if (!ctx) {
+                                resolve(originalDataUrl);
+                                return;
+                            }
+                            ctx.imageSmoothingEnabled = true;
+                            ctx.imageSmoothingQuality = 'high';
+                            ctx.drawImage(img, 0, 0, targetW, targetH);
+
+                            let optimizedUrl = canvas.toDataURL('image/webp', 0.90);
+                            if (!optimizedUrl || !optimizedUrl.startsWith('data:image/webp')) {
+                                optimizedUrl = canvas.toDataURL('image/jpeg', 0.90);
+                            }
+
+                            // Mantener la versión más ligera sin sacrificar calidad
+                            if (optimizedUrl && optimizedUrl.length < originalDataUrl.length) {
+                                resolve(optimizedUrl);
+                            } else {
+                                resolve(originalDataUrl);
+                            }
+                        } catch (err) {
+                            resolve(originalDataUrl);
+                        }
+                    };
+                    img.onerror = () => resolve(originalDataUrl);
+                    img.src = originalDataUrl;
+                };
+                reader.onerror = reject;
+                reader.readAsDataURL(file);
+            });
+        }
+
+        let pendingUploadRequireConfirm = false;
+
+        function triggerUploadPieceMedia(pieceId, isAppend = false, requireConfirm = false) {
             pendingUploadPieceId = pieceId;
             pendingUploadIsAppend = isAppend;
+            pendingUploadRequireConfirm = requireConfirm;
             const fileInput = document.getElementById('piece-media-file-input');
             if (fileInput) {
                 fileInput.value = '';
@@ -8817,26 +9677,23 @@
 
             const existingList = pendingUploadIsAppend ? getPieceMediaList(piece) : [];
 
-            const readFilePromise = (file, idx) => {
-                return new Promise((resolve) => {
-                    if (file.size > 25 * 1024 * 1024) {
-                        showToast(`"${file.name}" supera el límite de 25MB`, 'error');
-                        resolve(null);
-                        return;
-                    }
-                    const reader = new FileReader();
-                    reader.onload = (e) => {
-                        resolve({
-                            id: 'm_' + pieceId + '_' + Date.now() + '_' + idx,
-                            url: e.target.result,
-                            name: file.name,
-                            type: file.type.startsWith('video') ? 'video' : 'image',
-                            uploaded_at: Date.now() + idx
-                        });
+            const readFilePromise = async (file, idx) => {
+                if (file.size > 25 * 1024 * 1024) {
+                    showToast(`"${file.name}" supera el límite de 25MB`, 'error');
+                    return null;
+                }
+                try {
+                    const optimizedUrl = await readAndOptimizeMediaFile(file);
+                    return {
+                        id: 'm_' + pieceId + '_' + Date.now() + '_' + idx,
+                        url: optimizedUrl,
+                        name: file.name,
+                        type: file.type.startsWith('video') ? 'video' : 'image',
+                        uploaded_at: Date.now() + idx
                     };
-                    reader.onerror = () => resolve(null);
-                    reader.readAsDataURL(file);
-                });
+                } catch (err) {
+                    return null;
+                }
             };
 
             const promises = Array.from(files).map((f, i) => readFilePromise(f, i));
@@ -8844,6 +9701,17 @@
 
             if (loadedItems.length === 0) {
                 showToast('No se pudieron procesar los archivos', 'error');
+                return;
+            }
+
+            if (pendingUploadRequireConfirm) {
+                pendingUploadRequireConfirm = false;
+                openSendToReviewConfirmModal({
+                    mode: 'upload',
+                    pieceId: pieceId,
+                    mediaItems: loadedItems,
+                    isAppend: pendingUploadIsAppend
+                });
                 return;
             }
 
@@ -9003,14 +9871,82 @@
             }
         }
 
-        // Navegación del Carrusel
+        // Navegación del Carrusel (actualización directa del DOM sin parpadeo)
+        function updateFanCarouselDOM(pieceId) {
+            const box = document.getElementById(`carousel-box-${pieceId}`);
+            const piece = findPieceById(pieceId);
+            if (!box || !piece) return;
+
+            const mediaList = getPieceMediaList(piece);
+            if (mediaList.length === 0) return;
+
+            let activeIdx = carouselCurrentSlide[pieceId] || 0;
+            if (activeIdx >= mediaList.length) activeIdx = 0;
+            if (activeIdx < 0) activeIdx = mediaList.length - 1;
+            carouselCurrentSlide[pieceId] = activeIdx;
+
+            const cards = box.querySelectorAll('.review-fan-card[data-fan-idx]');
+            cards.forEach((card) => {
+                const idx = parseInt(card.getAttribute('data-fan-idx'), 10);
+                const m = mediaList[idx];
+                if (!m) return;
+
+                let rel = idx - activeIdx;
+                if (mediaList.length > 2) {
+                    if (rel > mediaList.length / 2) rel -= mediaList.length;
+                    if (rel < -mediaList.length / 2) rel += mediaList.length;
+                }
+
+                let transformStyle = '';
+                let zIndex = 10;
+                let opacity = 1;
+                let pointerEvents = 'auto';
+
+                if (rel === 0) {
+                    transformStyle = 'translateX(0px) translateY(0px) rotate(0deg) scale(1)';
+                    zIndex = 20;
+                    opacity = 1;
+                } else if (rel === -1) {
+                    transformStyle = 'translateX(-64px) translateY(8px) rotate(-9deg) scale(0.88)';
+                    zIndex = 15;
+                    opacity = 0.92;
+                } else if (rel === 1) {
+                    transformStyle = 'translateX(64px) translateY(8px) rotate(9deg) scale(0.88)';
+                    zIndex = 15;
+                    opacity = 0.92;
+                } else if (rel === -2) {
+                    transformStyle = 'translateX(-114px) translateY(18px) rotate(-16deg) scale(0.76)';
+                    zIndex = 10;
+                    opacity = 0.72;
+                } else if (rel === 2) {
+                    transformStyle = 'translateX(114px) translateY(18px) rotate(16deg) scale(0.76)';
+                    zIndex = 10;
+                    opacity = 0.72;
+                } else {
+                    transformStyle = `translateX(${rel < 0 ? -135 : 135}px) translateY(24px) rotate(${rel < 0 ? -20 : 20}deg) scale(0.65)`;
+                    zIndex = 1;
+                    opacity = 0;
+                    pointerEvents = 'none';
+                }
+
+                card.style.transform = transformStyle;
+                card.style.zIndex = zIndex;
+                card.style.opacity = opacity;
+                card.style.pointerEvents = pointerEvents;
+                card.classList.toggle('is-active', rel === 0);
+
+                if (rel === 0) {
+                    card.setAttribute('title', 'Clic para abrir carrusel completo y gestionar fotos');
+                    card.onclick = () => openMediaLightbox(m.url, `${piece.topic} - ${m.name || 'Arte ' + (idx + 1)}`, piece.id, idx);
+                } else {
+                    card.setAttribute('title', m.name || ('Ver foto ' + (idx + 1)));
+                    card.onclick = () => setCarouselSlide(piece.id, idx);
+                }
+            });
+        }
+
         function changeCarouselSlide(pieceId, direction) {
-            let piece = null;
-            for (const b in mockDataByBrand) {
-                const found = (mockDataByBrand[b] || []).find(p => p.id === pieceId);
-                if (found) { piece = found; break; }
-            }
-            if (!piece) piece = mockData.find(p => p.id === pieceId);
+            const piece = findPieceById(pieceId);
             if (!piece) return;
 
             const list = getPieceMediaList(piece);
@@ -9019,12 +9955,12 @@
             let cur = carouselCurrentSlide[pieceId] || 0;
             cur = (cur + direction + list.length) % list.length;
             carouselCurrentSlide[pieceId] = cur;
-            renderReviews();
+            updateFanCarouselDOM(pieceId);
         }
 
         function setCarouselSlide(pieceId, index) {
             carouselCurrentSlide[pieceId] = index;
-            renderReviews();
+            updateFanCarouselDOM(pieceId);
         }
 
         // Modal de Edición de Arte
@@ -9263,43 +10199,824 @@
             }
         }
 
-        // Lightbox para pantalla completa
-        function openMediaLightbox(url, title) {
-            const modal = document.getElementById('mediaLightboxModal');
+        // Lightbox para pantalla completa con carrusel, zoom y gestión flotante
+        let activeLightboxPieceId = null;
+        let activeLightboxIndex = 0;
+        let lightboxZoom = 1;
+        let lightboxPanX = 0;
+        let lightboxPanY = 0;
+
+        function applyLightboxZoomTransform() {
             const imgEl = document.getElementById('lightbox-image');
-            const videoEl = document.getElementById('lightbox-video');
-            const titleEl = document.getElementById('lightbox-title');
-
-            if (titleEl) titleEl.innerText = title || 'Material Multimedia';
-
-            const isVideo = url.includes('video/') || url.endsWith('.mp4') || url.endsWith('.webm') || url.endsWith('.mov');
-            if (isVideo) {
-                if (imgEl) imgEl.style.display = 'none';
-                if (videoEl) {
-                    videoEl.src = url;
-                    videoEl.style.display = 'block';
-                    videoEl.play().catch(() => { });
+            const zoomLabel = document.getElementById('lightbox-zoom-label');
+            if (imgEl) {
+                imgEl.classList.remove('lightbox-anim-next', 'lightbox-anim-prev', 'lightbox-anim-zoom');
+                if (lightboxZoom <= 1) {
+                    lightboxZoom = 1;
+                    lightboxPanX = 0;
+                    lightboxPanY = 0;
+                    imgEl.style.transform = '';
+                    imgEl.classList.remove('is-zoomed', 'is-panning');
+                } else {
+                    imgEl.style.transform = `translate3d(${lightboxPanX}px, ${lightboxPanY}px, 0) scale(${lightboxZoom})`;
+                    imgEl.classList.add('is-zoomed');
                 }
+            }
+            if (zoomLabel) {
+                zoomLabel.innerText = `${Math.round(lightboxZoom * 100)}%`;
+            }
+        }
+
+        function resetLightboxZoom() {
+            lightboxZoom = 1;
+            lightboxPanX = 0;
+            lightboxPanY = 0;
+            applyLightboxZoomTransform();
+        }
+
+        function changeLightboxZoom(delta, clientX = null, clientY = null) {
+            const imgEl = document.getElementById('lightbox-image');
+            if (!imgEl || imgEl.style.display === 'none') return;
+
+            const prevZoom = lightboxZoom;
+            const nextZoom = Math.min(4, Math.max(1, +(lightboxZoom + delta).toFixed(2)));
+            if (nextZoom === prevZoom) return;
+
+            if (nextZoom === 1) {
+                resetLightboxZoom();
+                return;
+            }
+
+            if (clientX !== null && clientY !== null) {
+                const rect = imgEl.getBoundingClientRect();
+                const cx = rect.left + rect.width / 2;
+                const cy = rect.top + rect.height / 2;
+                const ratio = nextZoom / prevZoom;
+                lightboxPanX = (lightboxPanX - (clientX - cx) * (ratio - 1) / prevZoom);
+                lightboxPanY = (lightboxPanY - (clientY - cy) * (ratio - 1) / prevZoom);
+            }
+
+            lightboxZoom = nextZoom;
+            applyLightboxZoomTransform();
+        }
+
+        function findPieceById(pieceId) {
+            if (!pieceId) return null;
+            for (const b in mockDataByBrand) {
+                const found = (mockDataByBrand[b] || []).find(p => p.id === pieceId);
+                if (found) return found;
+            }
+            return mockData.find(p => p.id === pieceId) || null;
+        }
+
+        function openMediaLightbox(url, title, pieceId = null, slideIndex = 0) {
+            const modal = document.getElementById('mediaLightboxModal');
+            activeLightboxPieceId = pieceId;
+            activeLightboxIndex = slideIndex || 0;
+
+            if (pieceId) {
+                renderLightboxCarousel();
             } else {
-                if (videoEl) {
-                    videoEl.pause();
-                    videoEl.style.display = 'none';
-                }
-                if (imgEl) {
-                    imgEl.src = url;
-                    imgEl.style.display = 'block';
+                const imgEl = document.getElementById('lightbox-image');
+                const videoEl = document.getElementById('lightbox-video');
+                const titleEl = document.getElementById('lightbox-title');
+                const counterEl = document.getElementById('lightbox-counter');
+                const prevBtn = document.getElementById('lightbox-prev-btn');
+                const nextBtn = document.getElementById('lightbox-next-btn');
+                const thumbsEl = document.getElementById('lightbox-thumbs-row');
+                const actionsEl = document.getElementById('lightbox-floating-actions');
+
+                if (titleEl) titleEl.innerText = title || 'Material Multimedia';
+                if (counterEl) counterEl.style.display = 'none';
+                if (prevBtn) prevBtn.style.display = 'none';
+                if (nextBtn) nextBtn.style.display = 'none';
+                if (thumbsEl) thumbsEl.style.display = 'none';
+                if (actionsEl) actionsEl.style.display = 'none';
+
+                const isVideo = url && (url.includes('video/') || url.endsWith('.mp4') || url.endsWith('.webm') || url.endsWith('.mov'));
+                const zoomControls = document.getElementById('lightbox-zoom-controls');
+                resetLightboxZoom();
+                if (isVideo) {
+                    if (zoomControls) zoomControls.style.display = 'none';
+                    if (imgEl) imgEl.style.display = 'none';
+                    if (videoEl) {
+                        videoEl.src = url;
+                        videoEl.style.display = 'block';
+                        videoEl.play().catch(() => { });
+                    }
+                } else {
+                    if (zoomControls) zoomControls.style.display = 'flex';
+                    if (videoEl) {
+                        videoEl.pause();
+                        videoEl.style.display = 'none';
+                    }
+                    if (imgEl) {
+                        imgEl.src = url;
+                        imgEl.style.display = 'block';
+                    }
                 }
             }
 
             modal.classList.add('active');
         }
 
+        function triggerLightboxMediaAnim(el, animClass) {
+            if (!el) return;
+            el.classList.remove('lightbox-anim-next', 'lightbox-anim-prev', 'lightbox-anim-zoom');
+            void el.offsetWidth;
+            el.classList.add(animClass);
+        }
+
+        function renderLightboxCarousel(animClass = 'lightbox-anim-zoom') {
+            const piece = findPieceById(activeLightboxPieceId);
+            if (!piece) {
+                closeMediaLightbox();
+                return;
+            }
+            const list = getPieceMediaList(piece);
+            if (list.length === 0) {
+                closeMediaLightbox();
+                return;
+            }
+            if (activeLightboxIndex >= list.length) activeLightboxIndex = list.length - 1;
+            if (activeLightboxIndex < 0) activeLightboxIndex = 0;
+
+            const current = list[activeLightboxIndex];
+            const imgEl = document.getElementById('lightbox-image');
+            const videoEl = document.getElementById('lightbox-video');
+            const titleEl = document.getElementById('lightbox-title');
+            const counterEl = document.getElementById('lightbox-counter');
+            const prevBtn = document.getElementById('lightbox-prev-btn');
+            const nextBtn = document.getElementById('lightbox-next-btn');
+            const thumbsEl = document.getElementById('lightbox-thumbs-row');
+            const actionsEl = document.getElementById('lightbox-floating-actions');
+            const reorderBtn = document.getElementById('lightbox-reorder-btn');
+
+            if (titleEl) titleEl.innerText = `${piece.topic || 'Pieza'} — ${current.name || 'Arte ' + (activeLightboxIndex + 1)}`;
+            if (counterEl) {
+                counterEl.innerText = `${activeLightboxIndex + 1} / ${list.length}`;
+                counterEl.style.display = 'inline-block';
+            }
+            if (prevBtn) prevBtn.style.display = list.length > 1 ? 'flex' : 'none';
+            if (nextBtn) nextBtn.style.display = list.length > 1 ? 'flex' : 'none';
+            if (actionsEl) actionsEl.style.display = 'flex';
+            if (reorderBtn) reorderBtn.style.display = list.length > 1 ? 'inline-flex' : 'none';
+
+            const isVideo = current.type === 'video' || (current.url && (current.url.includes('video/') || current.url.endsWith('.mp4') || current.url.endsWith('.webm') || current.url.endsWith('.mov')));
+            const zoomControls = document.getElementById('lightbox-zoom-controls');
+            resetLightboxZoom();
+            if (isVideo) {
+                if (zoomControls) zoomControls.style.display = 'none';
+                if (imgEl) imgEl.style.display = 'none';
+                if (videoEl) {
+                    videoEl.src = current.url;
+                    videoEl.style.display = 'block';
+                    triggerLightboxMediaAnim(videoEl, animClass);
+                }
+            } else {
+                if (zoomControls) zoomControls.style.display = 'flex';
+                if (videoEl) {
+                    videoEl.pause();
+                    videoEl.style.display = 'none';
+                }
+                if (imgEl) {
+                    imgEl.src = current.url;
+                    imgEl.style.display = 'block';
+                    triggerLightboxMediaAnim(imgEl, animClass);
+                }
+            }
+
+            if (thumbsEl) {
+                if (list.length > 1) {
+                    thumbsEl.style.display = 'flex';
+                    thumbsEl.innerHTML = list.map((m, idx) => {
+                        const isMVideo = m.type === 'video' || (m.url && (m.url.includes('video/') || m.url.endsWith('.mp4')));
+                        return `
+                            <button type="button" class="carousel-thumb-btn ${idx === activeLightboxIndex ? 'active' : ''}" onclick="setLightboxSlide(${idx})" title="${escapeHtml(m.name || 'Arte ' + (idx + 1))}">
+                                ${isMVideo ? `<div style="width:100%; height:100%; background:#222; display:flex; align-items:center; justify-content:center; color:#fff;"><span class="material-symbols-rounded" style="font-size:1rem;">movie</span></div>` : `<img src="${m.url}" alt="">`}
+                            </button>
+                        `;
+                    }).join('');
+                } else {
+                    thumbsEl.style.display = 'none';
+                }
+            }
+        }
+
+        function navigateLightbox(direction) {
+            const piece = findPieceById(activeLightboxPieceId);
+            if (!piece) return;
+            const list = getPieceMediaList(piece);
+            if (list.length <= 1) return;
+            activeLightboxIndex = (activeLightboxIndex + direction + list.length) % list.length;
+            carouselCurrentSlide[activeLightboxPieceId] = activeLightboxIndex;
+            updateFanCarouselDOM(activeLightboxPieceId);
+            renderLightboxCarousel(direction >= 0 ? 'lightbox-anim-next' : 'lightbox-anim-prev');
+        }
+
+        function setLightboxSlide(index) {
+            const prevIdx = activeLightboxIndex;
+            activeLightboxIndex = index;
+            if (activeLightboxPieceId) {
+                carouselCurrentSlide[activeLightboxPieceId] = index;
+                updateFanCarouselDOM(activeLightboxPieceId);
+            }
+            const animClass = index > prevIdx ? 'lightbox-anim-next' : (index < prevIdx ? 'lightbox-anim-prev' : 'lightbox-anim-zoom');
+            renderLightboxCarousel(animClass);
+        }
+
         function closeMediaLightbox() {
             const modal = document.getElementById('mediaLightboxModal');
             const videoEl = document.getElementById('lightbox-video');
             if (videoEl) videoEl.pause();
+            resetLightboxZoom();
             modal.classList.remove('active');
+            activeLightboxPieceId = null;
         }
+
+        async function deleteCurrentLightboxMedia() {
+            if (!activeLightboxPieceId) return;
+            const pieceId = activeLightboxPieceId;
+            await deletePieceMediaItem(pieceId, activeLightboxIndex);
+            if (document.getElementById('mediaLightboxModal').classList.contains('active')) {
+                const piece = findPieceById(pieceId);
+                const list = piece ? getPieceMediaList(piece) : [];
+                if (list.length === 0) {
+                    closeMediaLightbox();
+                } else {
+                    if (activeLightboxIndex >= list.length) activeLightboxIndex = list.length - 1;
+                    renderLightboxCarousel();
+                }
+            }
+        }
+
+        // ==================== MODAL ARRASTRAR O PEGAR (CTRL+V) ====================
+        let dropPasteMode = 'append'; // 'append' | 'replace'
+        let dropPasteStagedFiles = []; // [{ file, previewUrl, isVideo, name }]
+
+        function openDropPasteModal(mode = 'append') {
+            if (!activeLightboxPieceId) return;
+            dropPasteMode = mode;
+            dropPasteStagedFiles = [];
+
+            const titleEl = document.getElementById('drop-paste-modal-title');
+            const subEl = document.getElementById('drop-paste-modal-subtitle');
+            if (mode === 'replace') {
+                if (titleEl) titleEl.innerHTML = '<span class="material-symbols-rounded">sync</span> Sustituir foto actual';
+                if (subEl) subEl.innerHTML = 'Arrastra la nueva imagen, haz clic para buscar o presiona <strong>Ctrl + V</strong> para pegar y sustituir';
+            } else {
+                if (titleEl) titleEl.innerHTML = '<span class="material-symbols-rounded">add_photo_alternate</span> Añadir otra foto';
+                if (subEl) subEl.innerHTML = 'Arrastra tus imágenes, haz clic para buscar o presiona <strong>Ctrl + V</strong> para pegar y subir';
+            }
+
+            const fileInput = document.getElementById('drop-paste-file-input');
+            if (fileInput) {
+                fileInput.value = '';
+                fileInput.multiple = (mode === 'append');
+            }
+
+            renderDropPastePreviews();
+            document.getElementById('mediaDropPasteModal').classList.add('active');
+        }
+
+        function closeDropPasteModal() {
+            document.getElementById('mediaDropPasteModal').classList.remove('active');
+            dropPasteStagedFiles = [];
+        }
+
+        function addFilesToDropPasteStage(fileList) {
+            if (!fileList || fileList.length === 0) return;
+            const files = Array.from(fileList);
+
+            files.forEach(async (file) => {
+                if (!file.type.startsWith('image/') && !file.type.startsWith('video/')) {
+                    showToast(`"${file.name || 'Archivo'}" no es una imagen o video válido`, 'error');
+                    return;
+                }
+                if (file.size > 25 * 1024 * 1024) {
+                    showToast(`"${file.name}" supera el límite de 25MB`, 'error');
+                    return;
+                }
+                try {
+                    const optimizedUrl = await readAndOptimizeMediaFile(file);
+                    const item = {
+                        url: optimizedUrl,
+                        name: file.name || `pegado_${Date.now()}.png`,
+                        type: file.type.startsWith('video/') ? 'video' : 'image'
+                    };
+                    if (dropPasteMode === 'replace') {
+                        dropPasteStagedFiles = [item];
+                    } else {
+                        dropPasteStagedFiles.push(item);
+                    }
+                    renderDropPastePreviews();
+                } catch (err) {
+                    showToast(`No se pudo procesar "${file.name || 'Archivo'}"`, 'error');
+                }
+            });
+        }
+
+        function handleDropPasteFileInput(event) {
+            addFilesToDropPasteStage(event.target.files);
+            event.target.value = '';
+        }
+
+        function removeDropPasteStagedItem(idx) {
+            dropPasteStagedFiles.splice(idx, 1);
+            renderDropPastePreviews();
+        }
+
+        function renderDropPastePreviews() {
+            const grid = document.getElementById('drop-paste-preview-list');
+            const submitBtn = document.getElementById('drop-paste-submit-btn');
+            if (!grid || !submitBtn) return;
+
+            if (dropPasteStagedFiles.length === 0) {
+                grid.style.display = 'none';
+                grid.innerHTML = '';
+                submitBtn.disabled = true;
+                submitBtn.innerText = 'Subir';
+                return;
+            }
+
+            grid.style.display = 'grid';
+            grid.innerHTML = dropPasteStagedFiles.map((item, idx) => `
+                <div class="drop-paste-preview-item" title="${escapeHtml(item.name)}">
+                    ${item.type === 'video'
+                        ? `<video src="${item.url}" muted></video>`
+                        : `<img src="${item.url}" alt="${escapeHtml(item.name)}">`}
+                    <button type="button" class="drop-paste-remove-btn" onclick="event.stopPropagation(); removeDropPasteStagedItem(${idx})" title="Quitar">×</button>
+                </div>
+            `).join('');
+
+            submitBtn.disabled = false;
+            submitBtn.innerText = dropPasteMode === 'replace'
+                ? 'Sustituir y Subir'
+                : `Subir (${dropPasteStagedFiles.length})`;
+        }
+
+        async function submitDropPasteMedia() {
+            if (!activeLightboxPieceId || dropPasteStagedFiles.length === 0) return;
+            const pieceId = activeLightboxPieceId;
+            const piece = findPieceById(pieceId);
+            if (!piece) return;
+
+            const submitBtn = document.getElementById('drop-paste-submit-btn');
+            if (submitBtn) {
+                submitBtn.disabled = true;
+                submitBtn.innerText = 'Subiendo...';
+            }
+
+            const list = getPieceMediaList(piece);
+            const now = Date.now();
+
+            if (dropPasteMode === 'replace') {
+                const replacement = dropPasteStagedFiles[0];
+                if (activeLightboxIndex >= 0 && activeLightboxIndex < list.length) {
+                    list[activeLightboxIndex] = {
+                        id: list[activeLightboxIndex].id || ('m_' + pieceId + '_' + now),
+                        url: replacement.url,
+                        name: replacement.name,
+                        type: replacement.type,
+                        uploaded_at: now
+                    };
+                }
+            } else {
+                dropPasteStagedFiles.forEach((f, idx) => {
+                    list.push({
+                        id: 'm_' + pieceId + '_' + now + '_' + idx,
+                        url: f.url,
+                        name: f.name,
+                        type: f.type,
+                        uploaded_at: now + idx
+                    });
+                });
+                activeLightboxIndex = list.length - 1;
+            }
+
+            try {
+                const res = await fetch('api.php?action=upload_piece_media', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        id: pieceId,
+                        media_url: JSON.stringify(list)
+                    })
+                });
+                const data = await res.json();
+                if (data.success) {
+                    updatePieceLocalState(pieceId, {
+                        media_url: data.media_url,
+                        designer_design: 'Listo'
+                    });
+                    carouselCurrentSlide[pieceId] = activeLightboxIndex;
+                    showToast(dropPasteMode === 'replace' ? 'Foto sustituida con éxito' : `Se subieron ${dropPasteStagedFiles.length} elemento(s)`, 'success');
+                    closeDropPasteModal();
+                    renderReviews();
+                    renderTimeline();
+                    renderTable();
+                    renderCreatedArtsCard();
+                    renderLightboxCarousel();
+                } else {
+                    showToast('Error al guardar: ' + (data.message || ''), 'error');
+                    renderDropPastePreviews();
+                }
+            } catch (err) {
+                showToast('Error de red al subir', 'error');
+                renderDropPastePreviews();
+            }
+        }
+
+        // ==================== MODAL ORDENAR CARRUSEL ====================
+        let reorderDraftList = [];
+        let reorderDragSrcIndex = null;
+
+        function openReorderMediaModal() {
+            if (!activeLightboxPieceId) return;
+            const piece = findPieceById(activeLightboxPieceId);
+            if (!piece) return;
+            reorderDraftList = getPieceMediaList(piece).map(item => ({ ...item }));
+            renderReorderMediaList();
+            document.getElementById('mediaReorderModal').classList.add('active');
+        }
+
+        function closeReorderMediaModal() {
+            document.getElementById('mediaReorderModal').classList.remove('active');
+            reorderDraftList = [];
+        }
+
+        function moveReorderItem(idx, delta) {
+            const target = idx + delta;
+            if (target < 0 || target >= reorderDraftList.length) return;
+            const temp = reorderDraftList[idx];
+            reorderDraftList[idx] = reorderDraftList[target];
+            reorderDraftList[target] = temp;
+            renderReorderMediaList();
+        }
+
+        function renderReorderMediaList() {
+            const container = document.getElementById('reorder-media-list');
+            if (!container) return;
+
+            container.innerHTML = reorderDraftList.map((m, idx) => {
+                const isVideo = m.type === 'video' || (m.url && (m.url.includes('video/') || m.url.endsWith('.mp4')));
+                return `
+                    <div class="reorder-media-item" draggable="true"
+                         ondragstart="reorderDragSrcIndex = ${idx}; this.classList.add('dragging')"
+                         ondragend="this.classList.remove('dragging')"
+                         ondragover="event.preventDefault()"
+                         ondrop="event.preventDefault(); if(reorderDragSrcIndex !== null && reorderDragSrcIndex !== ${idx}) { const moved = reorderDraftList.splice(reorderDragSrcIndex, 1)[0]; reorderDraftList.splice(${idx}, 0, moved); reorderDragSrcIndex = null; renderReorderMediaList(); }">
+                        <span class="material-symbols-rounded text-muted" style="cursor: grab;">drag_indicator</span>
+                        <span style="font-weight: 800; font-size: 0.8rem; color: var(--neon-red); min-width: 24px;">#${idx + 1}</span>
+                        <div style="width: 44px; height: 44px; border-radius: 8px; overflow: hidden; flex-shrink: 0; background: #111; border: 1px solid var(--card-border);">
+                            ${isVideo
+                                ? `<video src="${m.url}" style="width:100%; height:100%; object-fit:cover;"></video>`
+                                : `<img src="${m.url}" style="width:100%; height:100%; object-fit:cover;" alt="">`}
+                        </div>
+                        <div style="flex: 1; min-width: 0; font-size: 0.82rem; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                            ${escapeHtml(m.name || 'Arte ' + (idx + 1))}
+                        </div>
+                        <div style="display: flex; gap: 4px;">
+                            <button type="button" class="btn-float btn-secondary" style="padding: 3px 7px;" ${idx === 0 ? 'disabled' : ''} onclick="moveReorderItem(${idx}, -1)" title="Subir">↑</button>
+                            <button type="button" class="btn-float btn-secondary" style="padding: 3px 7px;" ${idx === reorderDraftList.length - 1 ? 'disabled' : ''} onclick="moveReorderItem(${idx}, 1)" title="Bajar">↓</button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        async function saveReorderMediaModal() {
+            if (!activeLightboxPieceId || reorderDraftList.length === 0) return;
+            const pieceId = activeLightboxPieceId;
+            showToast('Guardando nuevo orden...', 'info');
+
+            try {
+                const res = await fetch('api.php?action=upload_piece_media', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        id: pieceId,
+                        media_url: JSON.stringify(reorderDraftList)
+                    })
+                });
+                const data = await res.json();
+                if (data.success) {
+                    updatePieceLocalState(pieceId, { media_url: data.media_url });
+                    activeLightboxIndex = 0;
+                    carouselCurrentSlide[pieceId] = 0;
+                    showToast('Orden actualizado', 'success');
+                    closeReorderMediaModal();
+                    renderReviews();
+                    renderTimeline();
+                    renderTable();
+                    renderCreatedArtsCard();
+                    renderLightboxCarousel();
+                } else {
+                    showToast('Error al guardar orden: ' + (data.message || ''), 'error');
+                }
+            } catch (err) {
+                showToast('Error de red al guardar orden', 'error');
+            }
+        }
+
+        let hoveredTimelineUploadPieceId = null;
+        let pendingSendToReviewState = null;
+
+        function openSendToReviewConfirmModal(state) {
+            pendingSendToReviewState = state;
+            const modal = document.getElementById('sendToReviewConfirmModal');
+            if (!modal) return;
+
+            const piece = findPieceById(state.pieceId);
+            const metaEl = document.getElementById('send-review-piece-meta');
+            const descEl = document.getElementById('send-review-confirm-desc');
+            const stripEl = document.getElementById('send-review-preview-strip');
+            const confirmBtn = document.getElementById('send-review-confirm-btn');
+
+            if (metaEl) {
+                const brandName = piece ? (piece.brand || '') : '';
+                const pieceTitle = piece ? (piece.title || piece.copy_text || 'Pieza') : '';
+                metaEl.textContent = [brandName, pieceTitle].filter(Boolean).join(' • ');
+            }
+
+            if (confirmBtn) {
+                confirmBtn.disabled = false;
+                confirmBtn.innerHTML = `<span class="material-symbols-rounded" style="font-size: 1rem;">send</span> Enviar a Revisión`;
+            }
+
+            if (state.mode === 'upload' && Array.isArray(state.mediaItems) && state.mediaItems.length > 0) {
+                const count = state.mediaItems.length;
+                if (descEl) {
+                    descEl.innerHTML = `Se ${count === 1 ? 'subirá <strong>1 archivo</strong>' : `subirán <strong>${count} archivos</strong>`} y la pieza cambiará a estado <strong>Terminado / En Revisión</strong>.`;
+                }
+                if (stripEl) {
+                    stripEl.style.display = 'grid';
+                    stripEl.innerHTML = state.mediaItems.map((m) => {
+                        const isVideo = m.type === 'video';
+                        return `
+                            <div style="aspect-ratio: 1; border-radius: 8px; overflow: hidden; border: 1px solid var(--card-border); background: #111; position: relative;">
+                                ${isVideo
+                                    ? `<video src="${m.url}" style="width:100%; height:100%; object-fit:cover;"></video>`
+                                    : `<img src="${m.url}" style="width:100%; height:100%; object-fit:cover;" alt="">`}
+                            </div>
+                        `;
+                    }).join('');
+                }
+            } else {
+                if (descEl) {
+                    descEl.innerHTML = `Esta pieza cambiará a estado <strong>Terminado / En Revisión</strong> y aparecerá en la sección de <strong>Revisiones</strong>.`;
+                }
+                if (stripEl) {
+                    stripEl.style.display = 'none';
+                    stripEl.innerHTML = '';
+                }
+            }
+
+            modal.classList.add('active');
+        }
+
+        function closeSendToReviewConfirmModal() {
+            const modal = document.getElementById('sendToReviewConfirmModal');
+            if (modal) modal.classList.remove('active');
+            const hadStatusPending = pendingSendToReviewState && pendingSendToReviewState.mode === 'status';
+            pendingSendToReviewState = null;
+            if (hadStatusPending) {
+                renderTimeline();
+            }
+        }
+
+        async function confirmSendToReview() {
+            if (!pendingSendToReviewState) return;
+            const state = pendingSendToReviewState;
+            const confirmBtn = document.getElementById('send-review-confirm-btn');
+            if (confirmBtn) {
+                confirmBtn.disabled = true;
+                confirmBtn.innerHTML = `<span class="material-symbols-rounded" style="font-size: 1rem;">hourglass_top</span> Enviando...`;
+            }
+
+            if (state.mode === 'upload') {
+                await executeUploadTimelineMediaItems(state.pieceId, state.mediaItems, state.isAppend);
+                pendingSendToReviewState = null;
+                const modal = document.getElementById('sendToReviewConfirmModal');
+                if (modal) modal.classList.remove('active');
+            } else if (state.mode === 'status') {
+                pendingSendToReviewState = null;
+                const modal = document.getElementById('sendToReviewConfirmModal');
+                if (modal) modal.classList.remove('active');
+                await updateStatus(state.pieceId, 'designer_design', 'Listo');
+                renderTimeline();
+                renderReviews();
+            }
+        }
+
+        async function executeUploadTimelineMediaItems(pieceId, newMediaItems, isAppend = true) {
+            if (!pieceId || !newMediaItems || newMediaItems.length === 0) return;
+            showToast(`Subiendo ${newMediaItems.length} archivo(s)...`, 'info');
+            try {
+                const piece = findPieceById(pieceId);
+                const existing = (isAppend && piece) ? getPieceMediaList(piece) : [];
+                const combined = existing.concat(newMediaItems);
+
+                const res = await fetch('api.php?action=upload_piece_media', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        id: pieceId,
+                        media_url: JSON.stringify(combined)
+                    })
+                });
+                const data = await res.json();
+                if (data.success) {
+                    updatePieceLocalState(pieceId, {
+                        media_url: data.media_url,
+                        designer_design: 'Listo'
+                    });
+                    carouselCurrentSlide[pieceId] = isAppend ? (combined.length - 1) : 0;
+                    showToast('Arte subido y enviado a Revisión', 'success');
+                    renderTimeline();
+                    renderReviews();
+                    renderTable();
+                    renderCreatedArtsCard();
+                } else {
+                    showToast('Error al subir arte: ' + (data.message || ''), 'error');
+                }
+            } catch (err) {
+                showToast('Error de red al subir arte', 'error');
+            }
+        }
+
+        async function uploadTimelineFilesToPiece(pieceId, fileList) {
+            if (!pieceId || !fileList || fileList.length === 0) return;
+            const files = Array.from(fileList).filter(f => f && ((f.type && (f.type.startsWith('image/') || f.type.startsWith('video/'))) || /\.(png|jpe?g|gif|webp|mp4|mov|webm)$/i.test(f.name || '')));
+            if (files.length === 0) {
+                showToast('Solo se permiten imágenes o videos', 'warning');
+                return;
+            }
+            const oversized = files.filter(f => f.size > 25 * 1024 * 1024);
+            if (oversized.length > 0) {
+                showToast('Algún archivo supera el límite de 25MB', 'warning');
+                return;
+            }
+
+            try {
+                const now = Date.now();
+                const readFileAsDataUrl = async (file, idx) => {
+                    const optimizedUrl = await readAndOptimizeMediaFile(file);
+                    return {
+                        id: 'm_' + pieceId + '_' + now + '_' + idx,
+                        url: optimizedUrl,
+                        type: (file.type && file.type.startsWith('video/')) || /\.(mp4|mov|webm)$/i.test(file.name || '') ? 'video' : 'image',
+                        name: file.name || `Arte_${now}_${idx}.png`,
+                        uploaded_at: now + idx
+                    };
+                };
+
+                const newMediaItems = await Promise.all(files.map((f, idx) => readFileAsDataUrl(f, idx)));
+                openSendToReviewConfirmModal({
+                    mode: 'upload',
+                    pieceId: pieceId,
+                    mediaItems: newMediaItems,
+                    isAppend: true
+                });
+            } catch (err) {
+                showToast('Error al leer los archivos seleccionados', 'error');
+            }
+        }
+
+        // Eventos globales de Drag & Drop, Ctrl+V y Teclado para los modales multimedia
+        (function initMediaModalListeners() {
+            const dropzone = document.getElementById('media-dropzone');
+            if (dropzone) {
+                dropzone.addEventListener('dragover', (e) => {
+                    e.preventDefault();
+                    dropzone.classList.add('drag-over');
+                });
+                dropzone.addEventListener('dragleave', () => {
+                    dropzone.classList.remove('drag-over');
+                });
+                dropzone.addEventListener('drop', (e) => {
+                    e.preventDefault();
+                    dropzone.classList.remove('drag-over');
+                    if (e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+                        addFilesToDropPasteStage(e.dataTransfer.files);
+                    }
+                });
+            }
+
+            document.addEventListener('paste', (e) => {
+                const items = e.clipboardData && e.clipboardData.items;
+                if (!items) return;
+                const pastedFiles = [];
+                for (let i = 0; i < items.length; i++) {
+                    if (items[i].kind === 'file') {
+                        const file = items[i].getAsFile();
+                        if (file) pastedFiles.push(file);
+                    }
+                }
+                if (pastedFiles.length === 0) return;
+
+                const dropModal = document.getElementById('mediaDropPasteModal');
+                if (dropModal && dropModal.classList.contains('active')) {
+                    e.preventDefault();
+                    addFilesToDropPasteStage(pastedFiles);
+                    return;
+                }
+
+                const anyModalOpen = document.querySelector('.modal-overlay.active, .modal.active');
+                if (!anyModalOpen && hoveredTimelineUploadPieceId !== null) {
+                    e.preventDefault();
+                    uploadTimelineFilesToPiece(hoveredTimelineUploadPieceId, pastedFiles);
+                }
+            });
+
+            const lightboxImg = document.getElementById('lightbox-image');
+            const lightboxStage = document.querySelector('#mediaLightboxModal .lightbox-carousel-stage');
+            if (lightboxStage) {
+                lightboxStage.addEventListener('wheel', (e) => {
+                    const lb = document.getElementById('mediaLightboxModal');
+                    if (!lb || !lb.classList.contains('active')) return;
+                    if (!lightboxImg || lightboxImg.style.display === 'none') return;
+                    e.preventDefault();
+                    const delta = e.deltaY < 0 ? 0.35 : -0.35;
+                    changeLightboxZoom(delta, e.clientX, e.clientY);
+                }, { passive: false });
+            }
+
+            if (lightboxImg) {
+                let isPanning = false;
+                let hasMoved = false;
+                let startX = 0;
+                let startY = 0;
+                let startPanX = 0;
+                let startPanY = 0;
+
+                lightboxImg.addEventListener('pointerdown', (e) => {
+                    if (e.button !== 0) return;
+                    startX = e.clientX;
+                    startY = e.clientY;
+                    hasMoved = false;
+                    if (lightboxZoom > 1) {
+                        isPanning = true;
+                        startPanX = lightboxPanX;
+                        startPanY = lightboxPanY;
+                        lightboxImg.classList.add('is-panning');
+                        lightboxImg.setPointerCapture(e.pointerId);
+                    }
+                });
+
+                lightboxImg.addEventListener('pointermove', (e) => {
+                    if (!isPanning) return;
+                    const dx = e.clientX - startX;
+                    const dy = e.clientY - startY;
+                    if (Math.abs(dx) > 4 || Math.abs(dy) > 4) hasMoved = true;
+                    lightboxPanX = startPanX + dx;
+                    lightboxPanY = startPanY + dy;
+                    applyLightboxZoomTransform();
+                });
+
+                const endPan = (e) => {
+                    if (isPanning) {
+                        isPanning = false;
+                        lightboxImg.classList.remove('is-panning');
+                        try { lightboxImg.releasePointerCapture(e.pointerId); } catch (_) {}
+                    }
+                };
+                lightboxImg.addEventListener('pointerup', endPan);
+                lightboxImg.addEventListener('pointercancel', endPan);
+
+                lightboxImg.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    if (hasMoved) {
+                        hasMoved = false;
+                        return;
+                    }
+                    if (lightboxZoom > 1) {
+                        resetLightboxZoom();
+                    } else {
+                        changeLightboxZoom(1.2, e.clientX, e.clientY);
+                    }
+                });
+            }
+
+            document.addEventListener('keydown', (e) => {
+                const lightbox = document.getElementById('mediaLightboxModal');
+                const dropModal = document.getElementById('mediaDropPasteModal');
+                const reorderModal = document.getElementById('mediaReorderModal');
+                if (dropModal && dropModal.classList.contains('active')) {
+                    if (e.key === 'Escape') closeDropPasteModal();
+                    return;
+                }
+                if (reorderModal && reorderModal.classList.contains('active')) {
+                    if (e.key === 'Escape') closeReorderMediaModal();
+                    return;
+                }
+                if (lightbox && lightbox.classList.contains('active')) {
+                    if (e.key === 'Escape') closeMediaLightbox();
+                    else if (e.key === 'ArrowLeft') navigateLightbox(-1);
+                    else if (e.key === 'ArrowRight') navigateLightbox(1);
+                }
+            });
+        })();
 
         // Función auxiliar central para actualizar estado de pieza en memoria
         function updatePieceLocalState(pieceId, props) {
@@ -9324,7 +11041,7 @@
         }
 
         // ==================== ACTUALIZACIÓN DE ESTADO EN BD ====================
-        async function updateStatus(id, field, value) {
+        async function updateStatus(id, field, value, options = {}) {
             // Actualización optimista local en mockData
             const itemIndex = mockData.findIndex(d => d.id === id);
             if (itemIndex > -1) {
@@ -9348,8 +11065,10 @@
                     break;
                 }
             }
-            renderTimeline();
-            renderReviews();
+            if (!options.skipTimelineRender) {
+                renderTimeline();
+                renderReviews();
+            }
 
             try {
                 const res = await fetch('api.php?action=update_status', {
@@ -9374,8 +11093,10 @@
                             break;
                         }
                     }
-                    renderTimeline();
-                    renderReviews();
+                    if (!options.skipTimelineRender) {
+                        renderTimeline();
+                        renderReviews();
+                    }
                     showToast(`BD: Guardado (${field})`, 'success');
                 } else {
                     showToast('Error en BD: ' + (data.message || 'No guardado'), 'error');
@@ -10511,6 +12232,255 @@
             if (tabId === 'brands') renderBrandsConfigTable();
             if (tabId === 'users' || tabId === 'requests') loadAccessRequests();
             if (tabId === 'legal') loadLegalAuditData();
+            if (tabId === 'trash') renderSettingsTrashList();
+        }
+
+        function getFiveMonthsAgoTimestamp() {
+            const cutoff = new Date();
+            cutoff.setMonth(cutoff.getMonth() - 5);
+            return cutoff.getTime();
+        }
+
+        function collectAllPieceMediaEntries() {
+            const seenPieceIds = new Set();
+            const allPieces = [];
+
+            for (const b in mockDataByBrand) {
+                (mockDataByBrand[b] || []).forEach(p => {
+                    if (p && p.id !== undefined && !seenPieceIds.has(p.id)) {
+                        seenPieceIds.add(p.id);
+                        allPieces.push(p);
+                    }
+                });
+            }
+            (mockData || []).forEach(p => {
+                if (p && p.id !== undefined && !seenPieceIds.has(p.id)) {
+                    seenPieceIds.add(p.id);
+                    allPieces.push(p);
+                }
+            });
+
+            const entries = [];
+            allPieces.forEach(piece => {
+                const list = getPieceMediaList(piece);
+                if (!list || list.length === 0) return;
+
+                let fallbackTs = Date.now();
+                if (piece.calculatedDate instanceof Date && !isNaN(piece.calculatedDate.getTime())) {
+                    fallbackTs = piece.calculatedDate.getTime();
+                } else if (piece.created_at) {
+                    const parsed = Date.parse(piece.created_at);
+                    if (!isNaN(parsed)) fallbackTs = parsed;
+                }
+
+                list.forEach((m, idx) => {
+                    const ts = (m && typeof m.uploaded_at === 'number' && !isNaN(m.uploaded_at))
+                        ? m.uploaded_at
+                        : (m && m.uploaded_at && !isNaN(Date.parse(m.uploaded_at)) ? Date.parse(m.uploaded_at) : fallbackTs);
+                    entries.push({
+                        pieceId: piece.id,
+                        brand: piece.brand || 'Sin marca',
+                        title: piece.title || piece.copy_text || `Pieza #${piece.id}`,
+                        mediaIndex: idx,
+                        mediaId: m.id || '',
+                        url: m.url || '',
+                        name: m.name || `Arte_${idx + 1}`,
+                        type: (m.type === 'video' || (m.url && (m.url.includes('video/') || m.url.endsWith('.mp4')))) ? 'video' : 'image',
+                        timestamp: ts
+                    });
+                });
+            });
+
+            // Ordenar por fecha (más reciente primero)
+            entries.sort((a, b) => b.timestamp - a.timestamp);
+            return entries;
+        }
+
+        function renderSettingsTrashList() {
+            const tbody = document.getElementById('cfg-trash-table-body');
+            const summary = document.getElementById('cfg-trash-summary');
+            const badge = document.getElementById('cfg-tab-trash-badge');
+            const btn5m = document.getElementById('btn-empty-trash-5m');
+            const btnAll = document.getElementById('btn-empty-trash-all');
+
+            const entries = collectAllPieceMediaEntries();
+            const cutoffTs = getFiveMonthsAgoTimestamp();
+            const olderCount = entries.filter(e => e.timestamp < cutoffTs).length;
+
+            if (badge) {
+                badge.textContent = String(entries.length);
+                badge.style.display = entries.length > 0 ? 'inline-block' : 'none';
+            }
+
+            if (btnAll) btnAll.disabled = entries.length === 0;
+            if (btn5m) btn5m.disabled = olderCount === 0;
+
+            if (summary) {
+                summary.innerHTML = `
+                    <div>
+                        Total en papelera: <strong>${entries.length}</strong> archivo(s)
+                        &nbsp;|&nbsp;
+                        Más viejas de 5 meses: <strong style="color: ${olderCount > 0 ? '#f59e0b' : 'var(--text-muted)'};">${olderCount}</strong>
+                    </div>
+                    <div class="text-muted" style="font-size: 0.78rem;">
+                        Ordenado por fecha (más reciente primero)
+                    </div>
+                `;
+            }
+
+            if (!tbody) return;
+            if (entries.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="5" class="text-muted" style="text-align: center; padding: 2rem;">No hay imágenes cargadas en las piezas actualmente.</td></tr>`;
+                return;
+            }
+
+            tbody.innerHTML = entries.map(e => {
+                const dateObj = new Date(e.timestamp);
+                const dateStr = isNaN(dateObj.getTime())
+                    ? 'Sin fecha'
+                    : dateObj.toLocaleDateString('es-ES', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+                const isOlder5m = e.timestamp < cutoffTs;
+
+                return `
+                    <tr>
+                        <td style="width: 72px;">
+                            <div style="width: 52px; height: 52px; border-radius: 8px; overflow: hidden; background: #111; border: 1px solid var(--card-border);">
+                                ${e.type === 'video'
+                                    ? `<video src="${e.url}" style="width: 100%; height: 100%; object-fit: cover;"></video>`
+                                    : `<img src="${e.url}" style="width: 100%; height: 100%; object-fit: cover;" alt="">`}
+                            </div>
+                        </td>
+                        <td>
+                            <div style="font-weight: 700; font-size: 0.85rem; max-width: 220px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="${escapeHtml(e.name)}">
+                                ${escapeHtml(e.name)}
+                            </div>
+                            <div class="text-muted" style="font-size: 0.74rem;">${e.type === 'video' ? 'Video' : 'Imagen'}</div>
+                        </td>
+                        <td>
+                            <div style="font-weight: 700; font-size: 0.84rem; color: var(--neon-red);">${escapeHtml(e.brand)}</div>
+                            <div class="text-muted" style="font-size: 0.78rem; max-width: 260px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="${escapeHtml(e.title)}">
+                                ${escapeHtml(e.title)}
+                            </div>
+                        </td>
+                        <td>
+                            <div style="font-size: 0.82rem; font-weight: 600;">${dateStr}</div>
+                            ${isOlder5m
+                                ? `<span style="display: inline-block; margin-top: 3px; font-size: 0.68rem; font-weight: 800; color: #f59e0b; background: rgba(245, 158, 11, 0.14); border: 1px solid rgba(245, 158, 11, 0.35); padding: 1px 7px; border-radius: 999px;">+5 meses</span>`
+                                : ''}
+                        </td>
+                        <td style="text-align: right;">
+                            <button type="button" class="btn-float btn-secondary" style="padding: 5px 10px; font-size: 0.78rem; color: var(--neon-red);" onclick="removeTrashMediaItem(${e.pieceId}, ${e.mediaIndex})" title="Eliminar esta imagen">
+                                <span class="material-symbols-rounded" style="font-size: 1rem;">delete</span>
+                            </button>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        async function removeTrashMediaItem(pieceId, mediaIndex) {
+            const piece = findPieceById(pieceId);
+            if (!piece) return;
+            const list = getPieceMediaList(piece);
+            if (mediaIndex < 0 || mediaIndex >= list.length) return;
+            list.splice(mediaIndex, 1);
+
+            try {
+                const res = await fetch('api.php?action=upload_piece_media', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        id: pieceId,
+                        media_url: JSON.stringify(list)
+                    })
+                });
+                const data = await res.json();
+                if (data.success) {
+                    updatePieceLocalState(pieceId, {
+                        media_url: data.media_url,
+                        designer_design: list.length > 0 ? piece.designer_design : 'Pendiente'
+                    });
+                    showToast('Imagen eliminada de la pieza', 'success');
+                    renderSettingsTrashList();
+                    renderTimeline();
+                    renderReviews();
+                    renderTable();
+                    renderCreatedArtsCard();
+                } else {
+                    showToast('Error al eliminar imagen: ' + (data.message || ''), 'error');
+                }
+            } catch (err) {
+                showToast('Error de red al eliminar imagen', 'error');
+            }
+        }
+
+        async function emptyTrashMedia(mode) {
+            const entries = collectAllPieceMediaEntries();
+            if (entries.length === 0) {
+                showToast('La papelera ya está vacía', 'info');
+                return;
+            }
+
+            const cutoffTs = getFiveMonthsAgoTimestamp();
+            const targetEntries = mode === 'older_5_months'
+                ? entries.filter(e => e.timestamp < cutoffTs)
+                : entries;
+
+            if (targetEntries.length === 0) {
+                showToast('No hay imágenes con más de 5 meses de antigüedad', 'info');
+                return;
+            }
+
+            const confirmMsg = mode === 'older_5_months'
+                ? `¿Seguro que deseas eliminar ${targetEntries.length} imagen(es) con más de 5 meses de antigüedad?`
+                : `¿Seguro que deseas vaciar toda la papelera (${targetEntries.length} archivo(s))? Esta acción no se puede deshacer.`;
+            if (!confirm(confirmMsg)) return;
+
+            // Agrupar índices a eliminar por pieza
+            const toRemoveByPiece = {};
+            targetEntries.forEach(e => {
+                if (!toRemoveByPiece[e.pieceId]) toRemoveByPiece[e.pieceId] = new Set();
+                toRemoveByPiece[e.pieceId].add(e.mediaIndex);
+            });
+
+            showToast(`Eliminando ${targetEntries.length} archivo(s)...`, 'info');
+            let successPieces = 0;
+
+            for (const pidStr of Object.keys(toRemoveByPiece)) {
+                const pieceId = Number(pidStr);
+                const piece = findPieceById(pieceId);
+                if (!piece) continue;
+                const removeIdxSet = toRemoveByPiece[pidStr];
+                const remaining = getPieceMediaList(piece).filter((_, idx) => !removeIdxSet.has(idx));
+
+                try {
+                    const res = await fetch('api.php?action=upload_piece_media', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            id: pieceId,
+                            media_url: JSON.stringify(remaining)
+                        })
+                    });
+                    const data = await res.json();
+                    if (data.success) {
+                        successPieces++;
+                        updatePieceLocalState(pieceId, {
+                            media_url: data.media_url,
+                            designer_design: remaining.length > 0 ? piece.designer_design : 'Pendiente'
+                        });
+                    }
+                } catch (err) {
+                    console.error('Error vaciando papelera para pieza', pieceId, err);
+                }
+            }
+
+            renderSettingsTrashList();
+            renderTimeline();
+            renderReviews();
+            renderTable();
+            renderCreatedArtsCard();
+            showToast(`Papelera actualizada (${successPieces} pieza(s) limpiadas)`, 'success');
         }
 
         function openContactQuoteModal() {
