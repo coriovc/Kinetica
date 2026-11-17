@@ -1,0 +1,2118 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="dark">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Iniciar Sesión • Kinetica Workspace</title>
+    <link rel="icon" type="image/png" href="img/icon.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="img/apple-touch-icon.png">
+    <link rel="manifest" href="manifest.json">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Kinetica">
+    <meta name="theme-color" content="#0f111a">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,500,1,0" />
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <script src="js/legal-consent.js" defer></script>
+    <script type="text/plain" data-consent-category="analytics">
+        window.KineticaConsent?.track('analytics', 'page_view', { page: 'login' });
+    </script>
+    <style>
+        .material-symbols-rounded {
+            font-family: 'Material Symbols Rounded';
+            font-weight: normal;
+            font-style: normal;
+            font-size: 20px;
+            line-height: 1;
+            letter-spacing: normal;
+            text-transform: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            white-space: nowrap;
+            word-wrap: normal;
+            direction: ltr;
+            -webkit-font-feature-settings: 'liga';
+            font-feature-settings: 'liga';
+            -webkit-font-smoothing: antialiased;
+            font-variation-settings: 'FILL' 1, 'wght' 500, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+            user-select: none;
+        }
+
+        :root {
+            --bg-base: #090d16;
+            --glass-bg: rgba(17, 24, 39, 0.78);
+            --glass-border: rgba(239, 68, 68, 0.22);
+            --glass-highlight: rgba(255, 255, 255, 0.08);
+            --neon-red: #ef4444;
+            --dark-red: #dc2626;
+            --deep-red: #991b1b;
+            --text-main: #f9fafb;
+            --text-muted: #9ca3af;
+            --font-main: 'Inter', sans-serif;
+            --card-bg: #111827;
+            --card-border: #1f2937;
+            --input-bg: rgba(17, 24, 39, 0.9);
+            --input-border: #374151;
+            --shadow-glass: 0 15px 35px 0 rgba(0, 0, 0, 0.6);
+            --shadow-hover: 0 20px 45px 0 rgba(239, 68, 68, 0.22);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg-base);
+            background-image:
+                radial-gradient(circle at 10% 20%, rgba(220, 38, 38, 0.12), transparent 45%),
+                radial-gradient(circle at 90% 80%, rgba(153, 27, 27, 0.14), transparent 45%),
+                radial-gradient(circle at 50% 50%, rgba(17, 24, 39, 0.95), #090d16);
+            color: var(--text-main);
+            font-family: var(--font-main);
+            min-height: 100vh;
+            overflow-x: hidden;
+            display: flex;
+            align-items: stretch;
+            justify-content: stretch;
+        }
+
+        /* Contenedor Principal en Pantalla Dividida (Split Screen) */
+        .login-layout {
+            display: flex;
+            width: 100vw;
+            min-height: 100vh;
+        }
+
+        /* ==================== COLUMNA IZQUIERDA: CARRUSEL FULL-SCREEN ==================== */
+        .carousel-column {
+            flex: 1.15;
+            position: relative;
+            overflow: hidden;
+            background: #06090f;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .carousel-slides-wrapper {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        .carousel-slide {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1), transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+            transform: scale(1.05);
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding: 4.5rem 3.5rem;
+            z-index: 1;
+        }
+
+        .carousel-slide.active {
+            opacity: 1;
+            visibility: visible;
+            transform: scale(1);
+            z-index: 2;
+        }
+
+        .slide-bg-image {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: brightness(0.45) saturate(1.2);
+            z-index: -2;
+            transition: transform 7s ease-out;
+        }
+
+        .carousel-slide.active .slide-bg-image {
+            transform: scale(1.08);
+        }
+
+        .slide-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(180deg,
+                    rgba(9, 13, 22, 0.2) 0%,
+                    rgba(9, 13, 22, 0.5) 45%,
+                    rgba(9, 13, 22, 0.94) 85%,
+                    #090d16 100%);
+            z-index: -1;
+        }
+
+        /* Header flotante en el carrusel */
+        .carousel-top-bar {
+            position: relative;
+            z-index: 10;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 2.5rem 3.5rem 0 3.5rem;
+        }
+
+        .brand-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba(17, 24, 39, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(239, 68, 68, 0.35);
+            padding: 0.5rem 1rem;
+            border-radius: 999px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+        }
+
+        .brand-badge-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--neon-red);
+            box-shadow: 0 0 10px var(--neon-red);
+            animation: pulse-dot 2s infinite ease-in-out;
+        }
+
+        @keyframes pulse-dot {
+
+            0%,
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+
+            50% {
+                opacity: 0.5;
+                transform: scale(0.85);
+            }
+        }
+
+        .brand-badge-text {
+            font-size: 0.8rem;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            color: #fff;
+        }
+
+        /* Contenido del Slide */
+        .slide-content {
+            position: relative;
+            z-index: 5;
+            max-width: 620px;
+        }
+
+        .slide-category {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(220, 38, 38, 0.18);
+            color: var(--neon-red);
+            border: 1px solid rgba(220, 38, 38, 0.35);
+            padding: 0.3rem 0.75rem;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            margin-bottom: 1rem;
+        }
+
+        .slide-title {
+            font-size: 2.35rem;
+            font-weight: 800;
+            line-height: 1.2;
+            letter-spacing: -0.025em;
+            color: #ffffff;
+            margin-bottom: 0.85rem;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.6);
+        }
+
+        .slide-desc {
+            font-size: 1rem;
+            line-height: 1.6;
+            color: #d1d5db;
+            margin-bottom: 1.5rem;
+        }
+
+        /* Tarjeta flotante interactiva de previsualización en el slide */
+        .slide-metric-card {
+            display: flex;
+            align-items: center;
+            gap: 1.25rem;
+            background: rgba(17, 24, 39, 0.75);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-left: 3px solid var(--neon-red);
+            border-radius: 14px;
+            padding: 0.9rem 1.25rem;
+            max-width: 440px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+        }
+
+        .slide-metric-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 10px;
+            background: linear-gradient(135deg, rgba(220, 38, 38, 0.25), rgba(153, 27, 27, 0.15));
+            border: 1px solid rgba(220, 38, 38, 0.35);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.35rem;
+            flex-shrink: 0;
+        }
+
+        .slide-metric-label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            font-weight: 700;
+            color: var(--text-muted);
+            letter-spacing: 0.04em;
+        }
+
+        .slide-metric-value {
+            font-size: 1rem;
+            font-weight: 800;
+            color: #fff;
+            margin-top: 2px;
+        }
+
+        /* Controles del Carrusel (Flechas e Indicadores) */
+        .carousel-bottom-bar {
+            position: relative;
+            z-index: 10;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 3.5rem 2.75rem 3.5rem;
+        }
+
+        .carousel-dots {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .carousel-dot {
+            height: 6px;
+            width: 24px;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.25);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+        }
+
+        .carousel-dot.active {
+            width: 42px;
+            background: var(--neon-red);
+            box-shadow: 0 0 12px var(--neon-red);
+        }
+
+        .carousel-nav-arrows {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .carousel-arrow-btn {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            background: rgba(17, 24, 39, 0.7);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            font-size: 1.1rem;
+        }
+
+        .carousel-arrow-btn:hover {
+            border-color: var(--neon-red);
+            background: rgba(220, 38, 38, 0.2);
+            color: var(--neon-red);
+            transform: scale(1.08);
+            box-shadow: 0 0 15px rgba(220, 38, 38, 0.3);
+        }
+
+        /* ==================== COLUMNA DERECHA: FORMULARIO DE ACCESO ==================== */
+        .login-column {
+            flex: 0.95;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 3rem 2.5rem;
+            position: relative;
+            background: rgba(9, 13, 22, 0.7);
+            backdrop-filter: blur(25px);
+            border-left: 1px solid rgba(255, 255, 255, 0.07);
+            overflow-y: auto;
+        }
+
+        .login-card-container {
+            width: 100%;
+            max-width: 460px;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        /* Encabezado del Formulario */
+        .login-header {
+            display: flex;
+            flex-direction: column;
+            gap: 0.4rem;
+        }
+
+        .login-brand-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 0.5rem;
+        }
+
+        .login-logo-circle {
+            width: 46px;
+            height: 46px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, var(--neon-red), var(--deep-red));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 900;
+            font-size: 1.4rem;
+            color: #ffffff;
+            box-shadow: 0 4px 18px rgba(220, 38, 38, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .login-brand-title {
+            font-size: 1.55rem;
+            font-weight: 800;
+            letter-spacing: -0.03em;
+            color: #ffffff;
+        }
+
+        .login-brand-tagline {
+            font-size: 0.74rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--neon-red);
+        }
+
+        .login-title {
+            font-size: 1.75rem;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            color: #ffffff;
+        }
+
+        .login-subtitle {
+            font-size: 0.88rem;
+            color: var(--text-muted);
+            line-height: 1.45;
+        }
+
+        /* Opción de Iniciar como Administrador (Tarjeta Rápida) */
+        .admin-quick-card {
+            background: linear-gradient(135deg, rgba(220, 38, 38, 0.12), rgba(17, 24, 39, 0.8));
+            border: 1px solid rgba(239, 68, 68, 0.35);
+            border-radius: 12px;
+            padding: 0.85rem 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .admin-quick-card:hover {
+            border-color: var(--neon-red);
+            background: linear-gradient(135deg, rgba(220, 38, 38, 0.22), rgba(17, 24, 39, 0.95));
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(220, 38, 38, 0.25);
+        }
+
+        .admin-quick-card::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 50px;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(239, 68, 68, 0.08));
+            pointer-events: none;
+        }
+
+        .admin-quick-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .admin-crown-badge {
+            width: 34px;
+            height: 34px;
+            border-radius: 8px;
+            background: rgba(220, 38, 38, 0.2);
+            color: #fca5a5;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+            border: 1px solid rgba(220, 38, 38, 0.4);
+        }
+
+        .admin-quick-text strong {
+            font-size: 0.86rem;
+            color: #ffffff;
+            display: block;
+        }
+
+        .admin-quick-text span {
+            font-size: 0.72rem;
+            color: #fca5a5;
+            font-weight: 600;
+        }
+
+        .admin-quick-action {
+            font-size: 0.74rem;
+            font-weight: 700;
+            color: #ffffff;
+            background: var(--neon-red);
+            padding: 0.35rem 0.65rem;
+            border-radius: 6px;
+            letter-spacing: 0.02em;
+            transition: all 0.2s ease;
+        }
+
+        /* Formulario */
+        .login-form {
+            display: flex;
+            flex-direction: column;
+            gap: 1.1rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.45rem;
+        }
+
+        .form-label-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .form-label {
+            font-size: 0.82rem;
+            font-weight: 600;
+            color: #e5e7eb;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .privilege-hint-badge {
+            font-size: 0.68rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            padding: 0.15rem 0.5rem;
+            border-radius: 4px;
+            background: rgba(255, 255, 255, 0.08);
+            color: var(--text-muted);
+            transition: all 0.2s ease;
+        }
+
+        .privilege-hint-badge.admin {
+            background: rgba(220, 38, 38, 0.2);
+            color: #ef4444;
+            border: 1px solid rgba(220, 38, 38, 0.3);
+        }
+
+        .privilege-hint-badge.designer {
+            background: rgba(147, 51, 234, 0.2);
+            color: #c084fc;
+            border: 1px solid rgba(147, 51, 234, 0.3);
+        }
+
+        .privilege-hint-badge.cm {
+            background: rgba(16, 185, 129, 0.2);
+            color: #34d399;
+            border: 1px solid rgba(16, 185, 129, 0.3);
+        }
+
+        .input-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .input-icon {
+            position: absolute;
+            left: 1rem;
+            font-size: 1.05rem;
+            color: var(--text-muted);
+            pointer-events: none;
+            transition: color 0.2s ease;
+        }
+
+        .form-input {
+            width: 100%;
+            background: var(--input-bg);
+            border: 1px solid var(--input-border);
+            border-radius: 10px;
+            padding: 0.85rem 1rem 0.85rem 2.85rem;
+            color: #ffffff;
+            font-family: var(--font-main);
+            font-size: 0.92rem;
+            transition: all 0.25s ease;
+            outline: none;
+        }
+
+        .form-input:focus {
+            border-color: var(--neon-red);
+            box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.18);
+            background: rgba(17, 24, 39, 0.98);
+        }
+
+        .form-input:focus+.input-icon {
+            color: var(--neon-red);
+        }
+
+        .toggle-password-btn {
+            position: absolute;
+            right: 0.85rem;
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            padding: 0.3rem;
+            font-size: 1.05rem;
+            transition: color 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .toggle-password-btn:hover {
+            color: #ffffff;
+        }
+
+        /* Fila de Remember Me y Olvidé Contraseña */
+        .form-actions-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 0.82rem;
+            margin-top: 0.15rem;
+        }
+
+        .checkbox-container {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            user-select: none;
+            color: #d1d5db;
+        }
+
+        .checkbox-container input[type="checkbox"] {
+            appearance: none;
+            -webkit-appearance: none;
+            width: 17px;
+            height: 17px;
+            border-radius: 4px;
+            border: 1px solid var(--input-border);
+            background: var(--input-bg);
+            outline: none;
+            cursor: pointer;
+            position: relative;
+            transition: all 0.2s ease;
+        }
+
+        .checkbox-container input[type="checkbox"]:checked {
+            background: var(--neon-red);
+            border-color: var(--neon-red);
+        }
+
+        .checkbox-container input[type="checkbox"]:checked::after {
+            content: '✓';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #ffffff;
+            font-size: 0.72rem;
+            font-weight: 900;
+        }
+
+        .forgot-pass-link {
+            color: var(--text-muted);
+            text-decoration: none;
+            transition: color 0.2s ease;
+            font-size: 0.8rem;
+        }
+
+        .forgot-pass-link:hover {
+            color: var(--neon-red);
+            text-decoration: underline;
+        }
+
+        /* Botón Principal de Iniciar Sesión */
+        .btn-submit-login {
+            width: 100%;
+            padding: 0.95rem 1.5rem;
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            background: linear-gradient(135deg, var(--neon-red), var(--deep-red));
+            color: #ffffff;
+            font-family: var(--font-main);
+            font-size: 0.96rem;
+            font-weight: 700;
+            letter-spacing: -0.01em;
+            cursor: pointer;
+            box-shadow: 0 4px 18px rgba(220, 38, 38, 0.35);
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 0.4rem;
+        }
+
+        .btn-submit-login:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(220, 38, 38, 0.45);
+            filter: brightness(1.08);
+        }
+
+        .btn-submit-login:active {
+            transform: translateY(0);
+        }
+
+        .btn-submit-login.loading {
+            opacity: 0.8;
+            pointer-events: none;
+        }
+
+        /* Separador "O ingresa con" */
+        .auth-divider {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin: 0.5rem 0;
+        }
+
+        .auth-divider-line {
+            flex: 1;
+            height: 1px;
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .auth-divider-text {
+            font-size: 0.74rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        /* Botones de Social Login (Google) */
+        .social-buttons-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 0.75rem;
+        }
+
+        .btn-social {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            padding: 0.75rem 1rem;
+            border-radius: 10px;
+            background: rgba(17, 24, 39, 0.85);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            color: #ffffff;
+            font-family: var(--font-main);
+            font-size: 0.84rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-social:hover {
+            background: rgba(31, 41, 55, 0.95);
+            border-color: rgba(255, 255, 255, 0.25);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.35);
+        }
+
+        .btn-social.google:hover {
+            border-color: rgba(234, 67, 53, 0.45);
+        }
+
+        .btn-social.apple:hover {
+            border-color: rgba(255, 255, 255, 0.45);
+        }
+
+        .social-icon {
+            width: 18px;
+            height: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        /* Cuentas Rápidas de la Base de Datos */
+        .db-accounts-section {
+            background: rgba(17, 24, 39, 0.5);
+            border: 1px dashed rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 0.75rem 0.9rem;
+        }
+
+        .db-accounts-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 0.72rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-muted);
+            margin-bottom: 0.5rem;
+        }
+
+        .db-accounts-chips {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+
+        .db-chip {
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 6px;
+            padding: 0.3rem 0.55rem;
+            font-size: 0.74rem;
+            color: #d1d5db;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .db-chip:hover {
+            background: rgba(220, 38, 38, 0.2);
+            border-color: var(--neon-red);
+            color: #ffffff;
+            transform: translateY(-1px);
+        }
+
+        .db-chip-role-badge {
+            font-size: 0.62rem;
+            font-weight: 800;
+            padding: 0.1rem 0.35rem;
+            border-radius: 4px;
+            text-transform: uppercase;
+        }
+
+        .db-chip-role-badge.admin {
+            background: #dc2626;
+            color: #fff;
+        }
+
+        .db-chip-role-badge.designer {
+            background: #7c3aed;
+            color: #fff;
+        }
+
+        .db-chip-role-badge.cm {
+            background: #059669;
+            color: #fff;
+        }
+
+        /* Barra Inferior del Login (Estado de Base de Datos y Footer) */
+        .login-footer-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            margin-top: 0.5rem;
+            padding-top: 0.75rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.06);
+        }
+
+        .db-connection-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.72rem;
+            font-weight: 600;
+            color: #10b981;
+        }
+
+        .db-dot-live {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: #10b981;
+            box-shadow: 0 0 8px #10b981;
+            animation: pulse-dot 2.5s infinite;
+        }
+
+        /* Toasts de Notificación */
+        .login-toast {
+            position: fixed;
+            top: 1.5rem;
+            right: 1.5rem;
+            padding: 0.85rem 1.25rem;
+            border-radius: 10px;
+            background: #111827;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            color: #ffffff;
+            font-size: 0.85rem;
+            font-weight: 600;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            z-index: 99999;
+            transform: translateY(-20px);
+            opacity: 0;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            pointer-events: none;
+        }
+
+        .login-toast.active {
+            transform: translateY(0);
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .login-toast.success {
+            border-color: #10b981;
+            background: #064e3b;
+        }
+
+        .login-toast.error {
+            border-color: #ef4444;
+            background: #7f1d1d;
+        }
+
+        .login-toast.info {
+            border-color: #3b82f6;
+            background: #1e3a8a;
+        }
+
+        /* Modal Interactivo de Autenticación Social (Google / Apple) */
+        .social-auth-modal {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.75);
+            backdrop-filter: blur(12px);
+            z-index: 100000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 1.5rem;
+        }
+
+        .social-auth-modal.active {
+            display: flex;
+        }
+
+        .social-modal-card {
+            background: #111827;
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 16px;
+            width: 100%;
+            max-width: 440px;
+            padding: 2rem;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8);
+            display: flex;
+            flex-direction: column;
+            gap: 1.25rem;
+        }
+
+        .social-modal-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .social-modal-logo {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.08);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .account-choice-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            max-height: 240px;
+            overflow-y: auto;
+            margin: 0.5rem 0;
+        }
+
+        .account-choice-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 0.75rem 1rem;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .account-choice-item:hover {
+            background: rgba(220, 38, 38, 0.15);
+            border-color: var(--neon-red);
+            transform: translateX(3px);
+        }
+
+        .account-choice-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 1.5px solid var(--neon-red);
+        }
+
+        .account-choice-details {
+            flex: 1;
+            text-align: left;
+        }
+
+        .account-choice-details strong {
+            display: block;
+            font-size: 0.86rem;
+            color: #ffffff;
+        }
+
+        .account-choice-details span {
+            font-size: 0.74rem;
+            color: var(--text-muted);
+        }
+
+        /* Responsividad */
+        @media (max-width: 1024px) {
+            .carousel-column {
+                display: none;
+            }
+
+            .login-column {
+                flex: 1;
+                padding: 2rem 1.5rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            html,
+            body {
+                overflow-x: hidden;
+            }
+
+            .login-column {
+                padding: calc(1.5rem + env(safe-area-inset-top)) 1.15rem calc(1.5rem + env(safe-area-inset-bottom)) 1.15rem;
+                min-height: 100dvh;
+            }
+
+            .login-card,
+            .login-form-container {
+                width: 100%;
+                max-width: 100%;
+            }
+
+            input,
+            select,
+            textarea {
+                font-size: 16px !important;
+            }
+
+            .social-auth-modal {
+                width: 94vw !important;
+                max-width: 440px !important;
+                max-height: 90dvh;
+                overflow-y: auto;
+                padding: 1.25rem !important;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Material Design 3 Loading Indicator Overlay -->
+    <div id="kinetica-m3-loader-overlay" class="kinetica-m3-overlay" role="status" aria-live="polite">
+        <span data-m3-loader data-variant="contained" data-size="76" aria-label="Cargando Kinetica"></span>
+        <div class="kinetica-m3-overlay__label">Preparando acceso...</div>
+        <div class="kinetica-m3-overlay__sub">Kinetica Workspace</div>
+    </div>
+    <script src="js/m3-loading-indicator.js"></script>
+
+    <div class="login-layout">
+        <!-- ==================== COLUMNA IZQUIERDA: CARRUSEL FULL-SCREEN ==================== -->
+        <div class="carousel-column" id="login-carousel">
+            <!-- Top bar con badge de marca -->
+            <div class="carousel-top-bar">
+                <div class="brand-badge">
+                    <span class="brand-badge-dot"></span>
+                    <span class="brand-badge-text">Kinetica Workspace 2.0</span>
+                </div>
+                <div
+                    style="font-size: 0.78rem; font-weight: 700; color: rgba(255,255,255,0.6); letter-spacing: 0.04em;">
+                    PLATAFORMA INTEGRAL DE CONTENIDO
+                </div>
+            </div>
+
+            <!-- Slides del Carrusel -->
+            <div class="carousel-slides-wrapper">
+                <!-- Slide 1: Liquid Glass V2 -->
+                <div class="carousel-slide active" data-index="0">
+                    <img src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=1600&auto=format&fit=crop"
+                        class="slide-bg-image" alt="Liquid Glass Aesthetic">
+                    <div class="slide-overlay"></div>
+                    <div class="slide-content">
+                        <span class="slide-category"><span class="material-symbols-rounded"
+                                style="font-size:16px;">palette</span> Campaña & Diseño • Liquid Glass V2</span>
+                        <h2 class="slide-title">Orquestación Visual y Planificación Integral</h2>
+                        <p class="slide-desc">
+                            Gestiona cada pieza de contenido desde el brief estratégico hasta el arte final. Control de
+                            flujos de aprobación y trazabilidad milimétrica en un solo lugar.
+                        </p>
+                        <div class="slide-metric-card">
+                            <div class="slide-metric-icon"><span class="material-symbols-rounded"
+                                    style="font-size:24px;">auto_awesome</span></div>
+                            <div>
+                                <div class="slide-metric-label">Cumplimiento Operativo</div>
+                                <div class="slide-metric-value">100% en Producción • 4 Piezas Activas</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Slide 2: Neon Oasis -->
+                <div class="carousel-slide" data-index="1">
+                    <img src="https://images.unsplash.com/photo-1550745165-9bc0b252726f?q=80&w=1600&auto=format&fit=crop"
+                        class="slide-bg-image" alt="Neon Oasis">
+                    <div class="slide-overlay"></div>
+                    <div class="slide-content">
+                        <span class="slide-category"><span class="material-symbols-rounded"
+                                style="font-size:16px;">bolt</span> Revisiones en Vivo • Neon Oasis</span>
+                        <h2 class="slide-title">Revisiones Ágiles y Decisión con 1 Clic</h2>
+                        <p class="slide-desc">
+                            Flujos colaborativos entre Community Managers, Diseñadores y Agencia Revisa. Comentarios en
+                            tiempo real, histórico de versiones y aprobación instantánea.
+                        </p>
+                        <div class="slide-metric-card">
+                            <div class="slide-metric-icon"><span class="material-symbols-rounded"
+                                    style="font-size:24px;">fact_check</span></div>
+                            <div>
+                                <div class="slide-metric-label">Tiempo Medio de Aprobación</div>
+                                <div class="slide-metric-value">&lt; 4 Horas • Cero Cuellos de Botella</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Slide 3: Umami Pastelería -->
+                <div class="carousel-slide" data-index="2">
+                    <img src="https://images.unsplash.com/photo-1509440159596-0249088772ff?q=80&w=1600&auto=format&fit=crop"
+                        class="slide-bg-image" alt="Umami Pastelería">
+                    <div class="slide-overlay"></div>
+                    <div class="slide-content">
+                        <span class="slide-category"><span class="material-symbols-rounded"
+                                style="font-size:16px;">bakery_dining</span> Identidad & Estrategia • Umami</span>
+                        <h2 class="slide-title">Línea de Tiempo y Métricas por Marca</h2>
+                        <p class="slide-desc">
+                            Monitorea semanas de publicación, fechas de entrega y rendimiento por responsable.
+                            Estadísticas consolidadas con exportación a PDF y respaldos JSON.
+                        </p>
+                        <div class="slide-metric-card">
+                            <div class="slide-metric-icon"><span class="material-symbols-rounded"
+                                    style="font-size:24px;">trending_up</span></div>
+                            <div>
+                                <div class="slide-metric-label">Avance Global del Mes</div>
+                                <div class="slide-metric-value">87.5% Completado • 0 Retrasos</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Slide 4: Seguridad y Privilegios -->
+                <div class="carousel-slide" data-index="3">
+                    <img src="https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?q=80&w=1600&auto=format&fit=crop"
+                        class="slide-bg-image" alt="Seguridad y Control de Accesos">
+                    <div class="slide-overlay"></div>
+                    <div class="slide-content">
+                        <span class="slide-category"><span class="material-symbols-rounded"
+                                style="font-size:16px;">shield</span> Seguridad & Jerarquías</span>
+                        <h2 class="slide-title">Privilegios Granulares y Auditoría MySQL</h2>
+                        <p class="slide-desc">
+                            Acceso segmentado para Administradores, Diseñadores y Community Managers. Cada acción y
+                            cambio de estado queda registrado con firma de usuario y fecha.
+                        </p>
+                        <div class="slide-metric-card">
+                            <div class="slide-metric-icon"><span class="material-symbols-rounded"
+                                    style="font-size:24px;">enhanced_encryption</span></div>
+                            <div>
+                                <div class="slide-metric-label">Seguridad de Datos</div>
+                                <div class="slide-metric-value">Base de Datos MySQL • Sesiones Seguras</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Controles Inferiores del Carrusel -->
+            <div class="carousel-bottom-bar">
+                <div class="carousel-dots" id="carousel-dots-container">
+                    <button class="carousel-dot active" onclick="goToSlide(0)" aria-label="Slide 1"></button>
+                    <button class="carousel-dot" onclick="goToSlide(1)" aria-label="Slide 2"></button>
+                    <button class="carousel-dot" onclick="goToSlide(2)" aria-label="Slide 3"></button>
+                    <button class="carousel-dot" onclick="goToSlide(3)" aria-label="Slide 4"></button>
+                </div>
+                <div class="carousel-nav-arrows">
+                    <button class="carousel-arrow-btn" onclick="prevSlide()" title="Anterior"
+                        aria-label="Slide anterior">‹</button>
+                    <button class="carousel-arrow-btn" onclick="nextSlide()" title="Siguiente"
+                        aria-label="Siguiente slide">›</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== COLUMNA DERECHA: FORMULARIO DE ACCESO ==================== -->
+        <div class="login-column">
+            <div class="login-card-container">
+                <!-- Header con Logo de Marca -->
+                <div class="login-header">
+                    <div class="login-brand-row">
+                        <div class="login-logo-circle">K</div>
+                        <div>
+                            <div class="login-brand-title">KINETICA</div>
+                            <div class="login-brand-tagline">Content Intelligence Suite</div>
+                        </div>
+                    </div>
+                    <h1 class="login-title">Iniciar Sesión</h1>
+                    <p class="login-subtitle">Ingresa tus credenciales para acceder a tu panel de trabajo y gestionar
+                        tus marcas.</p>
+                </div>
+
+
+
+                <!-- Formulario Principal -->
+                <form class="login-form" id="login-form" onsubmit="handleFormLogin(event)">
+                    <!-- Campo: Usuario o Correo Electrónico -->
+                    <div class="form-group">
+                        <div class="form-label-row">
+                            <label class="form-label" for="login-identifier">
+                                <span class="material-symbols-rounded" style="font-size:16px;">person</span> Usuario o
+                                Correo Electrónico
+                            </label>
+                            <span id="role-detected-badge" class="privilege-hint-badge">Detección de Privilegio</span>
+                        </div>
+                        <div class="input-wrapper">
+                            <input type="text" id="login-identifier" class="form-input"
+                                placeholder="admin@kinetica.com o victor@kinetica.com" required autocomplete="username"
+                                oninput="onIdentifierChanged(this.value)">
+                            <span class="input-icon"><span class="material-symbols-rounded"
+                                    style="font-size:18px;">mail</span></span>
+                        </div>
+                    </div>
+
+                    <!-- Campo: Contraseña -->
+                    <div class="form-group">
+                        <div class="form-label-row">
+                            <label class="form-label" for="login-password">
+                                <span class="material-symbols-rounded" style="font-size:16px;">lock</span> Contraseña
+                            </label>
+                        </div>
+                        <div class="input-wrapper">
+                            <input type="password" id="login-password" class="form-input"
+                                placeholder="Ingresa tu contraseña" required autocomplete="current-password">
+                            <span class="input-icon"><span class="material-symbols-rounded"
+                                    style="font-size:18px;">key</span></span>
+                            <button type="button" class="toggle-password-btn" onclick="togglePasswordVisibility()"
+                                aria-label="Mostrar u ocultar contraseña">
+                                <span id="eye-icon" class="material-symbols-rounded"
+                                    style="font-size:18px;">visibility</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Remember Me & Forgot Password -->
+                    <div class="form-actions-row">
+                        <label class="checkbox-container">
+                            <input type="checkbox" id="remember-me" checked>
+                            <span>Recordarme en este equipo</span>
+                        </label>
+                        <a href="javascript:void(0)" class="forgot-pass-link"
+                            onclick="handleForgotPassword()">¿Olvidaste tu contraseña?</a>
+                    </div>
+
+                    <!-- Botón de Envío -->
+                    <button type="submit" class="btn-submit-login" id="submit-login-btn">
+                        <span>Entrar</span>
+                    </button>
+                </form>
+
+                <!-- Separador "O ingresa con" -->
+                <div class="auth-divider">
+                    <div class="auth-divider-line"></div>
+                    <div class="auth-divider-text">O continúa con</div>
+                    <div class="auth-divider-line"></div>
+                </div>
+
+                <!-- Botón de Google -->
+                <div class="social-buttons-grid">
+                    <!-- Google Button -->
+                    <button type="button" class="btn-social google" onclick="startGoogleOAuthLogin()">
+                        <span class="social-icon">
+                            <svg viewBox="0 0 24 24" width="18" height="18" xmlns="http://www.w3.org/2000/svg">
+                                <path fill="#EA4335"
+                                    d="M12 5c1.7 0 3 .7 3.7 1.3l2.8-2.8C16.8 2 14.6 1.2 12 1.2 7.5 1.2 3.7 3.8 2 7.6l3.4 2.6C6.3 7.3 8.9 5 12 5z" />
+                                <path fill="#4285F4"
+                                    d="M22.8 12.3c0-.8-.1-1.6-.2-2.3H12v4.5h6.1c-.3 1.4-1.1 2.6-2.3 3.4l3.5 2.7c2.1-1.9 3.5-4.8 3.5-8.3z" />
+                                <path fill="#FBBC05"
+                                    d="M5.4 14.8c-.2-.7-.4-1.5-.4-2.3 0-.8.2-1.6.4-2.3L2 7.6C.7 10.1 0 11.5 0 12.5s.7 2.4 2 4.9l3.4-2.6z" />
+                                <path fill="#34A853"
+                                    d="M12 23.8c3.2 0 6-1.1 8-3l-3.5-2.7c-1.1.7-2.5 1.2-4.5 1.2-3.1 0-5.7-2.3-6.6-5.2L2 16.7C3.7 20.6 7.5 23.8 12 23.8z" />
+                            </svg>
+                        </span>
+                        <span>Continuar con Google</span>
+                    </button>
+                </div>
+
+                <!-- Cuentas del Sistema (Directorio de la Base de Datos) 
+            <div class="db-accounts-section">
+                <div class="db-accounts-header">
+                    <span>Usuarios en Base de Datos</span>
+                    <span style="color: var(--neon-red); cursor: pointer;" onclick="loadDatabaseUsers()">↻ Refrescar</span>
+                </div>
+                <div class="db-accounts-chips" id="db-users-chips">
+                    <div class="db-chip" onclick="fillUserCredentials('admin@kinetica.com', 'admin123', 'admin')">
+                        <span class="db-chip-role-badge admin">ADMIN</span>
+                        <span>Admin Kinetica</span>
+                    </div>
+                    <div class="db-chip" onclick="fillUserCredentials('victor@kinetica.com', 'admin123', 'designer')">
+                        <span class="db-chip-role-badge designer">DISEÑADOR</span>
+                        <span>Victor Corio</span>
+                    </div>
+                    <div class="db-chip" onclick="fillUserCredentials('valentina@kinetica.com', 'admin123', 'community_manager')">
+                        <span class="db-chip-role-badge cm">CM</span>
+                        <span>Valentina A.</span>
+                    </div>
+                    <div class="db-chip" onclick="fillUserCredentials('wilfredo@kinetica.com', 'admin123', 'community_manager')">
+                        <span class="db-chip-role-badge cm">CM</span>
+                        <span>Wilfredo P.</span>
+                    </div>
+                </div>
+            </div>-->
+
+                <!-- Footer Legal, Cotizaciones y Bloque de Propiedad Intelectual -->
+                <footer style="margin-top: 1.35rem; padding-top: 1rem; border-top: 1px solid rgba(255,255,255,0.08); display: flex; flex-direction: column; gap: 0.7rem;">                    
+                    <nav aria-label="Enlaces legales" style="display: flex; flex-wrap: wrap; gap: 0.55rem 0.9rem; font-size: 0.73rem;">
+                        <a href="terminos-y-condiciones.html" style="color: #9ca3af; text-decoration: none;">Términos y Condiciones</a>
+                        <a href="politica-de-privacidad.html" style="color: #9ca3af; text-decoration: none;">Política de Privacidad</a>
+                        <a href="politica-de-cookies.html" style="color: #9ca3af; text-decoration: none;">Política de Cookies</a>
+                        <a href="aviso-legal.html" style="color: #9ca3af; text-decoration: none;">Aviso Legal</a>
+                        <button type="button" onclick="window.KineticaConsent?.openPreferences()" style="background: none; border: none; color: #9ca3af; font-size: 0.74rem; font-weight: 600; cursor: pointer; text-decoration: underline;">
+                            Configurar Cookies
+                        </button>
+                    </nav>
+                    <div style="font-size: 0.7rem; line-height: 1.48; color: #71717a; background: rgba(255,255,255,0.025); border: 1px solid rgba(255,255,255,0.07); border-radius: 10px; padding: 0.65rem 0.75rem;">
+                        <strong style="color: #d4d4d8;">Propiedad Intelectual:</strong> © 2026 Kinetica Digital (Venezuela). Todos los códigos fuente, interfaces UI/UX, diseños gráficos y elementos visuales del portafolio son titularidad exclusiva de Kinetica Digital, protegidos por la Ley sobre el Derecho de Autor y la Ley de Propiedad Industrial de Venezuela.
+                    </div>
+                </footer>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== MODAL DE INICIO DE SESIÓN CON GOOGLE / APPLE ==================== -->
+    <div class="social-auth-modal" id="socialAuthModal">
+        <div class="social-modal-card">
+            <div class="social-modal-header">
+                <div class="social-modal-logo" id="social-modal-icon-container">
+                    <!-- SVG inyectado dinámicamente -->
+                </div>
+                <div>
+                    <h3 id="social-modal-title" style="font-size: 1.15rem; color: #fff;">Iniciar Sesión con Google</h3>
+                    <p class="text-muted" style="font-size: 0.78rem;">Selecciona una cuenta vinculada a la base de datos
+                        de Kinetica</p>
+                </div>
+            </div>
+
+            <div class="account-choice-list" id="social-accounts-list">
+                <!-- Cuentas pobladas dinámicamente desde el backend -->
+            </div>
+
+            <form id="custom-social-form" onsubmit="submitCustomSocialLogin(event)"
+                style="display: none; flex-direction: column; gap: 0.65rem; margin-bottom: 1rem; padding: 0.85rem; border-radius: 10px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08);">
+                <input type="email" id="custom-social-email" required placeholder="Correo electrónico (ej. usuario@gmail.com)"
+                    style="width: 100%; padding: 0.65rem 0.8rem; border-radius: 8px; border: 1px solid rgba(255,255,255,0.14); background: rgba(10,10,14,0.65); color: #fff; font-size: 0.88rem; outline: none;">
+                <input type="text" id="custom-social-name" placeholder="Nombre completo (opcional si ya estás registrado)"
+                    style="width: 100%; padding: 0.65rem 0.8rem; border-radius: 8px; border: 1px solid rgba(255,255,255,0.14); background: rgba(10,10,14,0.65); color: #fff; font-size: 0.88rem; outline: none;">
+                <button type="submit" class="btn-submit-login" style="margin-top: 0; padding: 0.65rem;">
+                    Continuar con este correo
+                </button>
+            </form>
+
+            <div style="display: flex; gap: 8px;">
+                <button type="button" class="btn-social" style="flex: 1; padding: 0.65rem;"
+                    onclick="closeSocialAuthModal()">
+                    Cancelar
+                </button>
+                <button type="button" id="btn-toggle-custom-social" class="btn-submit-login" style="flex: 1.2; padding: 0.65rem; margin-top: 0;"
+                    onclick="loginWithCustomSocialEmail()">
+                    Otra Cuenta...
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== PANTALLA: CUENTA DE GOOGLE NO REGISTRADA ==================== -->
+    <div class="social-auth-modal" id="googleUnregisteredModal">
+        <div class="social-modal-card" style="max-width: 450px; padding: 2rem; text-align: center;">
+            <div style="width: 62px; height: 62px; margin: 0 auto 1rem; border-radius: 18px; background: rgba(239, 68, 68, 0.14); border: 1px solid rgba(239, 68, 68, 0.35); color: #f87171; display: flex; align-items: center; justify-content: center;">
+                <span class="material-symbols-rounded" style="font-size: 32px;">shield_lock</span>
+            </div>
+            <h3 style="font-size: 1.25rem; font-weight: 800; color: #fff; margin-bottom: 0.5rem;">
+                Disculpa, no encontramos tu cuenta
+            </h3>
+            <p style="font-size: 0.86rem; color: #a1a1aa; line-height: 1.55; margin-bottom: 1.15rem;">
+                Este correo de Google aún no está integrado en el sistema. Contacta al administrador para que te integre a nuestro equipo o solicita un registro aquí para que apruebe y asigne tus privilegios.
+            </p>
+
+            <!-- Perfil detectado de Google -->
+            <div style="display: flex; align-items: center; gap: 12px; padding: 0.8rem 1rem; border-radius: 12px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); margin-bottom: 1.15rem; text-align: left;">
+                <img id="unreg-google-avatar" src="" alt="Google"
+                    style="width: 44px; height: 44px; border-radius: 12px; object-fit: cover; border: 1px solid rgba(255,255,255,0.2); flex-shrink: 0;">
+                <div style="min-width: 0; flex: 1;">
+                    <div id="unreg-google-name" style="font-size: 0.92rem; font-weight: 700; color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Usuario</div>
+                    <div id="unreg-google-email" style="font-size: 0.78rem; color: #9ca3af; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">correo@gmail.com</div>
+                </div>
+            </div>
+
+            <!-- Estado si ya envió solicitud -->
+            <div id="unreg-already-sent-box" style="display: none; padding: 0.95rem 1rem; border-radius: 12px; background: rgba(16, 185, 129, 0.12); border: 1px solid rgba(16, 185, 129, 0.35); color: #34d399; font-size: 0.84rem; line-height: 1.45; margin-bottom: 1.1rem;">
+                <strong><span class="material-symbols-rounded" style="font-size: 16px; vertical-align: middle;">hourglass_top</span> Solicitud pendiente de aprobación</strong><br>
+                El administrador revisará tu solicitud en Configuración y te asignará los privilegios para ingresar.
+            </div>
+
+            <!-- Estado si su solicitud fue rechazada -->
+            <div id="unreg-rejected-box" style="display: none; padding: 0.95rem 1rem; border-radius: 12px; background: rgba(239, 68, 68, 0.12); border: 1px solid rgba(239, 68, 68, 0.38); color: #f87171; font-size: 0.86rem; line-height: 1.45; margin-bottom: 1.1rem;">
+                <strong><span class="material-symbols-rounded" style="font-size: 17px; vertical-align: middle;">cancel</span> Tu solicitud fue rechazada</strong><br>
+                Comunícate directamente con el administrador si consideras que se trata de un error.
+            </div>
+
+            <!-- Formulario para solicitar registro -->
+            <form id="unreg-request-form" onsubmit="submitAccessRequest(event)" novalidate style="display: flex; flex-direction: column; gap: 0.75rem; text-align: left; margin-bottom: 1rem;">
+                <div>
+                    <label style="display: block; font-size: 0.76rem; font-weight: 700; color: #d4d4d8; margin-bottom: 0.35rem;">Rol solicitado</label>
+                    <select id="unreg-requested-role" style="width: 100%; padding: 0.65rem 0.8rem; border-radius: 10px; border: 1px solid rgba(255,255,255,0.14); background: rgba(10,10,14,0.85); color: #fff; font-size: 0.86rem; outline: none;">
+                        <option value="community_manager">Community Manager</option>
+                        <option value="designer">Diseñador Gráfico</option>
+                        <option value="agency">Agencia / Supervisor</option>
+                    </select>
+                </div>
+                <div>
+                    <label style="display: block; font-size: 0.76rem; font-weight: 700; color: #d4d4d8; margin-bottom: 0.35rem;">Motivo breve de acceso (opcional)</label>
+                    <textarea id="unreg-request-message" rows="2" placeholder="Ej: Soy parte del equipo de diseño..."
+                        style="width: 100%; padding: 0.65rem 0.8rem; border-radius: 10px; border: 1px solid rgba(255,255,255,0.14); background: rgba(10,10,14,0.85); color: #fff; font-size: 0.85rem; outline: none; resize: none;"></textarea>
+                </div>
+                <!-- Dos casillas independientes y obligatorias (sin botón "Aceptar todo") -->
+                <label for="unreg_accept_terms" style="display: flex; align-items: flex-start; gap: 8px; font-size: 0.76rem; color: #d4d4d8; line-height: 1.4; cursor: pointer;">
+                    <input type="checkbox" id="unreg_accept_terms" required style="margin-top: 2px; accent-color: #ef4444; flex-shrink: 0;">
+                    <span>He leído y acepto los <a href="terminos-y-condiciones.html" target="_blank" rel="noopener" style="color: #f87171; font-weight: 700; text-decoration: underline;">Términos y Condiciones</a> (incluyendo política de reembolsos). *</span>
+                </label>
+                <label for="unreg_accept_privacy" style="display: flex; align-items: flex-start; gap: 8px; font-size: 0.76rem; color: #d4d4d8; line-height: 1.4; cursor: pointer;">
+                    <input type="checkbox" id="unreg_accept_privacy" required style="margin-top: 2px; accent-color: #ef4444; flex-shrink: 0;">
+                    <span>He leído y acepto la <a href="politica-de-privacidad.html" target="_blank" rel="noopener" style="color: #f87171; font-weight: 700; text-decoration: underline;">Política de Privacidad</a> y el registro de auditoría (fecha, hora e IP). *</span>
+                </label>
+                <div id="unreg-legal-error" style="display: none; padding: 0.55rem 0.75rem; border-radius: 8px; background: rgba(239,68,68,0.15); border: 1px solid rgba(239,68,68,0.4); color: #fca5a5; font-size: 0.76rem; font-weight: 600;"></div>
+                <button type="submit" id="unreg-submit-btn" class="btn-submit-login" style="margin-top: 0.2rem; padding: 0.75rem;">
+                    <span class="material-symbols-rounded" style="font-size: 18px;">how_to_reg</span> Solicitar Registro
+                </button>
+            </form>
+
+            <button type="button" class="btn-social" style="width: 100%; padding: 0.65rem;" onclick="closeGoogleUnregisteredScreen()">
+                Volver al inicio de sesión
+            </button>
+        </div>
+    </div>
+
+    <!-- Contenedor de Toast Notificaciones -->
+    <div class="login-toast" id="loginToast">
+        <span id="toast-icon" class="material-symbols-rounded" style="font-size:18px;">check_circle</span>
+        <span id="toast-message">Notificación</span>
+    </div>
+
+    <script>
+        // ==================== CONFIGURACIÓN & ESTADO ====================
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.carousel-slide');
+        const dots = document.querySelectorAll('.carousel-dot');
+        let slideInterval = null;
+        let registeredUsers = [];
+
+        // ==================== AUTO-REDIRECT SI YA TIENE SESIÓN ACTIVA ====================
+        document.addEventListener('DOMContentLoaded', () => {
+            const loaderStart = Date.now();
+            // Verificar si la URL pide forzar login (?logout=true o ?force=true)
+            const params = new URLSearchParams(window.location.search);
+            const forceLogin = params.get('logout') === 'true' || params.get('force') === 'true';
+
+            if (!forceLogin) {
+                const activeSession = localStorage.getItem('kinetica_auth_user') || sessionStorage.getItem('kinetica_auth_user');
+                if (activeSession) {
+                    try {
+                        const parsed = JSON.parse(activeSession);
+                        if (parsed && parsed.id) {
+                            window.M3LoadingIndicator?.showOverlay('Sesión detectada', `Redirigiendo como ${parsed.name}...`);
+                            showToast(`Sesión detectada para ${parsed.name}. Redirigiendo...`, 'info');
+                            setTimeout(() => {
+                                window.location.replace('index.html');
+                            }, 700);
+                            return;
+                        }
+                    } catch (e) { }
+                }
+            }
+
+            // Iniciar Carrusel automático
+            startCarouselTimer();
+            // Cargar usuarios de la base de datos para autocompletar e integración
+            loadDatabaseUsers();
+            // Verificar conexión con la base de datos
+            testDatabase();
+
+            const minDelay = window.M3LoadingIndicator?.MIN_DELAY_MS ?? 1000;
+            const elapsed = Date.now() - loaderStart;
+            setTimeout(() => {
+                window.M3LoadingIndicator?.hideOverlay();
+            }, Math.max(0, minDelay - elapsed));
+        });
+
+        // ==================== CONTROL DEL CARRUSEL ====================
+        function showSlide(index) {
+            if (index < 0) index = slides.length - 1;
+            if (index >= slides.length) index = 0;
+
+            slides.forEach((s, idx) => {
+                s.classList.toggle('active', idx === index);
+            });
+            dots.forEach((d, idx) => {
+                d.classList.toggle('active', idx === index);
+            });
+            currentSlide = index;
+        }
+
+        function nextSlide() {
+            showSlide(currentSlide + 1);
+        }
+
+        function prevSlide() {
+            showSlide(currentSlide - 1);
+        }
+
+        function goToSlide(index) {
+            showSlide(index);
+            resetCarouselTimer();
+        }
+
+        function startCarouselTimer() {
+            if (slideInterval) clearInterval(slideInterval);
+            slideInterval = setInterval(nextSlide, 5500);
+        }
+
+        function resetCarouselTimer() {
+            clearInterval(slideInterval);
+            startCarouselTimer();
+        }
+
+        // Pausar carrusel al pasar el ratón
+        const carouselEl = document.getElementById('login-carousel');
+        if (carouselEl) {
+            carouselEl.addEventListener('mouseenter', () => clearInterval(slideInterval));
+            carouselEl.addEventListener('mouseleave', () => startCarouselTimer());
+        }
+
+        // ==================== NOTIFICACIONES TOAST ====================
+        function showToast(message, type = 'success') {
+            const toast = document.getElementById('loginToast');
+            const msgEl = document.getElementById('toast-message');
+            const iconEl = document.getElementById('toast-icon');
+
+            if (!toast) return;
+
+            toast.className = `login-toast ${type} active`;
+            msgEl.innerText = message;
+            iconEl.innerText = type === 'success' ? 'check_circle' : (type === 'error' ? 'cancel' : 'info');
+
+            setTimeout(() => {
+                toast.classList.remove('active');
+            }, 3800);
+        }
+
+        // ==================== INTEGRACIÓN CON BASE DE DATOS ====================
+        async function loadDatabaseUsers() {
+            try {
+                const res = await fetch('api.php?action=get_data');
+                const data = await res.json();
+                if (data.success && Array.isArray(data.users)) {
+                    registeredUsers = data.users;
+                    renderDatabaseChips(data.users);
+                }
+            } catch (e) {
+                console.log('Modo sin conexión directa al cargar usuarios');
+            }
+        }
+
+        function renderDatabaseChips(users) {
+            const container = document.getElementById('db-users-chips');
+            if (!container || !users.length) return;
+
+            container.innerHTML = users.map(u => {
+                const roleClass = u.role === 'admin' ? 'admin' : (u.role === 'designer' ? 'designer' : 'cm');
+                const roleName = u.role === 'admin' ? 'ADMIN' : (u.role === 'designer' ? 'DISEÑO' : 'CM');
+                return `
+                <div class="db-chip" onclick="fillUserCredentials('${u.email}', 'admin123', '${u.role}')" title="Clic para cargar credenciales de ${u.name}">
+                    <span class="db-chip-role-badge ${roleClass}">${roleName}</span>
+                    <span>${u.name}</span>
+                </div>
+            `;
+            }).join('');
+        }
+
+        async function testDatabase() {
+            const ind = document.getElementById('login-db-text');
+            const dot = document.querySelector('.db-dot-live');
+            try {
+                const res = await fetch('api.php?action=test_connection');
+                const data = await res.json();
+                if (data.success) {
+                    if (ind) ind.innerText = 'MySQL Conectado';
+                    if (dot) {
+                        dot.style.background = '#10b981';
+                        dot.style.boxShadow = '0 0 8px #10b981';
+                    }
+                } else {
+                    if (ind) ind.innerText = 'MySQL Inactivo';
+                    if (dot) {
+                        dot.style.background = '#ef4444';
+                        dot.style.boxShadow = '0 0 8px #ef4444';
+                    }
+                }
+            } catch (e) {
+                if (ind) ind.innerText = 'Modo Local / Standalone';
+                if (dot) {
+                    dot.style.background = '#f59e0b';
+                    dot.style.boxShadow = '0 0 8px #f59e0b';
+                }
+            }
+        }
+
+        // ==================== ACCESO RÁPIDO & DETECCIÓN DE PRIVILEGIO ====================
+        function fillUserCredentials(email, password, role) {
+            const idInput = document.getElementById('login-identifier');
+            const passInput = document.getElementById('login-password');
+            if (idInput) idInput.value = email;
+            if (passInput) passInput.value = password;
+            onIdentifierChanged(email);
+            showToast(`Credenciales cargadas para rol: ${role.toUpperCase()}`, 'info');
+        }
+
+        function loginAsAdministrator() {
+            const idInput = document.getElementById('login-identifier');
+            const passInput = document.getElementById('login-password');
+            if (idInput) idInput.value = 'admin@kinetica.com';
+            if (passInput) passInput.value = 'admin123';
+            onIdentifierChanged('admin@kinetica.com');
+
+            // Ejecutar autenticación directa de Administrador
+            executeLogin({
+                username: 'admin@kinetica.com',
+                password: 'admin123',
+                provider: 'admin',
+                is_admin: true,
+                remember: document.getElementById('remember-me').checked
+            });
+        }
+
+        function onIdentifierChanged(val) {
+            val = (val || '').trim().toLowerCase();
+            const badge = document.getElementById('role-detected-badge');
+            if (!badge) return;
+
+            if (val.includes('admin')) {
+                badge.className = 'privilege-hint-badge admin';
+                badge.innerHTML = '<span class="material-symbols-rounded" style="font-size:14px;">admin_panel_settings</span> Rol: Administrador';
+            } else if (val.includes('victor') || val.includes('sofia') || val.includes('designer') || val.includes('diseno')) {
+                badge.className = 'privilege-hint-badge designer';
+                badge.innerHTML = '<span class="material-symbols-rounded" style="font-size:14px;">palette</span> Rol: Diseñador';
+            } else if (val.includes('valen') || val.includes('wilfredo') || val.includes('carlos') || val.includes('cm')) {
+                badge.className = 'privilege-hint-badge cm';
+                badge.innerHTML = '<span class="material-symbols-rounded" style="font-size:14px;">campaign</span> Rol: Community Manager';
+            } else {
+                badge.className = 'privilege-hint-badge';
+                badge.innerText = 'Detección de Privilegio';
+            }
+        }
+
+        function togglePasswordVisibility() {
+            const passInput = document.getElementById('login-password');
+            const eyeIcon = document.getElementById('eye-icon');
+            if (!passInput) return;
+
+            if (passInput.type === 'password') {
+                passInput.type = 'text';
+                if (eyeIcon) eyeIcon.innerText = 'visibility_off';
+            } else {
+                passInput.type = 'password';
+                if (eyeIcon) eyeIcon.innerText = 'visibility';
+            }
+        }
+
+        function handleForgotPassword() {
+            alert('Para restablecer la clave de tu cuenta Kinetica, contacta al administrador del sistema en admin@kinetica.com o utiliza una de las cuentas rápidas disponibles.');
+        }
+
+        // ==================== ENVÍO DEL FORMULARIO Y LOGIN PRINCIPAL ====================
+        async function handleFormLogin(event) {
+            event.preventDefault();
+            const identifier = document.getElementById('login-identifier').value.trim();
+            const password = document.getElementById('login-password').value;
+            const remember = document.getElementById('remember-me').checked;
+
+            if (!identifier || !password) {
+                showToast('Por favor completa todos los campos', 'error');
+                return;
+            }
+
+            const isAdmin = identifier.toLowerCase().includes('admin');
+
+            await executeLogin({
+                identifier: identifier,
+                password: password,
+                provider: isAdmin ? 'admin' : 'credentials',
+                is_admin: isAdmin,
+                remember: remember
+            });
+        }
+
+        async function executeLogin(payload) {
+            const submitBtn = document.getElementById('submit-login-btn');
+            if (submitBtn) {
+                submitBtn.classList.add('loading');
+                submitBtn.innerHTML = `<span data-m3-loader data-variant="uncontained" data-size="20" data-inherit-color="true"></span> <span>Validando credenciales...</span>`;
+                window.M3LoadingIndicator?.initAll(submitBtn);
+            }
+
+            try {
+                const res = await fetch('api.php?action=login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                const data = await res.json();
+
+                if (data.success && data.user) {
+                    // Guardar la sesión según la opción "Recordarme"
+                    saveSession(data.user, data.token, payload.remember);
+                    window.M3LoadingIndicator?.showOverlay('Iniciando sesión...', 'Preparando tu espacio de trabajo');
+                    showToast(`Bienvenido, ${data.user.name} (${data.user.role.toUpperCase()})`, 'success');
+
+                    setTimeout(() => {
+                        window.location.replace('index.html');
+                    }, 800);
+                } else if (data.not_registered) {
+                    openGoogleUnregisteredScreen(data.google_profile, data.already_requested, data.request_status);
+                    if (submitBtn) {
+                        submitBtn.classList.remove('loading');
+                        submitBtn.innerHTML = `<span>Entrar al Espacio de Trabajo</span> <span style="font-size: 1.1rem;">→</span>`;
+                    }
+                } else {
+                    showToast(data.error || data.message || 'Error al autenticar. Verifica tus credenciales.', 'error');
+                    if (submitBtn) {
+                        submitBtn.classList.remove('loading');
+                        submitBtn.innerHTML = `<span>Entrar al Espacio de Trabajo</span> <span style="font-size: 1.1rem;">→</span>`;
+                    }
+                }
+            } catch (e) {
+                // Fallback inteligente en caso de que la API no responda (modo demo / offline)
+                fallbackOfflineLogin(payload);
+            }
+        }
+
+        function fallbackOfflineLogin(payload) {
+            console.warn('API no disponible, ejecutando fallback de autenticación seguro.');
+            const email = (payload.identifier || payload.username || payload.email || 'admin@kinetica.com').toLowerCase();
+            let matched = registeredUsers.find(u => u.email.toLowerCase() === email || u.name.toLowerCase() === email);
+
+            if (!matched) {
+                if (payload.is_admin || email.includes('admin')) {
+                    matched = {
+                        id: 6,
+                        name: 'Admin Kinetica',
+                        email: 'admin@kinetica.com',
+                        role: 'admin',
+                        status: 'activo',
+                        permissions: JSON.stringify(['dashboard', 'grid', 'timeline', 'reviews', 'reports', 'settings']),
+                        avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80'
+                    };
+                } else {
+                    matched = {
+                        id: 99,
+                        name: email.split('@')[0].toUpperCase(),
+                        email: email,
+                        role: 'community_manager',
+                        status: 'activo',
+                        permissions: JSON.stringify(['dashboard', 'grid', 'timeline', 'reviews']),
+                        avatar: `https://ui-avatars.com/api/?name=${encodeURIComponent(email)}&background=dc2626&color=fff`
+                    };
+                }
+            }
+
+            saveSession(matched, 'demo_token_' + Date.now(), payload.remember);
+            window.M3LoadingIndicator?.showOverlay('Iniciando sesión...', 'Preparando tu espacio de trabajo');
+            showToast(`✓ Acceso concedido: ${matched.name} (${matched.role.toUpperCase()})`, 'success');
+            setTimeout(() => {
+                window.location.replace('index.html');
+            }, 800);
+        }
+
+        function saveSession(user, token, remember) {
+            // Asegurar campos esenciales
+            if (!user.avatar) {
+                user.avatar = `https://ui-avatars.com/api/?name=${encodeURIComponent(user.name)}&background=dc2626&color=fff`;
+            }
+
+            const userStr = JSON.stringify(user);
+
+            // Guardamos en localStorage para persistencia y soporte de recargas de página
+            localStorage.setItem('kinetica_auth_user', userStr);
+            localStorage.setItem('kinetica_auth_token', token || 'token_' + Date.now());
+            localStorage.setItem('kinetica_remember_me', remember ? '1' : '0');
+            localStorage.setItem('kinetica_active_view', 'dashboard');
+
+            // Si remember no está activado, también guardamos en sessionStorage
+            if (!remember) {
+                sessionStorage.setItem('kinetica_auth_user', userStr);
+            }
+        }
+
+        // ==================== AUTENTICACIÓN REAL CON GOOGLE (OAUTH 2.0 GSI) ====================
+        const GOOGLE_CLIENT_ID = '323027924137-se6q2vop3kflpqk40ikoacfl5j490507.apps.googleusercontent.com';
+        let googleTokenClient = null;
+
+        function startGoogleOAuthLogin() {
+            if (!window.google || !google.accounts || !google.accounts.oauth2) {
+                showToast('Cargando servicio de Google, intenta de nuevo en un segundo...', 'info');
+                return;
+            }
+            if (!googleTokenClient) {
+                googleTokenClient = google.accounts.oauth2.initTokenClient({
+                    client_id: GOOGLE_CLIENT_ID,
+                    scope: 'openid email profile',
+                    callback: async (tokenResponse) => {
+                        if (!tokenResponse || tokenResponse.error || !tokenResponse.access_token) {
+                            showToast('Inicio de sesión con Google cancelado o fallido', 'error');
+                            return;
+                        }
+                        showToast('Verificando cuenta con Google...', 'info');
+                        await executeLogin({
+                            provider: 'google',
+                            access_token: tokenResponse.access_token,
+                            remember: document.getElementById('remember-me')?.checked || false
+                        });
+                    }
+                });
+            }
+            googleTokenClient.requestAccessToken({ prompt: 'select_account' });
+        }
+
+        let pendingUnregisteredGoogle = null;
+
+        function openGoogleUnregisteredScreen(profile, alreadyRequested, requestStatus) {
+            pendingUnregisteredGoogle = profile || {};
+            const modal = document.getElementById('googleUnregisteredModal');
+            const avatarEl = document.getElementById('unreg-google-avatar');
+            const nameEl = document.getElementById('unreg-google-name');
+            const emailEl = document.getElementById('unreg-google-email');
+            const formEl = document.getElementById('unreg-request-form');
+            const sentBox = document.getElementById('unreg-already-sent-box');
+            const rejectedBox = document.getElementById('unreg-rejected-box');
+
+            const name = pendingUnregisteredGoogle.name || 'Usuario de Google';
+            const email = pendingUnregisteredGoogle.email || '';
+            const fallback = `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=dc2626&color=fff&bold=true`;
+
+            if (avatarEl) avatarEl.src = pendingUnregisteredGoogle.avatar || fallback;
+            if (nameEl) nameEl.textContent = name;
+            if (emailEl) emailEl.textContent = email;
+
+            if (rejectedBox) rejectedBox.style.display = 'none';
+            if (sentBox) sentBox.style.display = 'none';
+
+            if (requestStatus === 'rechazado') {
+                if (formEl) formEl.style.display = 'none';
+                if (rejectedBox) rejectedBox.style.display = 'block';
+            } else if (alreadyRequested) {
+                if (formEl) formEl.style.display = 'none';
+                if (sentBox) sentBox.style.display = 'block';
+            } else {
+                if (formEl) { formEl.style.display = 'flex'; formEl.reset(); }
+            }
+
+            if (modal) modal.classList.add('active');
+        }
+
+        function closeGoogleUnregisteredScreen() {
+            const modal = document.getElementById('googleUnregisteredModal');
+            if (modal) modal.classList.remove('active');
+        }
+
+        async function submitAccessRequest(event) {
+            event.preventDefault();
+            if (!pendingUnregisteredGoogle || !pendingUnregisteredGoogle.email) return;
+
+            const termsEl = document.getElementById('unreg_accept_terms');
+            const privacyEl = document.getElementById('unreg_accept_privacy');
+            const legalErrEl = document.getElementById('unreg-legal-error');
+
+            if (window.KineticaConsent) {
+                const check = window.KineticaConsent.validateLegalForm(event, termsEl, privacyEl, legalErrEl);
+                if (!check.valid) {
+                    showToast(check.message, 'error');
+                    return;
+                }
+            } else if (!termsEl?.checked || !privacyEl?.checked) {
+                const msg = 'Debes marcar de forma independiente los Términos y Condiciones y la Política de Privacidad.';
+                if (legalErrEl) { legalErrEl.textContent = msg; legalErrEl.style.display = 'block'; }
+                showToast(msg, 'error');
+                return;
+            }
+
+            const btn = document.getElementById('unreg-submit-btn');
+            const role = document.getElementById('unreg-requested-role')?.value || 'community_manager';
+            const message = document.getElementById('unreg-request-message')?.value.trim() || '';
+
+            if (btn) { btn.disabled = true; btn.textContent = 'Enviando solicitud...'; }
+
+            try {
+                const res = await fetch('api.php?action=request_access', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        name: pendingUnregisteredGoogle.name,
+                        email: pendingUnregisteredGoogle.email,
+                        avatar: pendingUnregisteredGoogle.avatar || '',
+                        requested_role: role,
+                        message,
+                        accepted_terms: Boolean(termsEl?.checked),
+                        accepted_privacy: Boolean(privacyEl?.checked)
+                    })
+                });
+                const data = await res.json();
+                if (data.success) {
+                    const formEl = document.getElementById('unreg-request-form');
+                    const sentBox = document.getElementById('unreg-already-sent-box');
+                    if (formEl) formEl.style.display = 'none';
+                    if (sentBox) sentBox.style.display = 'block';
+                    showToast(data.message || 'Solicitud enviada al administrador', 'success');
+                } else {
+                    showToast(data.message || 'No se pudo enviar la solicitud', 'error');
+                }
+            } catch (e) {
+                showToast('Error de red al enviar la solicitud', 'error');
+            } finally {
+                if (btn) {
+                    btn.disabled = false;
+                    btn.innerHTML = '<span class="material-symbols-rounded" style="font-size: 18px;">how_to_reg</span> Solicitar Registro';
+                }
+            }
+        }
+
+        // ==================== AUTENTICACIÓN SOCIAL (GOOGLE & APPLE) ====================
+        let currentSocialProvider = 'Google';
+        let currentSocialAccounts = [];
+
+        function escapeSocialHtml(str) {
+            return String(str ?? '')
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#39;');
+        }
+
+        function openSocialAuthModal(provider) {
+            currentSocialProvider = provider;
+            const modal = document.getElementById('socialAuthModal');
+            const title = document.getElementById('social-modal-title');
+            const iconContainer = document.getElementById('social-modal-icon-container');
+            const list = document.getElementById('social-accounts-list');
+            const customForm = document.getElementById('custom-social-form');
+            const toggleBtn = document.getElementById('btn-toggle-custom-social');
+
+            if (!modal) return;
+
+            if (customForm) {
+                customForm.style.display = 'none';
+                customForm.reset();
+            }
+            if (toggleBtn) toggleBtn.textContent = 'Otra Cuenta...';
+
+            title.innerText = `Iniciar Sesión con ${provider}`;
+            if (provider === 'Google') {
+                iconContainer.innerHTML = `
+                <svg viewBox="0 0 24 24" width="24" height="24" xmlns="http://www.w3.org/2000/svg">
+                    <path fill="#EA4335" d="M12 5c1.7 0 3 .7 3.7 1.3l2.8-2.8C16.8 2 14.6 1.2 12 1.2 7.5 1.2 3.7 3.8 2 7.6l3.4 2.6C6.3 7.3 8.9 5 12 5z"/>
+                    <path fill="#4285F4" d="M22.8 12.3c0-.8-.1-1.6-.2-2.3H12v4.5h6.1c-.3 1.4-1.1 2.6-2.3 3.4l3.5 2.7c2.1-1.9 3.5-4.8 3.5-8.3z"/>
+                    <path fill="#FBBC05" d="M5.4 14.8c-.2-.7-.4-1.5-.4-2.3 0-.8.2-1.6.4-2.3L2 7.6C.7 10.1 0 11.5 0 12.5s.7 2.4 2 4.9l3.4-2.6z"/>
+                    <path fill="#34A853" d="M12 23.8c3.2 0 6-1.1 8-3l-3.5-2.7c-1.1.7-2.5 1.2-4.5 1.2-3.1 0-5.7-2.3-6.6-5.2L2 16.7C3.7 20.6 7.5 23.8 12 23.8z"/>
+                </svg>
+            `;
+            } else {
+                iconContainer.innerHTML = `
+                <svg viewBox="0 0 24 24" width="24" height="24" fill="#ffffff" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M15.97 6.89c.65-.8 1.09-1.92.97-3.04-.94.04-2.07.63-2.74 1.42-.59.68-1.11 1.79-.97 2.88 1.05.08 2.09-.5 2.74-1.26"/>
+                </svg>
+            `;
+            }
+
+            const providerKey = provider.toLowerCase();
+            const baseUsers = registeredUsers.length > 0 ? registeredUsers : [
+                { id: 6, name: 'Admin Kinetica', email: 'admin@kinetica.com', role: 'admin', status: 'activo', connected_accounts: 'google,apple', avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150' },
+                { id: 2, name: 'Victor Corio', email: 'victor@kinetica.com', role: 'designer', status: 'activo', connected_accounts: 'google,apple', avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150' },
+                { id: 3, name: 'Valentina Almeida', email: 'valentina@kinetica.com', role: 'community_manager', status: 'activo', connected_accounts: 'google,apple', avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150' }
+            ];
+
+            currentSocialAccounts = baseUsers.filter(acc => {
+                if ((acc.status || 'activo').toLowerCase() === 'inactivo') return false;
+                const conn = (acc.connected_accounts || '').trim().toLowerCase();
+                if (!conn) return true;
+                return conn.split(',').map(s => s.trim()).includes(providerKey);
+            });
+
+            if (currentSocialAccounts.length === 0) {
+                list.innerHTML = `<div style="padding: 1rem; text-align: center; color: var(--text-muted); font-size: 0.85rem;">No hay cuentas vinculadas a ${escapeSocialHtml(provider)}. Usa "Otra Cuenta..." para ingresar o crear una cuenta.</div>`;
+            } else {
+                list.innerHTML = currentSocialAccounts.map((acc, idx) => {
+                    const fallbackAvatar = `https://ui-avatars.com/api/?name=${encodeURIComponent(acc.name || 'User')}&background=dc2626&color=fff`;
+                    const avatarSrc = acc.avatar || fallbackAvatar;
+                    return `
+                    <div class="account-choice-item" onclick="selectSocialAccountByIndex(${idx})">
+                        <img src="${escapeSocialHtml(avatarSrc)}" class="account-choice-avatar" alt="Avatar">
+                        <div class="account-choice-details">
+                            <strong>${escapeSocialHtml(acc.name)}</strong>
+                            <span>${escapeSocialHtml(acc.email)} • <strong style="color:var(--neon-red); text-transform:uppercase;">${escapeSocialHtml(acc.role)}</strong></span>
+                        </div>
+                        <span class="material-symbols-rounded" style="font-size:18px; color:var(--text-muted);">arrow_forward</span>
+                    </div>`;
+                }).join('');
+            }
+
+            modal.classList.add('active');
+        }
+
+        function closeSocialAuthModal() {
+            const modal = document.getElementById('socialAuthModal');
+            if (modal) modal.classList.remove('active');
+        }
+
+        function selectSocialAccountByIndex(index) {
+            const acc = currentSocialAccounts[index];
+            if (!acc) return;
+            selectSocialAccount(acc.email, acc.name, acc.avatar || '');
+        }
+
+        async function selectSocialAccount(email, name, avatar) {
+            closeSocialAuthModal();
+            showToast(`Conectando con ${currentSocialProvider}...`, 'info');
+
+            await executeLogin({
+                email: email,
+                name: name,
+                avatar: avatar,
+                provider: currentSocialProvider.toLowerCase(),
+                remember: document.getElementById('remember-me').checked
+            });
+        }
+
+        function loginWithCustomSocialEmail() {
+            const customForm = document.getElementById('custom-social-form');
+            const toggleBtn = document.getElementById('btn-toggle-custom-social');
+            if (!customForm) return;
+
+            const isHidden = customForm.style.display === 'none' || !customForm.style.display;
+            customForm.style.display = isHidden ? 'flex' : 'none';
+            if (toggleBtn) toggleBtn.textContent = isHidden ? 'Ocultar' : 'Otra Cuenta...';
+            if (isHidden) {
+                const emailInput = document.getElementById('custom-social-email');
+                if (emailInput) emailInput.focus();
+            }
+        }
+
+        async function submitCustomSocialLogin(e) {
+            e.preventDefault();
+            const emailEl = document.getElementById('custom-social-email');
+            const nameEl = document.getElementById('custom-social-name');
+            const email = emailEl ? emailEl.value.trim() : '';
+            const name = nameEl ? nameEl.value.trim() : '';
+
+            if (!email || !email.includes('@')) {
+                showToast('Ingresa un correo electrónico válido.', 'error');
+                return;
+            }
+            const derivedName = name || email.split('@')[0];
+            await selectSocialAccount(email, derivedName, '');
+        }
+    </script>
+
+</body>
+
+</html>

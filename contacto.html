@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contacto y Cotización Inicial • Kinetica Digital</title>
+    <link rel="icon" type="image/png" href="img/icon.png">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,500,1,0" />
+    <link rel="stylesheet" href="css/legal-pages.css">
+    <script src="js/legal-consent.js" defer></script>
+</head>
+<body>
+    <script type="text/plain" data-consent-category="analytics">
+        window.KineticaConsent?.track('analytics', 'page_view', { page: 'contacto' });
+    </script>
+
+    <header class="legal-topbar">
+        <div class="legal-topbar-inner">
+            <a href="login.html" class="legal-brand">
+                <img src="img/logo.jpg" alt="Logo Kinetica Digital">
+                <div>
+                    <div>KINETICA DIGITAL</div>
+                    <div style="font-size:0.7rem;color:var(--text-muted);font-weight:600;">Agencia de Marketing, Diseño & Desarrollo</div>
+                </div>
+            </a>
+            <nav class="legal-nav" aria-label="Navegación legal">
+                <a href="terminos-y-condiciones.html">Términos y Condiciones</a>
+                <a href="politica-de-privacidad.html">Privacidad</a>
+                <a href="politica-de-cookies.html">Cookies</a>
+                <a href="aviso-legal.html">Aviso Legal</a>
+                <a href="contacto.html" class="cta-nav active">Solicitar Cotización</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="legal-container" style="max-width: 820px;">
+        <section class="legal-hero">
+            <div class="legal-pill">
+                <span class="material-symbols-rounded" style="font-size:15px;">request_quote</span>
+                Minimización de Datos & Trazabilidad Legal
+            </div>
+            <h1>Solicitar Cotización Inicial</h1>
+            <p class="text-muted">Completa únicamente los datos estrictamente necesarios para preparar tu propuesta inicial en Diseño Gráfico, Desarrollo Web o Publicidad Digital.</p>
+        </section>
+
+        <section class="legal-card">
+            <div class="legal-highlight-box" style="margin-top:0;">
+                <strong>Principio de Minimización de Datos:</strong> Este formulario solicita solo 4 datos indispensables para cotizar. No recopilamos cédula, RIF, teléfono ni información financiera en esta etapa inicial. Además, toda contratación digital cuenta con <strong>derecho de retracto de cinco (5) días hábiles</strong> conforme a nuestros <a href="terminos-y-condiciones.html#reembolsos" style="color:var(--neon-red);font-weight:700;">Términos y Condiciones</a>.
+            </div>
+
+            <div id="contact-error-banner" class="legal-error-banner" role="alert"></div>
+            <div id="contact-success-banner" class="legal-success-banner" role="status"></div>
+
+            <form id="public-contact-form" novalidate>
+                <div class="form-field">
+                    <label for="contact_client_name">Nombre completo o Razón Social *</label>
+                    <input type="text" id="contact_client_name" name="client_name" class="form-input" placeholder="Ej: María Fernanda Gómez / Inversiones Sol C.A." required maxlength="150">
+                </div>
+
+                <div class="form-field">
+                    <label for="contact_client_email">Correo electrónico de contacto *</label>
+                    <input type="email" id="contact_client_email" name="client_email" class="form-input" placeholder="nombre@empresa.com" required maxlength="150">
+                </div>
+
+                <div class="form-field">
+                    <label for="contact_service_type">Servicio a cotizar *</label>
+                    <select id="contact_service_type" name="service_type" class="form-select" required>
+                        <option value="">Selecciona un servicio...</option>
+                        <option value="Diseño Gráfico">Diseño Gráfico (Identidad, Grillas, Artes)</option>
+                        <option value="Desarrollo Web">Desarrollo Web (Sitios, Apps, E-Commerce)</option>
+                        <option value="Publicidad Digital">Publicidad Digital (Meta Ads, Google Ads, Redes)</option>
+                        <option value="Paquete Integral">Paquete Integral (Diseño + Web + Publicidad)</option>
+                    </select>
+                </div>
+
+                <div class="form-field">
+                    <label for="contact_project_summary">Resumen del requerimiento *</label>
+                    <textarea id="contact_project_summary" name="project_summary" class="form-textarea" rows="4" placeholder="Describe brevemente el alcance, objetivos y plazo estimado de tu proyecto..." required minlength="10"></textarea>
+                </div>
+
+                <!-- Casillas independientes y obligatorias (sin opción de "Aceptar todo") -->
+                <div style="margin: 1.25rem 0;">
+                    <label class="consent-checkbox-box" for="contact_accept_terms">
+                        <input type="checkbox" id="contact_accept_terms" name="accept_terms" required>
+                        <span>
+                            He leído y acepto de forma expresa los <a href="terminos-y-condiciones.html" target="_blank" rel="noopener">Términos y Condiciones</a> de Kinetica Digital, incluyendo la cláusula de Política de Reembolsos y Derecho de Retracto de 5 días hábiles. <strong>(Obligatorio)</strong>
+                        </span>
+                    </label>
+
+                    <label class="consent-checkbox-box" for="contact_accept_privacy">
+                        <input type="checkbox" id="contact_accept_privacy" name="accept_privacy" required>
+                        <span>
+                            He leído y acepto la <a href="politica-de-privacidad.html" target="_blank" rel="noopener">Política de Privacidad</a> y autorizo el tratamiento mínimo de mis datos junto con el registro de auditoría (fecha, hora e IP) para fines de trazabilidad legal. <strong>(Obligatorio)</strong>
+                        </span>
+                    </label>
+                </div>
+
+                <button type="submit" id="contact-submit-btn" class="btn-primary-legal">
+                    <span class="material-symbols-rounded">send</span>
+                    Enviar Solicitud de Cotización
+                </button>
+            </form>
+        </section>
+    </main>
+
+    <footer class="legal-footer">
+        <div class="legal-footer-inner">
+            <div class="legal-footer-links">
+                <strong style="font-size:0.9rem;">Kinetica Digital • Venezuela</strong>
+                <div class="legal-footer-nav">
+                    <a href="terminos-y-condiciones.html">Términos y Condiciones</a>
+                    <a href="politica-de-privacidad.html">Política de Privacidad</a>
+                    <a href="politica-de-cookies.html">Política de Cookies</a>
+                    <a href="aviso-legal.html">Aviso Legal</a>
+                    <a href="contacto.html">Contacto / Cotización</a>
+                    <button type="button" onclick="window.KineticaConsent?.openPreferences()">Configurar Cookies</button>
+                </div>
+            </div>
+            <div class="ip-protection-block">
+                <strong>Propiedad Intelectual e Industrial (§ 8 / Aviso Legal):</strong> © 2026 Kinetica Digital. Todos los derechos reservados. Los códigos fuente, arquitecturas de software, interfaces gráficas (UI/UX), diseños, logotipos, piezas publicitarias y elementos visuales exhibidos en esta plataforma y su portafolio están protegidos por la Ley sobre el Derecho de Autor y la Ley de Propiedad Industrial de la República Bolivariana de Venezuela, así como por el Convenio de Berna. Queda prohibida su reproducción, descompilación, distribución o uso comercial no autorizado.
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        document.getElementById('public-contact-form').addEventListener('submit', async function (event) {
+            event.preventDefault();
+
+            const errorBox = document.getElementById('contact-error-banner');
+            const successBox = document.getElementById('contact-success-banner');
+            const termsEl = document.getElementById('contact_accept_terms');
+            const privacyEl = document.getElementById('contact_accept_privacy');
+            const submitBtn = document.getElementById('contact-submit-btn');
+
+            if (successBox) successBox.style.display = 'none';
+
+            // 1. Bloquear submit si ambas casillas independientes no están marcadas
+            if (window.KineticaConsent) {
+                const check = window.KineticaConsent.validateLegalForm(event, termsEl, privacyEl, errorBox);
+                if (!check.valid) return;
+            } else if (!termsEl.checked || !privacyEl.checked) {
+                errorBox.textContent = 'Debes marcar de forma independiente los Términos y Condiciones y la Política de Privacidad.';
+                errorBox.style.display = 'block';
+                return;
+            }
+
+            const clientName = document.getElementById('contact_client_name').value.trim();
+            const clientEmail = document.getElementById('contact_client_email').value.trim();
+            const serviceType = document.getElementById('contact_service_type').value.trim();
+            const projectSummary = document.getElementById('contact_project_summary').value.trim();
+
+            if (clientName.length < 2 || !clientEmail.includes('@') || !serviceType || projectSummary.length < 10) {
+                errorBox.textContent = 'Completa los 4 campos requeridos para emitir tu cotización inicial (resumen mínimo de 10 caracteres).';
+                errorBox.style.display = 'block';
+                return;
+            }
+
+            errorBox.style.display = 'none';
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<span class="material-symbols-rounded">hourglass_top</span> Registrando solicitud...';
+
+            try {
+                const res = await fetch('api.php?action=submit_contact_quote', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        client_name: clientName,
+                        client_email: clientEmail,
+                        service_type: serviceType,
+                        project_summary: projectSummary,
+                        accepted_terms: termsEl.checked,
+                        accepted_privacy: privacyEl.checked
+                    })
+                });
+                const data = await res.json();
+
+                if (!res.ok || !data.success) {
+                    errorBox.textContent = data.message || 'No se pudo procesar la solicitud.';
+                    errorBox.style.display = 'block';
+                    return;
+                }
+
+                this.reset();
+                const audit = data.audit || {};
+                successBox.innerHTML = `
+                    <strong><span class="material-symbols-rounded" style="font-size:17px;vertical-align:middle;">check_circle</span> Solicitud de cotización #${data.quote_id} registrada con éxito.</strong><br>
+                    Trazabilidad de auditoría #${audit.audit_id || '-'} • Fecha: ${audit.consent_date || '-'} • Hora: ${audit.consent_time || '-'} • IP: ${audit.ip_address || '-'} • T&C: Aceptado • Privacidad: Aceptada.
+                `;
+                successBox.style.display = 'block';
+            } catch (err) {
+                errorBox.textContent = 'Error de conexión con el servidor al guardar la solicitud.';
+                errorBox.style.display = 'block';
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = '<span class="material-symbols-rounded">send</span> Enviar Solicitud de Cotización';
+            }
+        });
+    </script>
+</body>
+</html>
