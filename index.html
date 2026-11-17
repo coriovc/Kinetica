@@ -3981,7 +3981,7 @@
                         <h2 style="font-size: 1.25rem;">Kinetica</h2>
                         <p
                             style="font-size: 0.7rem; color: var(--text-muted); text-transform: uppercase; font-weight: 600;">
-                            Workspace V.1.21.21</p>
+                            Workspace V.1.21.31</p>
                     </div>
                 </div>
                 <!-- Botón contraer en la barra lateral sólo icono -->
@@ -4466,20 +4466,6 @@
                             ajustes directamente al diseñador.</p>
                     </div>
                     <div style="display: flex; gap: 0.75rem; flex-wrap: wrap; align-items: center;">
-                        <!-- Botón Piezas por Revisar -->
-                        <button type="button" class="btn-float" id="btn-rev-mode-active"
-                            onclick="setReviewsViewMode('active')"
-                            style="font-weight: 700; padding: 0.6rem 1.15rem; display: inline-flex; align-items: center; gap: 6px; background: var(--accent-gradient); color: #ffffff; border: none; box-shadow: 0 0 16px rgba(220,38,38,0.35); cursor: pointer; transition: all 0.2s ease;">
-                            <span><span class="material-symbols-rounded">assignment</span></span> Por Revisar (<span
-                                id="rev-badge-active-count">0</span>)
-                        </button>
-                        <!-- Botón Piezas Aprobadas -->
-                        <button type="button" class="btn-float btn-secondary" id="btn-rev-mode-approved"
-                            onclick="setReviewsViewMode('approved')"
-                            style="font-weight: 700; padding: 0.6rem 1.15rem; display: inline-flex; align-items: center; gap: 6px; border: 1.5px solid rgba(16,185,129,0.5); color: #10b981; background: rgba(16,185,129,0.12); cursor: pointer; transition: all 0.2s ease;">
-                            <span><span class="material-symbols-rounded">star</span></span> Piezas Aprobadas (<span
-                                id="rev-badge-approved-count">0</span>)
-                        </button>
                         <button class="btn-float btn-secondary" onclick="renderReviews()" title="Actualizar Revisiones">
                             <span><span class="material-symbols-rounded">sync</span></span>
                         </button>
@@ -4540,8 +4526,6 @@
                     </div>
                 </div>
 
-                <!-- Banner Informativo del Modo Activo -->
-                <div id="rev-mode-banner"></div>
 
                 <!-- Filtros de la Vista Revisiones -->
                 <div class="glass-panel" style="padding: 1.1rem 1.25rem; margin-bottom: 1.5rem;">
