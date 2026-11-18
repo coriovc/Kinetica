@@ -2176,6 +2176,432 @@
             filter: brightness(1.06);
         }
 
+        /* Dashboard: Embudo Gráfico, Donut Interactivo, Calendario Full-Width y Círculos de Desempeño */
+        .dash-funnel-wrap {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            padding: 0.25rem 0;
+        }
+
+        .dash-funnel-stage {
+            position: relative;
+            height: 46px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 18px;
+            color: #ffffff;
+            font-weight: 700;
+            font-size: 0.84rem;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: transform 0.24s cubic-bezier(0.22, 1, 0.36, 1), filter 0.24s ease, box-shadow 0.24s ease;
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.14);
+            overflow: hidden;
+        }
+
+        .dash-funnel-stage:hover {
+            transform: translateY(-2px) scale(1.02);
+            filter: brightness(1.08);
+            box-shadow: 0 10px 24px rgba(0, 0, 0, 0.22);
+        }
+
+        .dash-donut-wrap {
+            position: relative;
+            width: 184px;
+            height: 184px;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .dash-donut-segment {
+            fill: none;
+            stroke-width: 18;
+            stroke-linecap: round;
+            cursor: pointer;
+            transition: stroke-width 0.25s ease, opacity 0.25s ease, stroke-dashoffset 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+            transform-origin: center;
+        }
+
+        .dash-donut-segment:hover,
+        .dash-donut-segment.is-active {
+            stroke-width: 23;
+        }
+
+        .dash-status-pill-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            padding: 8px 12px;
+            border-radius: 10px;
+            border: 1px solid var(--card-border);
+            background: rgba(150, 150, 150, 0.05);
+            cursor: pointer;
+            transition: transform 0.18s ease, border-color 0.18s ease, background 0.18s ease;
+        }
+
+        .dash-status-pill-row:hover,
+        .dash-status-pill-row.is-active {
+            transform: translateX(3px);
+            background: rgba(150, 150, 150, 0.1);
+        }
+
+        .dash-calendar-wrap {
+            width: 100%;
+            overflow-x: visible;
+        }
+
+        .dash-calendar-wrap .calendar-table {
+            width: 100%;
+            table-layout: fixed;
+            min-width: 0;
+        }
+
+        @media (max-width: 768px) {
+            .dash-calendar-wrap {
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+            }
+
+            .dash-calendar-wrap .calendar-table {
+                min-width: 680px;
+                table-layout: auto;
+            }
+        }
+
+        .dash-team-circles-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 1rem;
+        }
+
+        @media (max-width: 960px) {
+            .dash-team-circles-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .dash-team-role-card {
+            border-radius: 14px;
+            border: 1px solid var(--card-border);
+            background: rgba(150, 150, 150, 0.04);
+            padding: 1.15rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            gap: 0.75rem;
+            transition: transform 0.22s ease, box-shadow 0.22s ease;
+        }
+
+        .dash-team-role-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 24px rgba(0, 0, 0, 0.08);
+        }
+
+        .dash-member-mini-rings {
+            width: 100%;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+            padding-top: 0.5rem;
+            border-top: 1px dashed var(--card-border);
+        }
+
+        .dash-member-chip {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            padding: 5px 10px;
+            border-radius: 999px;
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            font-size: 0.76rem;
+        }
+
+        /* Gráfico Spline/Área Estilo Referencia (Embudo & Pagos) */
+        .spline-chart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+            margin-bottom: 0.85rem;
+        }
+
+        .spline-chart-title-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .spline-chart-title {
+            font-size: 0.92rem;
+            font-weight: 800;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+            color: var(--text-main);
+            margin: 0;
+        }
+
+        .spline-real-pill {
+            font-size: 0.7rem;
+            font-weight: 800;
+            padding: 2px 9px;
+            border-radius: 999px;
+            background: rgba(16, 185, 129, 0.14);
+            color: #059669;
+            border: 1px solid rgba(16, 185, 129, 0.25);
+        }
+
+        .spline-chart-sub {
+            font-size: 0.78rem;
+            color: var(--text-muted);
+            margin-top: 3px;
+        }
+
+        .spline-chart-controls {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .spline-toggle-group {
+            display: inline-flex;
+            padding: 3px;
+            border-radius: 10px;
+            background: rgba(148, 163, 184, 0.14);
+            border: 1px solid var(--card-border);
+            gap: 2px;
+        }
+
+        .spline-toggle-btn {
+            border: none;
+            background: transparent;
+            color: var(--text-muted);
+            font-size: 0.75rem;
+            font-weight: 700;
+            padding: 4px 11px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.18s ease;
+        }
+
+        .spline-toggle-btn.active {
+            background: var(--card-bg);
+            color: #4f46e5;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+        }
+
+        .spline-legend {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 0.76rem;
+            font-weight: 700;
+            color: var(--text-main);
+        }
+
+        .spline-legend-item {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .spline-legend-dot {
+            width: 9px;
+            height: 9px;
+            border-radius: 50%;
+            display: inline-block;
+        }
+
+        .spline-svg-stage {
+            position: relative;
+            width: 100%;
+            min-height: 215px;
+        }
+
+        .spline-tooltip-box {
+            position: absolute;
+            top: 12px;
+            min-width: 185px;
+            max-width: 225px;
+            background: #181c2e;
+            color: #ffffff;
+            border-radius: 12px;
+            padding: 11px 13px;
+            box-shadow: 0 14px 32px rgba(15, 23, 42, 0.34);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            pointer-events: none;
+            z-index: 8;
+            opacity: 0;
+            transform: translateY(4px);
+            transition: opacity 0.16s ease, transform 0.16s ease, left 0.16s ease;
+        }
+
+        .spline-tooltip-box.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Selector de Fecha Personalizado Estilo Kinetica */
+        input[type="date"].form-control,
+        input[type="date"] {
+            border-radius: 12px;
+            border: 1.5px solid var(--card-border);
+            background: var(--card-bg);
+            color: var(--text-main);
+            font-weight: 700;
+            padding: 0.48rem 0.8rem;
+            cursor: pointer;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.15s ease;
+        }
+
+        input[type="date"]:hover,
+        input[type="date"]:focus {
+            border-color: var(--neon-red);
+            box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.14);
+            outline: none;
+        }
+
+        input[type="date"]::-webkit-calendar-picker-indicator {
+            cursor: pointer;
+            opacity: 0.78;
+            filter: invert(27%) sepia(89%) saturate(2900%) hue-rotate(348deg) brightness(92%) contrast(94%);
+            transition: transform 0.15s ease, opacity 0.15s ease;
+        }
+
+        input[type="date"]::-webkit-calendar-picker-indicator:hover {
+            opacity: 1;
+            transform: scale(1.1);
+        }
+
+        .kinetica-date-popover {
+            position: fixed;
+            z-index: 100050;
+            width: 288px;
+            border-radius: 16px;
+            padding: 0.9rem;
+            background: var(--card-bg, #ffffff);
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+            border: 1.5px solid var(--card-border);
+            box-shadow: 0 20px 44px rgba(15, 23, 42, 0.24);
+            display: none;
+            animation: fadeIn 0.16s ease-out;
+        }
+
+        .kinetica-date-popover.active {
+            display: block;
+        }
+
+        .kinetica-dp-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.65rem;
+            gap: 6px;
+        }
+
+        .kinetica-dp-nav-btn {
+            width: 30px;
+            height: 30px;
+            border-radius: 9px;
+            border: 1px solid var(--card-border);
+            background: rgba(150, 150, 150, 0.07);
+            color: var(--text-main);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.15s ease;
+        }
+
+        .kinetica-dp-nav-btn:hover {
+            border-color: var(--neon-red);
+            color: var(--neon-red);
+            background: rgba(220, 38, 38, 0.08);
+        }
+
+        .kinetica-dp-title {
+            font-size: 0.86rem;
+            font-weight: 800;
+            color: var(--text-main);
+            text-transform: capitalize;
+        }
+
+        .kinetica-dp-weekdays {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            text-align: center;
+            font-size: 0.68rem;
+            font-weight: 800;
+            color: var(--text-muted);
+            margin-bottom: 0.35rem;
+        }
+
+        .kinetica-dp-days {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 3px;
+        }
+
+        .kinetica-dp-day {
+            height: 32px;
+            border-radius: 9px;
+            border: 1px solid transparent;
+            background: transparent;
+            color: var(--text-main);
+            font-size: 0.78rem;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.15s ease;
+        }
+
+        .kinetica-dp-day:hover:not(:disabled) {
+            background: rgba(220, 38, 38, 0.1);
+            color: var(--neon-red);
+            border-color: rgba(220, 38, 38, 0.25);
+        }
+
+        .kinetica-dp-day.is-today {
+            border-color: rgba(220, 38, 38, 0.45);
+            color: var(--neon-red);
+        }
+
+        .kinetica-dp-day.is-selected {
+            background: var(--accent-gradient, linear-gradient(135deg, #dc2626, #ef4444));
+            color: #ffffff !important;
+            border-color: transparent;
+            box-shadow: 0 4px 12px rgba(220, 38, 38, 0.32);
+        }
+
+        .kinetica-dp-day.is-empty {
+            cursor: default;
+            pointer-events: none;
+        }
+
+        .kinetica-dp-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 0.65rem;
+            padding-top: 0.55rem;
+            border-top: 1px solid var(--card-border);
+            gap: 6px;
+        }
+
         .carousel-thumb-btn {
             border: 2px solid transparent;
             border-radius: 6px;
@@ -3981,7 +4407,7 @@
                         <h2 style="font-size: 1.25rem;">Kinetica</h2>
                         <p
                             style="font-size: 0.7rem; color: var(--text-muted); text-transform: uppercase; font-weight: 600;">
-                            Workspace V.1.21.31</p>
+                            Workspace V.1.22.21</p>
                     </div>
                 </div>
                 <!-- Botón contraer en la barra lateral sólo icono -->
@@ -4199,16 +4625,37 @@
                     </div>
 
                     <div class="dashboard-grid">
-                        <!-- Embudo de Producción -->
+                        <!-- Embudo de Producción del Mes (Gráfica Spline/Área) -->
                         <div class="col-6 glass-panel">
-                            <h3 style="margin-bottom: 1rem;">Embudo de Producción del Mes</h3>
-                            <div id="funnel-bars-container" style="display: flex; flex-direction: column; gap: 0.9rem;">
+                            <div id="funnel-bars-container">
                                 <!-- Inyectado por JS -->
                             </div>
                         </div>
 
-                        <!-- Calendario Completo del Mes -->
+                        <!-- Estado General de Piezas (Gráfico Circular Interactivo y Dinámico) -->
                         <div class="col-6 glass-panel">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; gap: 0.5rem; flex-wrap: wrap;">
+                                <h3 style="margin: 0;">Estado General de Piezas</h3>
+                                <span id="dash-status-hover-label" class="text-muted" style="font-size: 0.76rem; font-weight: 700;">Pasa el cursor sobre el gráfico</span>
+                            </div>
+                            <div style="display: flex; justify-content: space-around; align-items: center; flex-wrap: wrap; gap: 1.25rem;">
+                                <div class="dash-donut-wrap">
+                                    <svg id="dash-status-donut-svg" viewBox="0 0 180 180" style="width: 100%; height: 100%; transform: rotate(-90deg);">
+                                        <circle cx="90" cy="90" r="68" fill="none" stroke="rgba(150,150,150,0.14)" stroke-width="18"></circle>
+                                    </svg>
+                                    <div style="position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; pointer-events: none; text-align: center;">
+                                        <span id="ring-percentage" style="font-size: 1.55rem; font-weight: 900; color: #10b981; line-height: 1;">0%</span>
+                                        <span id="ring-sublabel" style="font-size: 0.7rem; font-weight: 700; color: var(--text-muted); margin-top: 3px;">CUMPLIMIENTO</span>
+                                    </div>
+                                </div>
+                                <div id="status-counts-list" style="display: flex; flex-direction: column; gap: 0.5rem; font-size: 0.82rem; flex: 1; min-width: 210px;">
+                                    <!-- Inyectado por JS -->
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Calendario Completo del Mes (Ancho Completo) -->
+                        <div class="col-12 glass-panel">
                             <div
                                 style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; flex-wrap: wrap; gap: 0.5rem;">
                                 <h3>Calendario Mensual</h3>
@@ -4216,7 +4663,7 @@
                                     style="font-size: 0.75rem; font-weight: 700; background: rgba(220,38,38,0.1); color: var(--neon-red); padding: 3px 10px; border-radius: 20px;">NOVIEMBRE
                                     2026</span>
                             </div>
-                            <div class="table-container">
+                            <div class="dash-calendar-wrap">
                                 <table class="calendar-table">
                                     <thead>
                                         <tr>
@@ -4250,60 +4697,14 @@
                             </div>
                         </div>
 
-                        <!-- Cumplimiento por Responsable -->
-                        <div class="col-6 glass-panel">
-                            <h3 style="margin-bottom: 1rem;">Cumplimiento por Responsable</h3>
-                            <div class="table-container">
-                                <table class="resp-table">
-                                    <thead>
-                                        <tr>
-                                            <th>Rol</th>
-                                            <th>Responsable</th>
-                                            <th>Etapa</th>
-                                            <th>Hechas</th>
-                                            <th>%</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="resp-table-body">
-                                        <!-- Inyectado por JS -->
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-
-                        <!-- Estado de las Piezas / Anillo -->
-                        <div class="col-6 glass-panel">
-                            <h3 style="margin-bottom: 1rem;">Estado General de Piezas</h3>
-                            <div
-                                style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
-                                <div id="status-counts-list"
-                                    style="display: flex; flex-direction: column; gap: 0.4rem; font-size: 0.82rem;">
-                                    <!-- Inyectado por JS -->
-                                </div>
-                                <div
-                                    style="width: 140px; height: 140px; border-radius: 50%; border: 10px solid #059669; display: flex; align-items: center; justify-content: center; box-shadow: 0 0 20px rgba(5,150,105,0.2); margin: 0 auto; background: rgba(5,150,105,0.03);">
-                                    <span id="ring-percentage"
-                                        style="font-size: 1.3rem; font-weight: 800; color: #059669;">0%</span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Directorio: Marcas, CMs y Diseñadores -->
+                        <!-- Desempeño Circular por Equipo (Community, Diseñador y Agencia) -->
                         <div class="col-12 glass-panel">
-                            <h3>Directorio del Proyecto</h3>
-                            <div class="lists-grid">
-                                <div class="list-card">
-                                    <h4 style="color:var(--text-main); font-weight:700;">Marcas Activas</h4>
-                                    <ul id="directory-brands-list"></ul>
-                                </div>
-                                <div class="list-card">
-                                    <h4 style="color:var(--text-main); font-weight:700;">Community Managers</h4>
-                                    <ul id="directory-cms-list"></ul>
-                                </div>
-                                <div class="list-card">
-                                    <h4 style="color:var(--text-main); font-weight:700;">Diseñadores Gráficos</h4>
-                                    <ul id="directory-designers-list"></ul>
-                                </div>
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; flex-wrap: wrap; gap: 0.5rem;">
+                                <h3 style="margin: 0;">Desempeño por Equipo (Community, Diseñador y Agencia)</h3>
+                                <span class="text-muted" style="font-size: 0.78rem;">Gráficos circulares dinámicos según piezas del período</span>
+                            </div>
+                            <div id="team-performance-circles" class="dash-team-circles-grid">
+                                <!-- Inyectado dinámicamente por JS -->
                             </div>
                         </div>
                     </div>
@@ -4817,6 +5218,13 @@
                     </div>
                 </div>
 
+                <!-- Gráfico de Pagos Recientes y Montos (Debajo de las tarjetas de totales de nómina) -->
+                <div class="glass-panel" id="payments-chart-panel" style="margin-bottom: 1.25rem; padding: 1.2rem 1.35rem;">
+                    <div id="payments-spline-chart-container">
+                        <!-- Inyectado por renderPaymentsSplineChart() -->
+                    </div>
+                </div>
+
                 <!-- Filtro de Roles -->
                 <div class="payments-role-tabs">
                     <button type="button" class="payments-role-tab active" onclick="setPaymentsRoleFilter('ALL', this)">
@@ -4855,17 +5263,13 @@
                     <button class="config-tab-btn active" onclick="switchConfigTab('brands', this)"><span
                             class="material-symbols-rounded">partner_exchange</span> Gestión de Marcas</button>
                     <button class="config-tab-btn" onclick="switchConfigTab('users', this)"><span
-                            class="material-symbols-rounded">shield_person</span> Usuarios</button>
-                    <button class="config-tab-btn" onclick="switchConfigTab('requests', this)"><span
-                            class="material-symbols-rounded">person_add</span> Solicitudes <span id="cfg-tab-requests-badge" style="display:none; background:#f59e0b; color:#111; font-size:0.7rem; font-weight:800; padding:1px 7px; border-radius:999px; margin-left:4px;">0</span></button>
-                    <button class="config-tab-btn" onclick="switchConfigTab('backup', this)"><span
-                            class="material-symbols-rounded">save</span> Exportar / Importar</button>
+                            class="material-symbols-rounded">shield_person</span> Usuarios <span id="cfg-tab-requests-badge" style="display:none; background:#f59e0b; color:#111; font-size:0.7rem; font-weight:800; padding:1px 7px; border-radius:999px; margin-left:4px;">0</span></button>
                     <button class="config-tab-btn" onclick="switchConfigTab('theme', this)"><span
                             class="material-symbols-rounded">palette</span> Apariencia</button>
+                    <button class="config-tab-btn" onclick="switchConfigTab('security', this)"><span
+                            class="material-symbols-rounded">pin</span> Código</button>
                     <button class="config-tab-btn" onclick="switchConfigTab('db', this)"><span
-                            class="material-symbols-rounded">power</span> Servidor</button>
-                    <button class="config-tab-btn" onclick="switchConfigTab('legal', this)"><span
-                            class="material-symbols-rounded">gavel</span> Cumplimiento Legal</button>
+                            class="material-symbols-rounded">tune</span> Más Ajustes</button>
                     <button class="config-tab-btn" onclick="switchConfigTab('trash', this)"><span
                             class="material-symbols-rounded">delete_sweep</span> Papelera <span id="cfg-tab-trash-badge" style="display:none; background:rgba(220,38,38,0.16); color:var(--neon-red); border:1px solid rgba(220,38,38,0.35); font-size:0.7rem; font-weight:800; padding:1px 7px; border-radius:999px; margin-left:4px;">0</span></button>
                 </div>
@@ -5006,42 +5410,9 @@
                     <div id="cfg-user-detail-section" style="display: none;">
                         <!-- Poblado dinámicamente por openUserDetailSection(userId) -->
                     </div>
-                </div>
 
-                <!-- TAB 3: Registro de Actividades (Auditoría)
-                <div class="config-panel" id="cfg-panel-logs">
-                    <div class="glass-panel">
-                        <div
-                            style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; flex-wrap: wrap; gap: 0.5rem;">
-                            <div>
-                                <h3>Registro de Actividades y Auditoría</h3>
-                                <p class="text-muted">Historial en tiempo real de cambios, creaciones y actualizaciones.
-                                </p>
-                            </div>
-                            <button class="btn-float btn-secondary" onclick="loadActivityLogs()"><span
-                                    class="material-symbols-rounded">sync</span> Refrescar Registro</button>
-                        </div>
-                        <div class="table-container">
-                            <table>
-                                <thead>
-                                    <tr>
-                                        <th>Fecha / Hora</th>
-                                        <th>Usuario</th>
-                                        <th>Acción</th>
-                                        <th>Descripción de la Actividad</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="cfg-logs-table-body">
-                                     Inyectado por JS 
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div> -->
-
-                <!-- TAB: Solicitudes de Nuevos Usuarios -->
-                <div class="config-panel" id="cfg-panel-requests">
-                    <div class="glass-panel" style="margin-bottom: 1.5rem;">
+                    <!-- Solicitudes de Nuevos Usuarios (Integrado en Usuarios) -->
+                    <div class="glass-panel" style="margin-top: 1.5rem; margin-bottom: 1.5rem;">
                         <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.75rem; margin-bottom: 1.25rem; padding-bottom: 0.9rem; border-bottom: 1px solid var(--card-border);">
                             <div style="display: flex; align-items: center; gap: 10px;">
                                 <span class="material-symbols-rounded" style="font-size: 3rem;color: #dc2626;">person_add</span>
@@ -5057,43 +5428,6 @@
 
                         <div id="cfg-requests-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 1rem;">
                             <!-- Poblado dinámicamente por renderAccessRequestsPanel() -->
-                        </div>
-                    </div>
-                </div>
-
-                <!-- TAB 4: Copia de Seguridad (Exportar / Importar) -->
-                <div class="config-panel" id="cfg-panel-backup">
-                    <div class="dashboard-grid">
-                        <div class="col-6 glass-panel">
-                            <h3 style="margin-bottom: 1rem;"><span class="material-symbols-rounded">download</span>
-                                Exportar Todos los Datos</h3>
-                            <p class="text-muted" style="margin-bottom: 1rem; line-height: 1.5;">
-                                Descarga un archivo JSON completo que contiene la información de todas las tablas de la
-                                base de datos (campañas, grillas, piezas, briefs, usuarios, miembros y registros de
-                                auditoría).
-                            </p>
-                            <button class="btn-float btn-primary" onclick="exportAllData()" style="display: inline-flex; align-items: center; gap: 8px; padding: 0.55rem 1.25rem; font-weight: 700; border-radius: 10px; box-shadow: 0 4px 15px rgba(220,38,38,0.35); margin-left: auto;">
-                                <span><span class="material-symbols-rounded">save</span></span> Descargar Respaldo
-                                Completo (JSON)
-                            </button>
-                        </div>
-
-                        <div class="col-6 glass-panel">
-                            <h3 style="margin-bottom: 1rem;"><span class="material-symbols-rounded">upload</span>
-                                Importar y Restaurar Datos</h3>
-                            <p class="text-muted" style="margin-bottom: 1rem; line-height: 1.5;">
-                                Restaura una copia de seguridad JSON previamente exportada. Todas las tablas se
-                                actualizarán con los datos contenidos en el respaldo.
-                            </p>
-                            <form onsubmit="importAllData(event)"
-                                style="display: flex; flex-direction: column; gap: 1rem;">
-                                <input type="file" id="import-json-file" accept=".json" class="form-control" required>
-                                <button type="submit" class="btn-float btn-secondary"
-                                    style="border-color: var(--neon-red); color: var(--neon-red);">
-                                    <span><span class="material-symbols-rounded">bolt</span></span> Restaurar Base de
-                                    Datos Ahora
-                                </button>
-                            </form>
                         </div>
                     </div>
                 </div>
@@ -5129,9 +5463,42 @@
                     </div>
                 </div>
 
-                <!-- TAB 6: Servidor y Base de Datos -->
+                <!-- TAB 6: Más Ajustes -->
                 <div class="config-panel" id="cfg-panel-db">
                     <div class="dashboard-grid">
+                        <!-- Exportar / Importar Datos (Al principio de la sección) -->
+                        <div class="col-6 glass-panel">
+                            <h3 style="margin-bottom: 1rem;"><span class="material-symbols-rounded">download</span>
+                                Exportar Todos los Datos</h3>
+                            <p class="text-muted" style="margin-bottom: 1rem; line-height: 1.5;">
+                                Descarga un archivo JSON completo que contiene la información de todas las tablas de la
+                                base de datos (campañas, grillas, piezas, briefs, usuarios, miembros y registros de
+                                auditoría).
+                            </p>
+                            <button class="btn-float btn-primary" onclick="exportAllData()" style="display: inline-flex; align-items: center; gap: 8px; padding: 0.55rem 1.25rem; font-weight: 700; border-radius: 10px; box-shadow: 0 4px 15px rgba(220,38,38,0.35); margin-left: auto;">
+                                <span><span class="material-symbols-rounded">save</span></span> Descargar Respaldo
+                                Completo (JSON)
+                            </button>
+                        </div>
+
+                        <div class="col-6 glass-panel">
+                            <h3 style="margin-bottom: 1rem;"><span class="material-symbols-rounded">upload</span>
+                                Importar y Restaurar Datos</h3>
+                            <p class="text-muted" style="margin-bottom: 1rem; line-height: 1.5;">
+                                Restaura una copia de seguridad JSON previamente exportada. Todas las tablas se
+                                actualizarán con los datos contenidos en el respaldo.
+                            </p>
+                            <form onsubmit="importAllData(event)"
+                                style="display: flex; flex-direction: column; gap: 1rem;">
+                                <input type="file" id="import-json-file" accept=".json" class="form-control" required>
+                                <button type="submit" class="btn-float btn-secondary"
+                                    style="border-color: var(--neon-red); color: var(--neon-red);">
+                                    <span><span class="material-symbols-rounded">bolt</span></span> Restaurar Base de
+                                    Datos Ahora
+                                </button>
+                            </form>
+                        </div>
+
                         <div class="col-6 glass-panel">
                             <h3 style="margin-bottom: 1rem;">Estado del Motor MySQL</h3>
                             <div style="display: flex; flex-direction: column; gap: 0.8rem; font-size: 0.9rem;">
@@ -5165,15 +5532,43 @@
 
                         <div class="col-12 glass-panel">
                             <div
-                                style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; flex-wrap: wrap; gap: 0.5rem;">
+                                style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.85rem; flex-wrap: wrap; gap: 0.5rem;">
                                 <div>
                                     <h3>Registro de Actividades y Auditoría</h3>
                                     <p class="text-muted">Historial en tiempo real de cambios, creaciones y
                                         actualizaciones.
                                     </p>
                                 </div>
-                                <button class="btn-float btn-secondary" onclick="loadActivityLogs()"><span
-                                        class="material-symbols-rounded">sync</span> Refrescar Registro</button>
+                                <div style="display: flex; align-items: center; gap: 0.65rem; flex-wrap: wrap;">
+                                    <span id="cfg-logs-count-label" class="text-muted" style="font-size: 0.78rem; font-weight: 700;"></span>
+                                    <button class="btn-float btn-secondary" onclick="loadActivityLogs()"><span
+                                            class="material-symbols-rounded">sync</span> Refrescar Registro</button>
+                                </div>
+                            </div>
+                            <div style="display: flex; flex-wrap: wrap; gap: 0.65rem; align-items: center; margin-bottom: 1rem; padding: 0.75rem; border-radius: 12px; background: rgba(150, 150, 150, 0.05); border: 1px solid var(--card-border);">
+                                <div style="flex: 2; min-width: 210px; position: relative; display: flex; align-items: center;">
+                                    <span class="material-symbols-rounded" style="position: absolute; left: 10px; font-size: 1.1rem; color: var(--text-muted); pointer-events: none;">search</span>
+                                    <input type="text" id="cfg-logs-search" class="form-control"
+                                        placeholder="Buscar por nombre, usuario, acción o fecha..."
+                                        oninput="renderActivityLogs()"
+                                        style="padding-left: 2.15rem; font-size: 0.83rem;">
+                                </div>
+                                <select id="cfg-logs-action-filter" class="form-control" onchange="renderActivityLogs()" style="flex: 1; min-width: 155px; font-size: 0.83rem;">
+                                    <option value="TODAS">Todas las acciones</option>
+                                </select>
+                                <input type="date" id="cfg-logs-date-filter" class="form-control" onchange="renderActivityLogs()" title="Filtrar por fecha" style="width: auto; min-width: 145px; font-size: 0.83rem;">
+                                <div style="display: inline-flex; align-items: center; gap: 6px;">
+                                    <span class="text-muted" style="font-size: 0.78rem; font-weight: 700;">Ver:</span>
+                                    <select id="cfg-logs-limit" class="form-control" onchange="renderActivityLogs()" style="width: auto; min-width: 72px; font-size: 0.83rem; font-weight: 700;">
+                                        <option value="5">5</option>
+                                        <option value="10" selected>10</option>
+                                        <option value="20">20</option>
+                                        <option value="50">50</option>
+                                    </select>
+                                </div>
+                                <button type="button" class="btn-float btn-secondary" onclick="resetActivityLogsFilters()" title="Limpiar filtros" style="padding: 0.45rem 0.75rem; font-size: 0.78rem;">
+                                    Limpiar
+                                </button>
                             </div>
                             <div class="table-container" style="max-height: 460px; overflow-y: auto;">
                                 <table>
@@ -5191,12 +5586,8 @@
                                 </table>
                             </div>
                         </div>
-                    </div>
-                </div>
 
-                <!-- TAB 7: Cumplimiento Legal y Auditoría de Consentimientos -->
-                <div class="config-panel" id="cfg-panel-legal">
-                    <div class="dashboard-grid">
+                        <!-- Cumplimiento Legal (Integrado en Más Ajustes) -->
                         <div class="col-12 glass-panel">
                             <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:0.75rem; margin-bottom:1rem;">
                                 <div>
@@ -5327,9 +5718,98 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- TAB 9: Código de Seguridad (PIN Rotativo cada 5 min) -->
+                <div class="config-panel" id="cfg-panel-security">
+                    <div class="dashboard-grid">
+                        <div class="col-12 glass-panel" style="max-width: 680px; margin: 0 auto;">
+                            <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 1rem;">
+                                <div style="width: 48px; height: 48px; border-radius: 14px; background: rgba(220, 38, 38, 0.12); border: 1px solid rgba(220, 38, 38, 0.3); display: flex; align-items: center; justify-content: center; color: var(--neon-red); flex-shrink: 0;">
+                                    <span class="material-symbols-rounded" style="font-size: 1.8rem;">lock</span>
+                                </div>
+                                <div>
+                                    <h2 style="font-size: 1.35rem; margin: 0 0 2px 0;">Código de Seguridad para Eliminar Piezas</h2>
+                                    <p class="text-muted" style="font-size: 0.84rem; margin: 0;">
+                                        PIN de 4 dígitos generado automáticamente. Tiene una vigencia de <strong>5 minutos</strong> y cambia al expirar.
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div style="padding: 1.5rem; border-radius: 16px; background: rgba(150, 150, 150, 0.06); border: 1px solid var(--card-border); text-align: center; margin-bottom: 1rem;">
+                                <div style="font-size: 0.78rem; text-transform: uppercase; font-weight: 800; letter-spacing: 0.08em; color: var(--text-muted); margin-bottom: 0.65rem;">
+                                    Código Actual Vigente
+                                </div>
+                                <div id="cfg-security-pin-display" style="font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; font-size: 2.75rem; font-weight: 900; letter-spacing: 0.45rem; color: var(--neon-red); line-height: 1.1; margin-bottom: 0.85rem;">
+                                    ----
+                                </div>
+                                <div style="display: inline-flex; align-items: center; gap: 6px; padding: 4px 12px; border-radius: 999px; background: rgba(16, 185, 129, 0.12); border: 1px solid rgba(16, 185, 129, 0.32); color: #10b981; font-size: 0.82rem; font-weight: 700;">
+                                    <span class="material-symbols-rounded" style="font-size: 1rem;">timer</span>
+                                    Vigente por: <span id="cfg-security-pin-timer">05:00</span>
+                                </div>
+                            </div>
+
+                            <div style="display: flex; justify-content: center; gap: 0.75rem; flex-wrap: wrap;">
+                                <button type="button" class="btn-float btn-primary" onclick="copySecurityDeletePin()" style="display: inline-flex; align-items: center; gap: 6px;">
+                                    <span class="material-symbols-rounded" style="font-size: 1.05rem;">content_copy</span> Copiar Código
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </section>
 
             <!-- ==================== MODALES ==================== -->
+            <!-- Modal de Confirmación de Eliminación de Pieza con PIN de Seguridad -->
+            <div class="modal-overlay" id="deletePiecePinModal" style="z-index: 100025;"
+                onclick="if(event.target === this) closeDeletePiecePinModal()">
+                <div class="modal-content glass-panel" style="max-width: 430px; width: 92%;">
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; margin-bottom: 0.85rem;">
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <div style="width: 42px; height: 42px; border-radius: 12px; background: rgba(239, 68, 68, 0.14); border: 1px solid rgba(239, 68, 68, 0.35); display: flex; align-items: center; justify-content: center; color: #ef4444; flex-shrink: 0;">
+                                <span class="material-symbols-rounded" style="font-size: 1.4rem;">delete_forever</span>
+                            </div>
+                            <div>
+                                <h3 style="margin: 0; font-size: 1.1rem; font-weight: 800; color: var(--text-main);">
+                                    Confirmar Eliminación
+                                </h3>
+                                <p id="delete-pin-piece-meta" class="text-muted" style="margin: 2px 0 0 0; font-size: 0.78rem;"></p>
+                            </div>
+                        </div>
+                        <button type="button" class="btn-float btn-secondary btn-close-round" onclick="closeDeletePiecePinModal()"
+                            style="padding: 4px 10px; font-size: 0.85rem;">
+                            <span class="material-symbols-rounded">close</span>
+                        </button>
+                    </div>
+
+                    <p style="font-size: 0.84rem; color: var(--text-main); line-height: 1.45; margin: 0 0 0.85rem 0;">
+                        Contacta con un administrador para que te dé el <strong>código de seguridad</strong> para eliminar permanentemente esta pieza.
+                    </p>
+
+                    <div style="margin-bottom: 0.85rem;">
+                        <div style="position: relative; display: flex; align-items: center;">
+                            <input type="password" id="delete-piece-pin-input" maxlength="4" inputmode="numeric" pattern="[0-9]*" autocomplete="off"
+                                placeholder="••••"
+                                oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 4); document.getElementById('delete-pin-error').style.display = 'none';"
+                                onkeydown="if(event.key === 'Enter'){ event.preventDefault(); confirmDeletePieceWithPin(); }"
+                                style="width: 100%; text-align: center; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; font-size: 1.85rem; font-weight: 900; letter-spacing: 0.75rem; padding: 0.65rem 2.75rem; border-radius: 12px; border: 1.5px solid var(--card-border); background: rgba(150, 150, 150, 0.06); color: var(--text-main); outline: none;">
+                            <button type="button" id="delete-pin-toggle-vis-btn" onclick="toggleDeletePinVisibility()" title="Ver / ocultar código"
+                                style="position: absolute; right: 10px; background: transparent; border: none; color: var(--text-muted); cursor: pointer; display: inline-flex; align-items: center; justify-content: center; padding: 6px; border-radius: 8px;">
+                                <span class="material-symbols-rounded" id="delete-pin-toggle-vis-icon" style="font-size: 1.25rem;">visibility</span>
+                            </button>
+                        </div>
+                        <div id="delete-pin-error" style="display: none; margin-top: 6px; font-size: 0.78rem; font-weight: 700; color: #ef4444; text-align: center;"></div>
+                    </div>
+
+                    <div style="display: flex; justify-content: flex-end; gap: 8px;">
+                        <button type="button" class="btn-float btn-secondary" onclick="closeDeletePiecePinModal()">Cancelar</button>
+                        <button type="button" id="delete-pin-confirm-btn" class="btn-float" onclick="confirmDeletePieceWithPin()"
+                            style="background: linear-gradient(135deg, #dc2626, #991b1b); color: #ffffff; border: 1px solid rgba(239, 68, 68, 0.55); display: inline-flex; align-items: center; gap: 6px;">
+                            <span class="material-symbols-rounded" style="font-size: 1rem;">delete</span>
+                            Eliminar Pieza
+                        </button>
+                    </div>
+                </div>
+            </div>
             <!-- Modal Agregar / Modificar Pieza -->
             <div class="modal-overlay" id="addModal">
                 <div class="glass-panel modal-content" style="max-width: 640px;">
@@ -11091,9 +11571,160 @@
             }
         }
 
-        // ==================== ELIMINAR PIEZA ====================
-        async function deletePiece(id) {
-            if (!confirm('¿Deseas eliminar permanentemente esta pieza de la base de datos?')) return;
+        // ==================== ELIMINAR PIEZA (CON PIN DE SEGURIDAD) ====================
+        const SECURITY_DELETE_PIN_KEY = 'kinetica_security_delete_pin';
+        const SECURITY_DELETE_PIN_TTL_MS = 5 * 60 * 1000;
+        let pendingDeletePieceId = null;
+        let securityPinInterval = null;
+
+        function getSecurityDeletePinData() {
+            const now = Date.now();
+            try {
+                const raw = localStorage.getItem(SECURITY_DELETE_PIN_KEY);
+                if (raw) {
+                    const parsed = JSON.parse(raw);
+                    if (parsed && /^\d{4}$/.test(String(parsed.code)) && typeof parsed.expiresAt === 'number' && parsed.expiresAt > now) {
+                        return { code: String(parsed.code), expiresAt: parsed.expiresAt };
+                    }
+                }
+            } catch (e) {}
+
+            let num;
+            if (window.crypto && window.crypto.getRandomValues) {
+                const arr = new Uint32Array(1);
+                window.crypto.getRandomValues(arr);
+                num = 1000 + (arr[0] % 9000);
+            } else {
+                num = Math.floor(1000 + Math.random() * 9000);
+            }
+            const nextData = {
+                code: String(num),
+                expiresAt: now + SECURITY_DELETE_PIN_TTL_MS
+            };
+            try {
+                localStorage.setItem(SECURITY_DELETE_PIN_KEY, JSON.stringify(nextData));
+            } catch (e) {}
+            return nextData;
+        }
+
+        function renderSecurityPinPanel() {
+            const displayEl = document.getElementById('cfg-security-pin-display');
+            const timerEl = document.getElementById('cfg-security-pin-timer');
+            const updateView = () => {
+                const { code, expiresAt } = getSecurityDeletePinData();
+                if (displayEl) displayEl.textContent = code;
+                if (timerEl) {
+                    const remainingSec = Math.max(0, Math.ceil((expiresAt - Date.now()) / 1000));
+                    const mins = String(Math.floor(remainingSec / 60)).padStart(2, '0');
+                    const secs = String(remainingSec % 60).padStart(2, '0');
+                    timerEl.textContent = `${mins}:${secs}`;
+                }
+            };
+            updateView();
+            if (securityPinInterval) clearInterval(securityPinInterval);
+            securityPinInterval = setInterval(() => {
+                const panel = document.getElementById('cfg-panel-security');
+                if (!panel || !panel.classList.contains('active')) {
+                    clearInterval(securityPinInterval);
+                    securityPinInterval = null;
+                    return;
+                }
+                updateView();
+            }, 1000);
+        }
+
+        function copySecurityDeletePin() {
+            const { code } = getSecurityDeletePinData();
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(code).then(() => {
+                    showToast('Código de seguridad copiado', 'success');
+                }).catch(() => {
+                    showToast(`Código actual: ${code}`, 'info');
+                });
+            } else {
+                showToast(`Código actual: ${code}`, 'info');
+            }
+        }
+
+        function deletePiece(id) {
+            pendingDeletePieceId = id;
+            const modal = document.getElementById('deletePiecePinModal');
+            const metaEl = document.getElementById('delete-pin-piece-meta');
+            const inputEl = document.getElementById('delete-piece-pin-input');
+            const errEl = document.getElementById('delete-pin-error');
+            const confirmBtn = document.getElementById('delete-pin-confirm-btn');
+
+            const piece = findPieceById(id);
+            if (metaEl) {
+                const brand = piece ? (piece.brand || '') : '';
+                const title = piece ? (piece.title || piece.copy_text || `Pieza #${id}`) : `Pieza #${id}`;
+                metaEl.textContent = [brand, title].filter(Boolean).join(' • ');
+            }
+            if (inputEl) {
+                inputEl.value = '';
+                inputEl.type = 'password';
+            }
+            const visIcon = document.getElementById('delete-pin-toggle-vis-icon');
+            if (visIcon) visIcon.textContent = 'visibility';
+            if (errEl) {
+                errEl.style.display = 'none';
+                errEl.textContent = '';
+            }
+            if (confirmBtn) confirmBtn.disabled = false;
+
+            if (modal) {
+                modal.classList.add('active');
+                setTimeout(() => { if (inputEl) inputEl.focus(); }, 60);
+            }
+        }
+
+        function toggleDeletePinVisibility() {
+            const inputEl = document.getElementById('delete-piece-pin-input');
+            const iconEl = document.getElementById('delete-pin-toggle-vis-icon');
+            if (!inputEl) return;
+            const show = inputEl.type === 'password';
+            inputEl.type = show ? 'text' : 'password';
+            if (iconEl) iconEl.textContent = show ? 'visibility_off' : 'visibility';
+        }
+
+        function closeDeletePiecePinModal() {
+            const modal = document.getElementById('deletePiecePinModal');
+            if (modal) modal.classList.remove('active');
+            pendingDeletePieceId = null;
+        }
+
+        async function confirmDeletePieceWithPin() {
+            if (!pendingDeletePieceId) return;
+            const inputEl = document.getElementById('delete-piece-pin-input');
+            const errEl = document.getElementById('delete-pin-error');
+            const confirmBtn = document.getElementById('delete-pin-confirm-btn');
+            const entered = inputEl ? inputEl.value.trim() : '';
+
+            if (!/^\d{4}$/.test(entered)) {
+                if (errEl) {
+                    errEl.textContent = 'Ingresa los 4 dígitos del código de seguridad.';
+                    errEl.style.display = 'block';
+                }
+                if (inputEl) inputEl.focus();
+                return;
+            }
+
+            const { code } = getSecurityDeletePinData();
+            if (entered !== code) {
+                if (errEl) {
+                    errEl.textContent = 'Código incorrecto o expirado. Contacta con un administrador.';
+                    errEl.style.display = 'block';
+                }
+                if (inputEl) {
+                    inputEl.value = '';
+                    inputEl.focus();
+                }
+                return;
+            }
+
+            const id = pendingDeletePieceId;
+            if (confirmBtn) confirmBtn.disabled = true;
+
             try {
                 const res = await fetch('api.php?action=delete_piece', {
                     method: 'POST',
@@ -11115,15 +11746,19 @@
                         }
                     }
 
+                    closeDeletePiecePinModal();
                     renderTable();
                     updateDashboard();
                     renderBrandCards();
                     renderTimeline();
+                    renderReviews();
                     showToast('Pieza eliminada de la base de datos', 'success');
                 } else {
+                    if (confirmBtn) confirmBtn.disabled = false;
                     showToast('Error al eliminar: ' + (data.message || ''), 'error');
                 }
             } catch (err) {
+                if (confirmBtn) confirmBtn.disabled = false;
                 console.error('Error:', err);
                 showToast('Error de conexión al eliminar', 'error');
             }
@@ -11512,80 +12147,226 @@
             const ring = document.getElementById('ring-percentage');
             if (ring) ring.innerText = overall.toFixed(0) + '%';
 
-            const maxVal = Math.max(funnel.planned, 1);
-            document.getElementById('funnel-bars-container').innerHTML = `
-            <div>
-                <div style="display:flex; justify-content:space-between; font-size:0.85rem; margin-bottom:4px;"><span>Planificadas</span><span style="font-weight:bold;">${funnel.planned}</span></div>
-                <div class="progress-wrapper"><div class="progress-bar" style="width: ${(funnel.planned / maxVal) * 100}%"></div></div>
-            </div>
-            <div>
-                <div style="display:flex; justify-content:space-between; font-size:0.85rem; margin-bottom:4px;"><span>Cargadas (Community)</span><span style="font-weight:bold;">${funnel.loaded}</span></div>
-                <div class="progress-wrapper"><div class="progress-bar" style="width: ${(funnel.loaded / maxVal) * 100}%"></div></div>
-            </div>
-            <div>
-                <div style="display:flex; justify-content:space-between; font-size:0.85rem; margin-bottom:4px;"><span>Diseñadas</span><span style="font-weight:bold;">${funnel.designed}</span></div>
-                <div class="progress-wrapper"><div class="progress-bar" style="width: ${(funnel.designed / maxVal) * 100}%"></div></div>
-            </div>
-            <div>
-                <div style="display:flex; justify-content:space-between; font-size:0.85rem; margin-bottom:4px;"><span>Aprobadas (Agencia)</span><span style="font-weight:bold;">${funnel.approved}</span></div>
-                <div class="progress-wrapper"><div class="progress-bar" style="width: ${(funnel.approved / maxVal) * 100}%"></div></div>
-            </div>
-            <div>
-                <div style="display:flex; justify-content:space-between; font-size:0.85rem; margin-bottom:4px;"><span>Publicadas</span><span style="font-weight:bold; color:var(--neon-red);">${funnel.published}</span></div>
-                <div class="progress-wrapper"><div class="progress-bar" style="width: ${(funnel.published / maxVal) * 100}%; background: var(--neon-red);"></div></div>
-            </div>
-        `;
+            // 1. Embudo de Producción del Mes (Gráfico Spline/Área estilo referencia)
+            const funnelPoints = [
+                { label: 'Planificadas', shortLabel: 'Planif.', primary: funnel.planned, secondary: 0, badge: `${funnel.planned} pzs` },
+                { label: 'Cargadas', shortLabel: 'Cargadas', primary: funnel.loaded, secondary: Math.max(0, funnel.planned - funnel.loaded), badge: `${funnel.planned ? Math.round((funnel.loaded / funnel.planned) * 100) : 0}%` },
+                { label: 'Diseñadas', shortLabel: 'Diseñadas', primary: funnel.designed, secondary: Math.max(0, funnel.planned - funnel.designed), badge: `${funnel.planned ? Math.round((funnel.designed / funnel.planned) * 100) : 0}%` },
+                { label: 'Aprobadas', shortLabel: 'Aprobadas', primary: funnel.approved, secondary: Math.max(0, funnel.planned - funnel.approved), badge: `${funnel.planned ? Math.round((funnel.approved / funnel.planned) * 100) : 0}%` },
+                { label: 'Publicadas', shortLabel: 'Publicadas', primary: funnel.published, secondary: Math.max(0, funnel.planned - funnel.published), badge: `${funnel.planned ? Math.round((funnel.published / funnel.planned) * 100) : 0}%` }
+            ];
 
-            if (currentBrand === 'TODAS') {
-                let respRows = '';
-                Object.keys(brandsMetadata).forEach(bKey => {
-                    const bMeta = brandsMetadata[bKey];
-                    const bPieces = filteredData.filter(p => p.brand_name === bKey);
-                    const bTotal = bPieces.length;
-                    let bPub = 0;
-                    bPieces.forEach(p => { if ((statusMap[p.cm_publishing] || 0) === 100) bPub++; });
-                    const bPct = bTotal > 0 ? ((bPub / bTotal) * 100).toFixed(0) : '0';
-                    respRows += `
-                    <tr>
-                        <td><span class="avatar-mini" style="width:24px; height:24px; font-size:0.65rem;">${bMeta.initials}</span></td>
-                        <td><strong>${bMeta.name}</strong></td>
-                        <td>${bMeta.cm}</td>
-                        <td>${bPub}/${bTotal}</td>
-                        <td><span style="font-weight:700; color:var(--neon-red);">${bPct}%</span></td>
-                    </tr>
-                `;
-                });
-                document.getElementById('resp-table-body').innerHTML = respRows || '<tr><td colspan="5" class="text-muted">Sin datos para este mes</td></tr>';
-            } else {
-                const meta = brandsMetadata[currentBrand] || { cm: '-', designer: '-', agency: '-' };
-                const totalCount = filteredData.length > 0 ? filteredData.length : 1;
-                const planPct = ((funnel.loaded / totalCount) * 100).toFixed(0);
-                const desPct = ((funnel.designed / totalCount) * 100).toFixed(0);
-                const revPct = ((funnel.approved / totalCount) * 100).toFixed(0);
-                const pubPct = ((funnel.published / totalCount) * 100).toFixed(0);
+            renderSplineAreaChart('funnel-bars-container', {
+                title: 'EMBUDO DE PRODUCCIÓN',
+                realBadge: 'Datos Reales',
+                subtitle: `Avance del período • Completadas: ${funnel.published} • Planificadas: ${funnel.planned}`,
+                primaryLabel: 'Completadas',
+                secondaryLabel: 'Pendientes',
+                totalLabel: 'Meta total',
+                formatValue: (v) => `${v}`,
+                points: funnelPoints,
+                defaultActiveIndex: funnelPoints.length - 1,
+                getTooltipTotal: (pt) => `${funnel.planned} pzs`
+            });
 
-                document.getElementById('resp-table-body').innerHTML = `
-                <tr><td>Community</td><td>${meta.cm}</td><td>Planificación</td><td>${funnel.loaded}/${funnel.planned}</td><td>${planPct}%</td></tr>
-                <tr><td>Diseñador</td><td>${meta.designer}</td><td>Diseño</td><td>${funnel.designed}/${funnel.planned}</td><td>${desPct}%</td></tr>
-                <tr><td>Agencia</td><td>${meta.agency}</td><td>Revisión</td><td>${funnel.approved}/${funnel.planned}</td><td>${revPct}%</td></tr>
-                <tr><td>Community</td><td>${meta.cm}</td><td>Publicación</td><td>${funnel.published}/${funnel.planned}</td><td>${pubPct}%</td></tr>
-            `;
+            // 2. Desempeño Circular Dinámico por Equipo (Community, Diseñador y Agencia)
+            const roleAgg = {
+                community: { label: 'Community', icon: 'campaign', color: '#3b82f6', done: 0, total: 0, members: {} },
+                designer: { label: 'Diseñador', icon: 'palette', color: '#a855f7', done: 0, total: 0, members: {} },
+                agency: { label: 'Agencia', icon: 'verified', color: '#10b981', done: 0, total: 0, members: {} }
+            };
+
+            filteredData.forEach(item => {
+                const bMeta = brandsMetadata[item.brand_name] || {};
+                const cmName = (bMeta.cm || 'Sin asignar').trim();
+                const desName = (bMeta.designer || 'Sin asignar').trim();
+                const agName = (bMeta.agency || 'Kinetica').trim();
+
+                const cmDone = ((statusMap[item.cm_planning] || 0) === 100 && (statusMap[item.cm_publishing] || 0) === 100)
+                    ? 1
+                    : (((statusMap[item.cm_planning] || 0) === 100 || (statusMap[item.cm_publishing] || 0) === 100) ? 0.5 : 0);
+                const desDone = (statusMap[item.designer_design] || 0) === 100 ? 1 : 0;
+                const agDone = (statusMap[item.agency_review] || 0) === 100 ? 1 : 0;
+
+                roleAgg.community.total += 1;
+                roleAgg.community.done += cmDone;
+                if (!roleAgg.community.members[cmName]) roleAgg.community.members[cmName] = { done: 0, total: 0 };
+                roleAgg.community.members[cmName].total += 1;
+                roleAgg.community.members[cmName].done += cmDone;
+
+                roleAgg.designer.total += 1;
+                roleAgg.designer.done += desDone;
+                if (!roleAgg.designer.members[desName]) roleAgg.designer.members[desName] = { done: 0, total: 0 };
+                roleAgg.designer.members[desName].total += 1;
+                roleAgg.designer.members[desName].done += desDone;
+
+                roleAgg.agency.total += 1;
+                roleAgg.agency.done += agDone;
+                if (!roleAgg.agency.members[agName]) roleAgg.agency.members[agName] = { done: 0, total: 0 };
+                roleAgg.agency.members[agName].total += 1;
+                roleAgg.agency.members[agName].done += agDone;
+            });
+
+            const teamCirclesEl = document.getElementById('team-performance-circles');
+            if (teamCirclesEl) {
+                const buildMiniRingSvg = (pct, color, size = 28) => {
+                    const r = 10;
+                    const c = 2 * Math.PI * r;
+                    const offset = c - (pct / 100) * c;
+                    return `
+                        <svg width="${size}" height="${size}" viewBox="0 0 26 26" style="transform: rotate(-90deg); flex-shrink: 0;">
+                            <circle cx="13" cy="13" r="${r}" fill="none" stroke="rgba(150,150,150,0.2)" stroke-width="3.2"></circle>
+                            <circle cx="13" cy="13" r="${r}" fill="none" stroke="${color}" stroke-width="3.2" stroke-linecap="round"
+                                stroke-dasharray="${c.toFixed(2)}" stroke-dashoffset="${offset.toFixed(2)}"></circle>
+                        </svg>
+                    `;
+                };
+
+                teamCirclesEl.innerHTML = Object.values(roleAgg).map(role => {
+                    const pct = role.total > 0 ? Math.round((role.done / role.total) * 100) : 0;
+                    const r = 46;
+                    const circ = 2 * Math.PI * r;
+                    const offset = circ - (pct / 100) * circ;
+                    const memberEntries = Object.entries(role.members);
+
+                    return `
+                        <div class="dash-team-role-card">
+                            <div style="display: inline-flex; align-items: center; gap: 6px; font-weight: 800; font-size: 0.95rem; color: var(--text-main);">
+                                <span class="material-symbols-rounded" style="color: ${role.color}; font-size: 1.2rem;">${role.icon}</span>
+                                <span>${role.label}</span>
+                            </div>
+                            <div style="position: relative; width: 120px; height: 120px; display: flex; align-items: center; justify-content: center;">
+                                <svg viewBox="0 0 116 116" style="width: 100%; height: 100%; transform: rotate(-90deg);">
+                                    <circle cx="58" cy="58" r="${r}" fill="none" stroke="rgba(150,150,150,0.16)" stroke-width="11"></circle>
+                                    <circle cx="58" cy="58" r="${r}" fill="none" stroke="${role.color}" stroke-width="11" stroke-linecap="round"
+                                        stroke-dasharray="${circ.toFixed(2)}" stroke-dashoffset="${offset.toFixed(2)}"
+                                        style="transition: stroke-dashoffset 0.7s cubic-bezier(0.22, 1, 0.36, 1);"></circle>
+                                </svg>
+                                <div style="position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+                                    <span style="font-size: 1.4rem; font-weight: 900; color: ${role.color}; line-height: 1;">${pct}%</span>
+                                    <span style="font-size: 0.72rem; font-weight: 700; color: var(--text-muted); margin-top: 2px;">${Number.isInteger(role.done) ? role.done : role.done.toFixed(1)}/${role.total}</span>
+                                </div>
+                            </div>
+                            <div class="dash-member-mini-rings">
+                                ${memberEntries.length > 0 ? memberEntries.map(([mName, mStat]) => {
+                                    const mPct = mStat.total > 0 ? Math.round((mStat.done / mStat.total) * 100) : 0;
+                                    return `
+                                        <div class="dash-member-chip" title="${escapeHtml(mName)}: ${Number.isInteger(mStat.done) ? mStat.done : mStat.done.toFixed(1)}/${mStat.total} (${mPct}%)">
+                                            ${buildMiniRingSvg(mPct, role.color)}
+                                            <span style="font-weight: 700; color: var(--text-main); max-width: 110px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${escapeHtml(mName)}</span>
+                                            <span style="font-weight: 800; color: ${role.color};">${mPct}%</span>
+                                        </div>
+                                    `;
+                                }).join('') : '<span class="text-muted" style="font-size: 0.76rem;">Sin piezas en este período</span>'}
+                            </div>
+                        </div>
+                    `;
+                }).join('');
             }
 
+            // 3. Estado General de Piezas (Gráfico Donut Interactivo)
             let statusCounts = { 'Pendiente': 0, 'En Producción': 0, 'Publicado': 0 };
             filteredData.forEach(item => {
                 const st = item.overall_status || 'Pendiente';
                 statusCounts[st] = (statusCounts[st] || 0) + 1;
             });
 
-            document.getElementById('status-counts-list').innerHTML = `
-            <div><span class="material-symbols-rounded">radio_button_unchecked</span> En Planificación / Pendiente: <strong>${statusCounts['Pendiente'] || 0}</strong></div>
-            <div><span class="material-symbols-rounded">pending</span> En Producción: <strong>${statusCounts['En Producción'] || 0}</strong></div>
-            <div><span class="material-symbols-rounded">check_circle</span> Publicado y Completado: <strong>${statusCounts['Publicado'] || 0}</strong></div>
-            <div><span class="material-symbols-rounded">bar_chart</span> Total piezas en este período: <strong>${filteredData.length}</strong></div>
-        `;
+            const statusItems = [
+                { key: 'Pendiente', label: 'Pendiente', icon: 'radio_button_unchecked', color: '#ef4444', val: statusCounts['Pendiente'] || 0 },
+                { key: 'En Producción', label: 'En Producción', icon: 'pending', color: '#f59e0b', val: statusCounts['En Producción'] || 0 },
+                { key: 'Publicado', label: 'Publicado y Completado', icon: 'check_circle', color: '#10b981', val: statusCounts['Publicado'] || 0 }
+            ];
+
+            const totalStatusPieces = filteredData.length;
+            const donutSvg = document.getElementById('dash-status-donut-svg');
+            const radius = 68;
+            const circumference = 2 * Math.PI * radius;
+
+            if (donutSvg) {
+                let cumulativeLen = 0;
+                const segmentsHtml = statusItems.map((seg, idx) => {
+                    const segLen = totalStatusPieces > 0 ? (seg.val / totalStatusPieces) * circumference : 0;
+                    const dashArray = `${Math.max(segLen - (segLen > 4 ? 3 : 0), 0).toFixed(2)} ${circumference.toFixed(2)}`;
+                    const dashOffset = (-cumulativeLen).toFixed(2);
+                    cumulativeLen += segLen;
+                    const segPct = totalStatusPieces > 0 ? Math.round((seg.val / totalStatusPieces) * 100) : 0;
+                    return `<circle class="dash-donut-segment" data-seg-idx="${idx}" cx="90" cy="90" r="${radius}" stroke="${seg.color}"
+                        stroke-dasharray="${dashArray}" stroke-dashoffset="${dashOffset}"
+                        onmouseenter="highlightDashboardStatusSegment(${idx}, '${escapeHtml(seg.label)}', ${seg.val}, ${segPct}, '${seg.color}')"
+                        onmouseleave="resetDashboardStatusHighlight(${overall.toFixed(0)})"></circle>`;
+                }).join('');
+                donutSvg.innerHTML = `<circle cx="90" cy="90" r="${radius}" fill="none" stroke="rgba(150,150,150,0.14)" stroke-width="18"></circle>` + segmentsHtml;
+            }
+
+            const statusListEl = document.getElementById('status-counts-list');
+            if (statusListEl) {
+                statusListEl.innerHTML = statusItems.map((seg, idx) => {
+                    const segPct = totalStatusPieces > 0 ? Math.round((seg.val / totalStatusPieces) * 100) : 0;
+                    return `
+                        <div class="dash-status-pill-row" data-pill-idx="${idx}"
+                             onmouseenter="highlightDashboardStatusSegment(${idx}, '${escapeHtml(seg.label)}', ${seg.val}, ${segPct}, '${seg.color}')"
+                             onmouseleave="resetDashboardStatusHighlight(${overall.toFixed(0)})">
+                            <span style="display: inline-flex; align-items: center; gap: 7px; font-weight: 700; color: var(--text-main);">
+                                <span style="width: 10px; height: 10px; border-radius: 50%; background: ${seg.color}; display: inline-block;"></span>
+                                ${seg.label}
+                            </span>
+                            <span style="font-weight: 800; color: ${seg.color};">${seg.val} <span style="font-size: 0.72rem; color: var(--text-muted); font-weight: 600;">(${segPct}%)</span></span>
+                        </div>
+                    `;
+                }).join('') + `
+                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 6px 10px 0 10px; font-size: 0.8rem; color: var(--text-muted);">
+                        <span>Total piezas en este período</span>
+                        <strong style="color: var(--text-main);">${totalStatusPieces}</strong>
+                    </div>
+                `;
+            }
 
             renderFullCalendar(filteredData);
+        }
+
+        function highlightDashboardStatusSegment(idx, label, val, pct, color) {
+            document.querySelectorAll('#dash-status-donut-svg .dash-donut-segment').forEach(el => {
+                const isTarget = Number(el.getAttribute('data-seg-idx')) === idx;
+                el.classList.toggle('is-active', isTarget);
+                el.style.opacity = isTarget ? '1' : '0.35';
+            });
+            document.querySelectorAll('#status-counts-list .dash-status-pill-row').forEach(el => {
+                el.classList.toggle('is-active', Number(el.getAttribute('data-pill-idx')) === idx);
+            });
+            const ring = document.getElementById('ring-percentage');
+            const sub = document.getElementById('ring-sublabel');
+            const hoverLbl = document.getElementById('dash-status-hover-label');
+            if (ring) {
+                ring.innerText = `${pct}%`;
+                ring.style.color = color;
+            }
+            if (sub) sub.innerText = `${val} PIEZAS`;
+            if (hoverLbl) {
+                hoverLbl.innerText = `${label}: ${val}`;
+                hoverLbl.style.color = color;
+            }
+        }
+
+        function resetDashboardStatusHighlight(overallPct) {
+            document.querySelectorAll('#dash-status-donut-svg .dash-donut-segment').forEach(el => {
+                el.classList.remove('is-active');
+                el.style.opacity = '1';
+            });
+            document.querySelectorAll('#status-counts-list .dash-status-pill-row').forEach(el => {
+                el.classList.remove('is-active');
+            });
+            const ring = document.getElementById('ring-percentage');
+            const sub = document.getElementById('ring-sublabel');
+            const hoverLbl = document.getElementById('dash-status-hover-label');
+            if (ring) {
+                ring.innerText = `${overallPct}%`;
+                ring.style.color = '#10b981';
+            }
+            if (sub) sub.innerText = 'CUMPLIMIENTO';
+            if (hoverLbl) {
+                hoverLbl.innerText = 'Pasa el cursor sobre el gráfico';
+                hoverLbl.style.color = '';
+            }
         }
 
         // ==================== CALENDARIO COMPLETO DEL MES ====================
@@ -12212,11 +12993,15 @@
             const target = document.getElementById('cfg-panel-' + tabId);
             if (target) target.classList.add('active');
 
-            if (tabId === 'logs' || tabId === 'db') loadActivityLogs();
+            if (tabId === 'logs' || tabId === 'db') {
+                loadActivityLogs();
+                loadLegalAuditData();
+            }
             if (tabId === 'brands') renderBrandsConfigTable();
             if (tabId === 'users' || tabId === 'requests') loadAccessRequests();
             if (tabId === 'legal') loadLegalAuditData();
             if (tabId === 'trash') renderSettingsTrashList();
+            if (tabId === 'security') renderSecurityPinPanel();
         }
 
         function getFiveMonthsAgoTimestamp() {
@@ -15556,6 +16341,18 @@
             }
         }
 
+        function resetActivityLogsFilters() {
+            const s = document.getElementById('cfg-logs-search');
+            const a = document.getElementById('cfg-logs-action-filter');
+            const d = document.getElementById('cfg-logs-date-filter');
+            const l = document.getElementById('cfg-logs-limit');
+            if (s) s.value = '';
+            if (a) a.value = 'TODAS';
+            if (d) d.value = '';
+            if (l) l.value = '10';
+            renderActivityLogs();
+        }
+
         function renderActivityLogs() {
             const bodies = [
                 document.getElementById('cfg-logs-table-body'),
@@ -15563,9 +16360,41 @@
             ].filter(Boolean);
             if (bodies.length === 0) return;
 
-            const rowsHtml = (!activityLogs || activityLogs.length === 0)
-                ? '<tr><td colspan="4" class="text-muted" style="text-align:center; padding:1.25rem;">No hay actividades registradas en el sistema.</td></tr>'
-                : activityLogs.map(log => `
+            const allLogs = Array.isArray(activityLogs) ? activityLogs : [];
+
+            const actionSelect = document.getElementById('cfg-logs-action-filter');
+            if (actionSelect) {
+                const prevAction = actionSelect.value || 'TODAS';
+                const uniqueActions = Array.from(new Set(allLogs.map(l => (l.action || '').trim()).filter(Boolean))).sort();
+                actionSelect.innerHTML = '<option value="TODAS">Todas las acciones</option>' +
+                    uniqueActions.map(act => `<option value="${escapeHtml(act)}">${escapeHtml(act)}</option>`).join('');
+                if (uniqueActions.includes(prevAction)) actionSelect.value = prevAction;
+            }
+
+            const searchVal = (document.getElementById('cfg-logs-search')?.value || '').trim().toLowerCase();
+            const actionVal = document.getElementById('cfg-logs-action-filter')?.value || 'TODAS';
+            const dateVal = document.getElementById('cfg-logs-date-filter')?.value || '';
+            const limitVal = parseInt(document.getElementById('cfg-logs-limit')?.value || '10', 10) || 10;
+
+            const filtered = allLogs.filter(log => {
+                if (actionVal !== 'TODAS' && (log.action || '').trim() !== actionVal) return false;
+                if (dateVal && !(log.created_at || '').startsWith(dateVal)) return false;
+                if (searchVal) {
+                    const hay = `${log.user_name || ''} ${log.action || ''} ${log.description || ''} ${log.created_at || ''}`.toLowerCase();
+                    if (!hay.includes(searchVal)) return false;
+                }
+                return true;
+            });
+
+            const visibleLogs = filtered.slice(0, limitVal);
+            const countLabel = document.getElementById('cfg-logs-count-label');
+            if (countLabel) {
+                countLabel.textContent = `Mostrando ${visibleLogs.length} de ${filtered.length} registro(s)`;
+            }
+
+            const rowsHtml = visibleLogs.length === 0
+                ? '<tr><td colspan="4" class="text-muted" style="text-align:center; padding:1.25rem;">No hay actividades que coincidan con los filtros.</td></tr>'
+                : visibleLogs.map(log => `
                     <tr>
                         <td style="font-size:0.78rem; color:var(--text-muted); white-space:nowrap;">${escapeHtml(log.created_at || '-')}</td>
                         <td><span style="font-weight:700; font-size:0.82rem;">${escapeHtml(log.user_name || 'Usuario')}</span></td>
@@ -16503,6 +17332,263 @@
             renderPaymentsView();
         }
 
+        let paymentsChartRange = 'year';
+
+        function setPaymentsChartRange(range) {
+            paymentsChartRange = range;
+            renderPaymentsView();
+        }
+
+        function buildSplineSvgPath(coords) {
+            if (!coords || coords.length === 0) return '';
+            if (coords.length === 1) return `M ${coords[0].x.toFixed(1)} ${coords[0].y.toFixed(1)}`;
+            let d = `M ${coords[0].x.toFixed(1)} ${coords[0].y.toFixed(1)}`;
+            for (let i = 0; i < coords.length - 1; i++) {
+                const p0 = coords[i];
+                const p1 = coords[i + 1];
+                const cx = (p0.x + p1.x) / 2;
+                d += ` C ${cx.toFixed(1)} ${p0.y.toFixed(1)}, ${cx.toFixed(1)} ${p1.y.toFixed(1)}, ${p1.x.toFixed(1)} ${p1.y.toFixed(1)}`;
+            }
+            return d;
+        }
+
+        function renderSplineAreaChart(containerId, opts) {
+            const container = document.getElementById(containerId);
+            if (!container) return;
+
+            const points = opts.points || [];
+            const uid = containerId.replace(/[^a-zA-Z0-9]/g, '') + '_' + Math.floor(Math.random() * 10000);
+            const W = 720;
+            const H = 220;
+            const padL = 46;
+            const padR = 20;
+            const padT = 18;
+            const padB = 30;
+            const plotW = W - padL - padR;
+            const plotH = H - padT - padB;
+
+            const rawMax = Math.max(
+                ...points.map(p => Math.max(Number(p.primary) || 0, Number(p.secondary) || 0)),
+                1
+            );
+            const yStep = rawMax <= 10 ? Math.ceil(rawMax / 4) || 1 : Math.ceil(rawMax / 4 / 10) * 10;
+            const yMax = Math.max(yStep * 4, rawMax);
+
+            const xAt = (i) => points.length <= 1 ? padL + plotW / 2 : padL + (i / (points.length - 1)) * plotW;
+            const yAt = (v) => padT + plotH - (Math.max(0, v) / yMax) * plotH;
+
+            const primaryCoords = points.map((p, i) => ({ x: xAt(i), y: yAt(p.primary) }));
+            const secondaryCoords = points.map((p, i) => ({ x: xAt(i), y: yAt(p.secondary) }));
+
+            const primaryLinePath = buildSplineSvgPath(primaryCoords);
+            const primaryAreaPath = primaryCoords.length > 0
+                ? `${primaryLinePath} L ${primaryCoords[primaryCoords.length - 1].x.toFixed(1)} ${(padT + plotH).toFixed(1)} L ${primaryCoords[0].x.toFixed(1)} ${(padT + plotH).toFixed(1)} Z`
+                : '';
+            const secondaryLinePath = buildSplineSvgPath(secondaryCoords);
+
+            const gridLines = [0, 1, 2, 3, 4].map(step => {
+                const val = Math.round((yMax / 4) * step);
+                const y = yAt(val);
+                return `
+                    <line x1="${padL}" y1="${y.toFixed(1)}" x2="${W - padR}" y2="${y.toFixed(1)}"
+                        stroke="rgba(148, 163, 184, 0.24)" stroke-dasharray="4 4" stroke-width="1" />
+                    <text x="${padL - 8}" y="${(y + 4).toFixed(1)}" text-anchor="end"
+                        fill="#94a3b8" font-size="11" font-weight="600">${opts.formatValue ? opts.formatValue(val) : val}</text>
+                `;
+            }).join('');
+
+            const xLabels = points.map((p, i) => `
+                <text x="${xAt(i).toFixed(1)}" y="${H - 6}" text-anchor="middle"
+                    fill="#94a3b8" font-size="11" font-weight="600">${escapeHtml(p.shortLabel || p.label)}</text>
+            `).join('');
+
+            const hitZones = points.map((p, i) => {
+                const zoneW = points.length <= 1 ? plotW : plotW / Math.max(points.length - 1, 1);
+                const rx = Math.max(padL, xAt(i) - zoneW / 2);
+                const rw = Math.min(zoneW, W - padR - rx);
+                return `<rect x="${rx.toFixed(1)}" y="${padT}" width="${rw.toFixed(1)}" height="${plotH}"
+                    fill="transparent" style="cursor: pointer;" data-spline-idx="${i}"></rect>`;
+            }).join('');
+
+            const toggleHtml = Array.isArray(opts.toggles) && opts.toggles.length > 0
+                ? `<div class="spline-toggle-group">
+                    ${opts.toggles.map(t => `
+                        <button type="button" class="spline-toggle-btn ${t.active ? 'active' : ''}" onclick="${t.onclick}">${escapeHtml(t.label)}</button>
+                    `).join('')}
+                   </div>`
+                : '';
+
+            container.innerHTML = `
+                <div class="spline-chart-header">
+                    <div>
+                        <div class="spline-chart-title-row">
+                            <h3 class="spline-chart-title">${escapeHtml(opts.title || '')}</h3>
+                            ${opts.realBadge ? `<span class="spline-real-pill">${escapeHtml(opts.realBadge)}</span>` : ''}
+                        </div>
+                        <div class="spline-chart-sub">${escapeHtml(opts.subtitle || '')}</div>
+                    </div>
+                    <div class="spline-chart-controls">
+                        ${toggleHtml}
+                        <div class="spline-legend">
+                            <span class="spline-legend-item"><span class="spline-legend-dot" style="background: #4f46e5;"></span> ${escapeHtml(opts.primaryLabel || 'Principal')}</span>
+                            <span class="spline-legend-item"><span class="spline-legend-dot" style="background: #f43f5e;"></span> ${escapeHtml(opts.secondaryLabel || 'Secundario')}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="spline-svg-stage">
+                    <svg viewBox="0 0 ${W} ${H}" style="width: 100%; height: auto; display: block; overflow: visible;">
+                        <defs>
+                            <linearGradient id="grad_${uid}" x1="0" y1="0" x2="0" y2="1">
+                                <stop offset="0%" stop-color="#4f46e5" stop-opacity="0.24" />
+                                <stop offset="100%" stop-color="#4f46e5" stop-opacity="0.01" />
+                            </linearGradient>
+                        </defs>
+                        ${gridLines}
+                        ${xLabels}
+                        ${primaryAreaPath ? `<path d="${primaryAreaPath}" fill="url(#grad_${uid})"></path>` : ''}
+                        ${secondaryLinePath ? `<path d="${secondaryLinePath}" fill="none" stroke="#f43f5e" stroke-width="2.4" stroke-dasharray="5 5" stroke-linecap="round"></path>` : ''}
+                        ${primaryLinePath ? `<path d="${primaryLinePath}" fill="none" stroke="#4f46e5" stroke-width="3" stroke-linecap="round"></path>` : ''}
+                        <line id="guide_${uid}" x1="0" y1="${padT}" x2="0" y2="${padT + plotH}" stroke="rgba(148,163,184,0.55)" stroke-width="1.2" style="opacity:0; transition: opacity 0.15s ease;"></line>
+                        <circle id="dot1_${uid}" cx="0" cy="0" r="5.5" fill="#4f46e5" stroke="#ffffff" stroke-width="2.2" style="opacity:0; transition: opacity 0.15s ease;"></circle>
+                        <circle id="dot2_${uid}" cx="0" cy="0" r="5" fill="#f43f5e" stroke="#ffffff" stroke-width="2" style="opacity:0; transition: opacity 0.15s ease;"></circle>
+                        ${hitZones}
+                    </svg>
+                    <div id="tip_${uid}" class="spline-tooltip-box"></div>
+                </div>
+            `;
+
+            const stageEl = container.querySelector('.spline-svg-stage');
+            const tipEl = document.getElementById(`tip_${uid}`);
+            const guideEl = document.getElementById(`guide_${uid}`);
+            const dot1El = document.getElementById(`dot1_${uid}`);
+            const dot2El = document.getElementById(`dot2_${uid}`);
+
+            const showAt = (idx) => {
+                const pt = points[idx];
+                const c1 = primaryCoords[idx];
+                const c2 = secondaryCoords[idx];
+                if (!pt || !c1 || !tipEl) return;
+
+                if (guideEl) {
+                    guideEl.setAttribute('x1', c1.x.toFixed(1));
+                    guideEl.setAttribute('x2', c1.x.toFixed(1));
+                    guideEl.style.opacity = '1';
+                }
+                if (dot1El) {
+                    dot1El.setAttribute('cx', c1.x.toFixed(1));
+                    dot1El.setAttribute('cy', c1.y.toFixed(1));
+                    dot1El.style.opacity = '1';
+                }
+                if (dot2El && c2) {
+                    dot2El.setAttribute('cx', c2.x.toFixed(1));
+                    dot2El.setAttribute('cy', c2.y.toFixed(1));
+                    dot2El.style.opacity = '1';
+                }
+
+                const totalVal = opts.getTooltipTotal ? opts.getTooltipTotal(pt) : (opts.formatValue ? opts.formatValue(pt.primary + pt.secondary) : (pt.primary + pt.secondary));
+                tipEl.innerHTML = `
+                    <div style="display: flex; justify-content: space-between; align-items: center; gap: 8px; margin-bottom: 8px;">
+                        <strong style="font-size: 0.78rem; letter-spacing: 0.04em; text-transform: uppercase;">${escapeHtml(pt.label)}</strong>
+                        ${pt.badge ? `<span style="font-size: 0.68rem; background: rgba(255,255,255,0.1); padding: 2px 7px; border-radius: 999px; color: #cbd5e1;">${escapeHtml(pt.badge)}</span>` : ''}
+                    </div>
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; margin-bottom: 6px; font-size: 0.78rem;">
+                        <span style="display: inline-flex; align-items: center; gap: 5px; color: #a5b4fc;"><span style="width:7px; height:7px; border-radius:50%; background:#4f46e5;"></span> ${escapeHtml(opts.primaryLabel || '')}:</span>
+                        <div style="text-align: right;">
+                            <div style="font-weight: 800; color: #ffffff;">${escapeHtml(opts.formatValue ? opts.formatValue(pt.primary) : String(pt.primary))}</div>
+                            ${pt.primarySub ? `<div style="font-size: 0.68rem; color: #94a3b8;">${escapeHtml(pt.primarySub)}</div>` : ''}
+                        </div>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; padding-bottom: 7px; border-bottom: 1px solid rgba(255,255,255,0.1); font-size: 0.78rem;">
+                        <span style="display: inline-flex; align-items: center; gap: 5px; color: #fda4af;"><span style="width:7px; height:7px; border-radius:50%; background:#f43f5e;"></span> ${escapeHtml(opts.secondaryLabel || '')}:</span>
+                        <div style="text-align: right;">
+                            <div style="font-weight: 800; color: #ffffff;">${escapeHtml(opts.formatValue ? opts.formatValue(pt.secondary) : String(pt.secondary))}</div>
+                            ${pt.secondarySub ? `<div style="font-size: 0.68rem; color: #94a3b8;">${escapeHtml(pt.secondarySub)}</div>` : ''}
+                        </div>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 6px; font-size: 0.76rem;">
+                        <span style="color: #94a3b8;">${escapeHtml(opts.totalLabel || 'Total')}:</span>
+                        <strong style="color: #10b981;">${escapeHtml(String(totalVal))}</strong>
+                    </div>
+                `;
+
+                const pctX = (c1.x / W) * 100;
+                if (pctX > 58) {
+                    tipEl.style.left = `calc(${pctX.toFixed(1)}% - 210px)`;
+                } else {
+                    tipEl.style.left = `calc(${Math.max(pctX, 4).toFixed(1)}% + 12px)`;
+                }
+                tipEl.classList.add('is-visible');
+            };
+
+            container.querySelectorAll('rect[data-spline-idx]').forEach(rect => {
+                rect.addEventListener('mouseenter', () => {
+                    showAt(Number(rect.getAttribute('data-spline-idx')));
+                });
+            });
+
+            if (stageEl) {
+                stageEl.addEventListener('mouseleave', () => {
+                    tipEl.classList.remove('is-visible');
+                    if (guideEl) guideEl.style.opacity = '0';
+                    if (dot1El) dot1El.style.opacity = '0';
+                    if (dot2El) dot2El.style.opacity = '0';
+                });
+            }
+        }
+
+        function renderPaymentsSplineChart(totalMonthSalary) {
+            const chartEl = document.getElementById('payments-spline-chart-container');
+            if (!chartEl) return;
+
+            const monthShort = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'];
+            const allIndices = paymentsChartRange === '6m'
+                ? Array.from({ length: 6 }, (_, k) => (selectedMonthIndex - 5 + k + 12) % 12)
+                : Array.from({ length: 12 }, (_, k) => k);
+
+            let yearPaidUsd = 0;
+            let yearPendingUsd = 0;
+            const points = allIndices.map(mIdx => {
+                const mKey = `${selectedYear}-${String(mIdx + 1).padStart(2, '0')}`;
+                const mPays = (paymentsList || []).filter(p => (p.payment_month || (p.payment_date || '').slice(0, 7)) === mKey);
+                const paidUsd = mPays.reduce((acc, p) => acc + parseFloat(p.amount_usd || 0), 0);
+                const paidBs = mPays.reduce((acc, p) => acc + parseFloat(p.amount_bs || 0), 0);
+                const pendingUsd = mIdx === selectedMonthIndex || paidUsd > 0
+                    ? Math.max(0, totalMonthSalary - paidUsd)
+                    : 0;
+
+                yearPaidUsd += paidUsd;
+                yearPendingUsd += pendingUsd;
+
+                return {
+                    label: MONTH_NAMES[mIdx] || monthShort[mIdx],
+                    shortLabel: monthShort[mIdx],
+                    primary: Math.round(paidUsd * 100) / 100,
+                    secondary: Math.round(pendingUsd * 100) / 100,
+                    primarySub: paidBs > 0 ? `≈ Bs. ${paidBs.toLocaleString('es-VE', { maximumFractionDigits: 0 })}` : '',
+                    badge: `${mPays.length} ${mPays.length === 1 ? 'pago' : 'pagos'}`
+                };
+            });
+
+            const activePtIdx = allIndices.indexOf(selectedMonthIndex);
+
+            renderSplineAreaChart('payments-spline-chart-container', {
+                title: 'GRÁFICO DE PAGOS RECIENTES',
+                realBadge: 'Datos Reales',
+                subtitle: `Pagos calculados para el año ${selectedYear} • Pagado: $${yearPaidUsd.toFixed(0)} • Pendiente: $${yearPendingUsd.toFixed(0)}`,
+                primaryLabel: 'Pagado',
+                secondaryLabel: 'Pendiente',
+                totalLabel: 'Nómina del mes',
+                formatValue: (v) => `$${Number(v).toLocaleString('es-VE', { maximumFractionDigits: 0 })}`,
+                points: points,
+                defaultActiveIndex: activePtIdx > -1 ? activePtIdx : points.length - 1,
+                toggles: [
+                    { label: 'Año', active: paymentsChartRange === 'year', onclick: "setPaymentsChartRange('year')" },
+                    { label: '6 Meses', active: paymentsChartRange === '6m', onclick: "setPaymentsChartRange('6m')" }
+                ],
+                getTooltipTotal: (pt) => `$${(pt.primary + pt.secondary).toLocaleString('es-VE', { maximumFractionDigits: 0 })}`
+            });
+        }
+
         function renderPaymentsView() {
             const container = document.getElementById('payments-cards-container');
             if (!container) return;
@@ -16541,6 +17627,7 @@
             });
 
             const remainingMonth = Math.max(0, totalMonthSalary - totalMonthPaidUsd);
+            renderPaymentsSplineChart(totalMonthSalary);
             const kpiTotal = document.getElementById('pay-kpi-total');
             const kpiPaid = document.getElementById('pay-kpi-paid');
             const kpiPaidBs = document.getElementById('pay-kpi-paid-bs');
@@ -17117,9 +18204,147 @@
                 if (tooltip) tooltip.innerText = 'Expandir Menú';
             }
 
+            // Inicializar selector de fecha estilizado Kinetica
+            initKineticaDatePickers();
+
             // Cargar datos y sincronizar sesión activa del usuario
             loadDashboardData();
         };
+
+        function initKineticaDatePickers() {
+            if (document.getElementById('kinetica-date-popover')) return;
+            const pop = document.createElement('div');
+            pop.id = 'kinetica-date-popover';
+            pop.className = 'kinetica-date-popover';
+            document.body.appendChild(pop);
+
+            let activeInput = null;
+            let viewYear = new Date().getFullYear();
+            let viewMonth = new Date().getMonth();
+
+            const renderCalendarPopover = () => {
+                if (!activeInput) return;
+                const val = activeInput.value || '';
+                const today = new Date();
+                const todayStr = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
+
+                const firstDay = new Date(viewYear, viewMonth, 1);
+                const startOffset = (firstDay.getDay() + 6) % 7;
+                const daysInMonth = new Date(viewYear, viewMonth + 1, 0).getDate();
+                const monthLabel = (typeof MONTH_NAMES !== 'undefined' && MONTH_NAMES[viewMonth])
+                    ? `${MONTH_NAMES[viewMonth]} ${viewYear}`
+                    : `${viewMonth + 1}/${viewYear}`;
+
+                let daysHtml = '';
+                for (let i = 0; i < startOffset; i++) {
+                    daysHtml += `<span class="kinetica-dp-day is-empty"></span>`;
+                }
+                for (let d = 1; d <= daysInMonth; d++) {
+                    const iso = `${viewYear}-${String(viewMonth + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
+                    const isSelected = val === iso;
+                    const isToday = todayStr === iso;
+                    daysHtml += `<button type="button" class="kinetica-dp-day ${isSelected ? 'is-selected' : ''} ${isToday ? 'is-today' : ''}" data-dp-date="${iso}">${d}</button>`;
+                }
+
+                pop.innerHTML = `
+                    <div class="kinetica-dp-header">
+                        <button type="button" class="kinetica-dp-nav-btn" data-dp-nav="-1" title="Mes anterior">
+                            <span class="material-symbols-rounded" style="font-size:1.1rem;">chevron_left</span>
+                        </button>
+                        <div class="kinetica-dp-title">${escapeHtml(monthLabel)}</div>
+                        <button type="button" class="kinetica-dp-nav-btn" data-dp-nav="1" title="Mes siguiente">
+                            <span class="material-symbols-rounded" style="font-size:1.1rem;">chevron_right</span>
+                        </button>
+                    </div>
+                    <div class="kinetica-dp-weekdays">
+                        <span>L</span><span>M</span><span>X</span><span>J</span><span>V</span><span>S</span><span>D</span>
+                    </div>
+                    <div class="kinetica-dp-days">${daysHtml}</div>
+                    <div class="kinetica-dp-footer">
+                        <button type="button" class="btn-float btn-secondary" data-dp-action="clear" style="padding: 4px 10px; font-size: 0.74rem;">Limpiar</button>
+                        <button type="button" class="btn-float btn-primary" data-dp-action="today" style="padding: 4px 12px; font-size: 0.74rem;">Hoy</button>
+                    </div>
+                `;
+            };
+
+            const positionPopover = (input) => {
+                const rect = input.getBoundingClientRect();
+                const popW = 288;
+                const popH = 310;
+                const left = Math.min(Math.max(8, rect.left), window.innerWidth - popW - 8);
+                const top = (window.innerHeight - rect.bottom < popH && rect.top > popH)
+                    ? rect.top - popH - 6
+                    : rect.bottom + 6;
+                pop.style.left = `${left}px`;
+                pop.style.top = `${top}px`;
+            };
+
+            const applyDateValue = (isoStr) => {
+                if (!activeInput) return;
+                activeInput.value = isoStr;
+                activeInput.dispatchEvent(new Event('input', { bubbles: true }));
+                activeInput.dispatchEvent(new Event('change', { bubbles: true }));
+                pop.classList.remove('active');
+                activeInput = null;
+            };
+
+            pop.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const navBtn = e.target.closest('[data-dp-nav]');
+                if (navBtn) {
+                    const delta = Number(navBtn.getAttribute('data-dp-nav'));
+                    viewMonth += delta;
+                    if (viewMonth < 0) { viewMonth = 11; viewYear--; }
+                    if (viewMonth > 11) { viewMonth = 0; viewYear++; }
+                    renderCalendarPopover();
+                    return;
+                }
+                const dayBtn = e.target.closest('[data-dp-date]');
+                if (dayBtn) {
+                    applyDateValue(dayBtn.getAttribute('data-dp-date'));
+                    return;
+                }
+                const actBtn = e.target.closest('[data-dp-action]');
+                if (actBtn) {
+                    const act = actBtn.getAttribute('data-dp-action');
+                    if (act === 'clear') {
+                        applyDateValue('');
+                    } else if (act === 'today') {
+                        const t = new Date();
+                        applyDateValue(`${t.getFullYear()}-${String(t.getMonth() + 1).padStart(2, '0')}-${String(t.getDate()).padStart(2, '0')}`);
+                    }
+                }
+            });
+
+            document.addEventListener('click', (e) => {
+                const dateInput = e.target.closest('input[type="date"]');
+                if (dateInput) {
+                    e.preventDefault();
+                    activeInput = dateInput;
+                    const parts = (dateInput.value || '').split('-');
+                    if (parts.length === 3 && !isNaN(Number(parts[0])) && !isNaN(Number(parts[1]))) {
+                        viewYear = Number(parts[0]);
+                        viewMonth = Number(parts[1]) - 1;
+                    } else {
+                        const now = new Date();
+                        viewYear = now.getFullYear();
+                        viewMonth = now.getMonth();
+                    }
+                    renderCalendarPopover();
+                    positionPopover(dateInput);
+                    pop.classList.add('active');
+                    return;
+                }
+                if (pop.classList.contains('active') && !pop.contains(e.target)) {
+                    pop.classList.remove('active');
+                    activeInput = null;
+                }
+            });
+
+            window.addEventListener('resize', () => {
+                if (pop.classList.contains('active') && activeInput) positionPopover(activeInput);
+            });
+        }
     </script>
 
     <!-- Área de Impresión Dedicada (@media print) -->
