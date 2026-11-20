@@ -126,6 +126,57 @@
             box-sizing: border-box;
             margin: 0;
             padding: 0;
+            scrollbar-width: thin;
+            scrollbar-color: rgba(220, 38, 38, 0.55) transparent;
+        }
+
+        /* Barras deslizadoras temáticas Kinetica (Modo Claro y Oscuro) */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent;
+            border-radius: 999px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: rgba(220, 38, 38, 0.45);
+            border-radius: 999px;
+            border: 2px solid transparent;
+            background-clip: content-box;
+            transition: background 0.25s ease;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--neon-red);
+            border: 1px solid transparent;
+            background-clip: content-box;
+        }
+
+        ::-webkit-scrollbar-corner {
+            background: transparent;
+        }
+
+        [data-theme="dark"] * {
+            scrollbar-color: rgba(239, 68, 68, 0.6) rgba(17, 24, 39, 0.4);
+        }
+
+        [data-theme="dark"] ::-webkit-scrollbar-track {
+            background: rgba(17, 24, 39, 0.35);
+        }
+
+        [data-theme="dark"] ::-webkit-scrollbar-thumb {
+            background: rgba(239, 68, 68, 0.55);
+            border: 2px solid transparent;
+            background-clip: content-box;
+        }
+
+        [data-theme="dark"] ::-webkit-scrollbar-thumb:hover {
+            background: var(--neon-red);
+            border: 1px solid transparent;
+            background-clip: content-box;
         }
 
         body {
@@ -4361,6 +4412,131 @@
                 max-width: none !important;
             }
         }
+        /* ==================== FLUJO DE PRODUCCIÓN (STEPPER EN GRILLAS) ==================== */
+        .grid-flow-stepper {
+            display: inline-flex;
+            align-items: flex-start;
+            justify-content: center;
+            gap: 0;
+            padding: 2px 4px;
+        }
+
+        .grid-flow-node {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            position: relative;
+        }
+
+        .grid-flow-circle {
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            border: 1.5px solid rgba(245, 158, 11, 0.55);
+            background: rgba(245, 158, 11, 0.08);
+            color: #f59e0b;
+            transition: transform 0.16s ease, box-shadow 0.16s ease, border-color 0.16s ease, background 0.16s ease;
+            padding: 0;
+            outline: none;
+        }
+
+        .grid-flow-circle .material-symbols-rounded {
+            font-size: 17px;
+            line-height: 1;
+        }
+
+        .grid-flow-circle:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 0 4px rgba(148, 163, 184, 0.12);
+        }
+
+        .grid-flow-circle.is-done {
+            border-color: #10b981;
+            background: rgba(16, 185, 129, 0.14);
+            color: #10b981;
+        }
+
+        .grid-flow-circle.is-done:hover {
+            box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.18);
+        }
+
+        .grid-flow-circle.is-progress {
+            border-color: #3b82f6;
+            background: rgba(59, 130, 246, 0.14);
+            color: #3b82f6;
+        }
+
+        .grid-flow-circle.is-ready {
+            border-color: #a855f7;
+            background: rgba(168, 85, 247, 0.14);
+            color: #a855f7;
+        }
+
+        .grid-flow-circle.is-rejected {
+            border-color: #ef4444;
+            background: rgba(239, 68, 68, 0.14);
+            color: #ef4444;
+        }
+
+        .grid-flow-circle.is-pending {
+            border-color: rgba(245, 158, 11, 0.55);
+            background: rgba(245, 158, 11, 0.08);
+            color: #f59e0b;
+        }
+
+        .grid-flow-line {
+            width: 24px;
+            height: 2px;
+            margin-top: 16px;
+            border-radius: 2px;
+            background: rgba(148, 163, 184, 0.25);
+            flex-shrink: 0;
+            transition: background 0.2s ease;
+        }
+
+        .grid-flow-line.is-done {
+            background: #10b981;
+        }
+
+        .grid-flow-label {
+            font-size: 0.7rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            line-height: 1;
+            user-select: none;
+        }
+
+        .grid-flow-tooltip {
+            position: absolute;
+            bottom: calc(100% + 8px);
+            left: 50%;
+            transform: translateX(-50%) translateY(4px);
+            background: #0f172a;
+            color: #cbd5e1;
+            border: 1px solid rgba(148, 163, 184, 0.25);
+            border-radius: 8px;
+            padding: 5px 10px;
+            font-size: 0.74rem;
+            white-space: nowrap;
+            box-shadow: 0 8px 22px rgba(0, 0, 0, 0.35);
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.15s ease, transform 0.15s ease;
+            z-index: 60;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .grid-flow-node:hover .grid-flow-tooltip {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
     </style>
 </head>
 
@@ -4385,6 +4561,11 @@
             <span style="font-weight: 800; font-size: 1.1rem; color: var(--neon-red);">Kinetica</span>
         </div>
         <div style="display: flex; align-items: center; gap: 6px;">
+            <button class="btn-float btn-secondary" onclick="openNotificationsModal()"
+                style="padding: 0.4rem 0.7rem; font-size: 0.8rem; position: relative;" id="mobile-notif-btn" title="Notificaciones">
+                <span class="material-symbols-rounded">notifications</span>
+                <span id="mobile-notif-badge" style="display: none; position: absolute; top: -4px; right: -4px; background: var(--neon-red); color: #fff; font-size: 0.65rem; font-weight: 800; min-width: 16px; height: 16px; border-radius: 999px; align-items: center; justify-content: center; padding: 0 4px;">0</span>
+            </button>
             <button class="btn-float btn-secondary" onclick="toggleTheme()"
                 style="padding: 0.4rem 0.8rem; font-size: 0.8rem;" id="mobile-theme-btn"><span
                     class="material-symbols-rounded">dark_mode</span></button>
@@ -4445,6 +4626,11 @@
                 <li class="menu-item" id="nav-item-reviews" onclick="switchView('reviews', this)">
                     <span style="font-size: 1.2rem;"><span class="material-symbols-rounded">priority</span></span> <span
                         class="sidebar-hide-text">Revisiones</span>
+                </li>
+                <li class="menu-item" id="nav-item-upload" onclick="switchView('upload', this)" style="display: none;">
+                    <span style="font-size: 1.2rem;"><span class="material-symbols-rounded">cloud_upload</span></span> <span
+                        class="sidebar-hide-text">Subir</span>
+                    <span id="nav-upload-badge" class="sidebar-hide-text" style="display: none; margin-left: auto; background: var(--neon-red); color: #fff; font-size: 0.68rem; font-weight: 800; padding: 1px 7px; border-radius: 999px;">0</span>
                 </li>
                 <li class="menu-item" id="nav-item-reports" onclick="switchView('reports', this)">
                     <span style="font-size: 1.2rem;"><span class="material-symbols-rounded">trending_up</span></span>
@@ -4518,6 +4704,18 @@
 
                 <!-- ==================== BOTONES DEBAJO DE LA SESIÓN ACTIVA ==================== -->
                 <div class="sidebar-action-buttons-stack" style="margin-top: 8px;">
+                    <!-- 0. Botón Notificaciones -->
+                    <div class="has-tooltip" style="width: 100%; position: relative;">
+                        <button type="button" class="sidebar-btn-full" id="sidebar-notif-btn"
+                            onclick="openNotificationsModal()" title="Notificaciones"
+                            aria-label="Notificaciones" style="position: relative;">
+                            <span style="display: inline-flex; align-items: center; justify-content: center;"><span
+                                    class="material-symbols-rounded">notifications</span></span>
+                            <span id="sidebar-notif-badge" style="display: none; position: absolute; top: 3px; right: 5px; background: var(--neon-red); color: #fff; font-size: 0.62rem; font-weight: 800; min-width: 16px; height: 16px; border-radius: 999px; align-items: center; justify-content: center; padding: 0 4px;">0</span>
+                        </button>
+                        <div class="custom-tooltip" id="sidebar-notif-tooltip">Notificaciones</div>
+                    </div>
+
                     <!-- 1. Botón Estado "SQL Connected" -->
                     <div class="has-tooltip" style="width: 100%;">
                         <button type="button" class="sidebar-btn-full" id="sidebar-sql-btn"
@@ -5120,10 +5318,8 @@
                                         <th>Tipo / Tema</th>
                                         <th>Copy / Formato</th>
                                         <th>Contenido</th>
-                                        <th>Planificación</th>
-                                        <th>Diseño</th>
-                                        <th>Revisión</th>
-                                        <th>Publicación</th>
+                                        <th style="text-align: center;">Flujo de Producción</th>
+                                        <th>Originales</th>
                                         <th>Estado</th>
                                         <th>Avance</th>
                                         <th style="text-align: center; min-width: 170px;">Acciones</th>
@@ -5140,6 +5336,41 @@
                             <!-- Inyectado por renderTable() -->
                         </div>
                     </div>
+                </div>
+            </section>
+
+            <!-- ==================== VISTA: SUBIR ORIGINALES (SOLO DISEÑADOR) ==================== -->
+            <section id="view-upload" class="view-section">
+                <div class="header-flex">
+                    <div>
+                        <div
+                            style="display: inline-flex; align-items: center; gap: 8px; background: rgba(220,38,38,0.12); color: var(--neon-red); padding: 4px 12px; border-radius: 20px; font-size: 0.78rem; font-weight: 700; margin-bottom: 0.5rem; border: 1px solid rgba(220,38,38,0.25);">
+                            <span class="material-symbols-rounded" style="font-size: 1rem;">cloud_upload</span> Archivos Originales
+                        </div>
+                        <h1>Subir Originales</h1>
+                        <p class="text-muted">Piezas aprobadas de tus marcas asignadas listas para adjuntar el enlace de Google Drive con los archivos originales.</p>
+                    </div>
+                    <div style="display: flex; gap: 0.75rem; flex-wrap: wrap; align-items: center;">
+                        <button type="button" class="btn-float btn-secondary" onclick="renderUploadSection()" title="Actualizar lista">
+                            <span class="material-symbols-rounded">sync</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Filtros / Pestañas: Pendientes vs Archivadas -->
+                <div style="display: flex; gap: 0.65rem; flex-wrap: wrap; margin-bottom: 1.25rem;">
+                    <button type="button" class="btn-float btn-primary" id="upload-tab-pending" onclick="setUploadTab('pending')">
+                        <span class="material-symbols-rounded" style="font-size: 1.05rem;">upload_file</span>
+                        Por subir (<span id="upload-pending-count">0</span>)
+                    </button>
+                    <button type="button" class="btn-float btn-secondary" id="upload-tab-archived" onclick="setUploadTab('archived')">
+                        <span class="material-symbols-rounded" style="font-size: 1.05rem;">inventory_2</span>
+                        Archivadas (<span id="upload-archived-count">0</span>)
+                    </button>
+                </div>
+
+                <div id="upload-pieces-container" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 1rem;">
+                    <!-- Inyectado dinámicamente por renderUploadSection() -->
                 </div>
             </section>
 
@@ -6778,6 +7009,7 @@
                             <label class="perm-check-label"><input type="checkbox" class="approve-perm-chk" value="dashboard" checked> Dashboard</label>
                             <label class="perm-check-label"><input type="checkbox" class="approve-perm-chk" value="timeline" checked> Línea de Tiempo</label>
                             <label class="perm-check-label"><input type="checkbox" class="approve-perm-chk" value="reviews" checked> Revisiones</label>
+                            <label class="perm-check-label"><input type="checkbox" class="approve-perm-chk" value="upload"> Subir Originales</label>
                             <label class="perm-check-label"><input type="checkbox" class="approve-perm-chk" value="grid" checked> Grillas & Marcas</label>
                             <label class="perm-check-label"><input type="checkbox" class="approve-perm-chk" value="reports"> Reportes</label>
                             <label class="perm-check-label"><input type="checkbox" class="approve-perm-chk" value="settings"> Configuración</label>
@@ -7312,6 +7544,11 @@
                                             <span>Revisiones</span>
                                         </label>
                                         <label class="perm-pill-check">
+                                            <input type="checkbox" id="add_perm_upload">
+                                            <span class="material-symbols-rounded">cloud_upload</span>
+                                            <span>Subir</span>
+                                        </label>
+                                        <label class="perm-pill-check">
                                             <input type="checkbox" id="add_perm_grid" checked>
                                             <span class="material-symbols-rounded">calendar_month</span>
                                             <span>Grillas</span>
@@ -7606,6 +7843,11 @@
                                         <span>Revisiones</span>
                                     </label>
                                     <label class="perm-pill-check">
+                                        <input type="checkbox" id="edit_perm_upload">
+                                        <span class="material-symbols-rounded">cloud_upload</span>
+                                        <span>Subir</span>
+                                    </label>
+                                    <label class="perm-pill-check">
                                         <input type="checkbox" id="edit_perm_grid">
                                         <span class="material-symbols-rounded">calendar_month</span>
                                         <span>Grillas</span>
@@ -7732,6 +7974,80 @@
                                 class="material-symbols-rounded">download</span> Descargar PDF</button>
                         <button class="btn-float btn-primary" onclick="printCurrentBrandReport()"><span
                                 class="material-symbols-rounded">print</span> Imprimir / Guardar PDF</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modal Subir Link de Google Drive (Originales) -->
+            <div class="modal-overlay" id="driveUploadModal">
+                <div class="glass-panel modal-content" style="max-width: 540px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem;">
+                        <div>
+                            <h2 style="display: flex; align-items: center; gap: 8px;">
+                                <span class="material-symbols-rounded" style="color: var(--neon-red);">cloud_upload</span>
+                                Subir Link de Originales
+                            </h2>
+                            <p class="text-muted" style="font-size: 0.84rem; margin-top: 2px;">
+                                Pega el enlace de Google Drive donde se subieron los archivos originales de esta pieza.
+                            </p>
+                        </div>
+                        <button type="button" class="btn-float btn-secondary btn-close-round" onclick="closeDriveUploadModal()"
+                            style="padding: 0.3rem 0.5rem; border-radius: 50%;"><span
+                                class="material-symbols-rounded">close</span></button>
+                    </div>
+
+                    <form id="driveUploadForm" onsubmit="saveDriveUploadLink(event)">
+                        <input type="hidden" id="drive_upload_piece_id">
+
+                        <div style="background: rgba(150,150,150,0.06); border: 1px solid var(--card-border); border-radius: 10px; padding: 0.9rem; margin-bottom: 1rem;">
+                            <div style="display: flex; justify-content: space-between; align-items: center; gap: 8px; flex-wrap: wrap;">
+                                <strong id="drive_modal_piece_title" style="font-size: 0.98rem; color: var(--text-main);">Pieza</strong>
+                                <span id="drive_modal_brand_badge" style="font-size: 0.75rem; font-weight: 700; background: rgba(220,38,38,0.12); color: var(--neon-red); padding: 3px 10px; border-radius: 20px;">Marca</span>
+                            </div>
+                        </div>
+
+                        <div class="form-group" style="margin-bottom: 1.25rem;">
+                            <label class="text-muted" for="drive_upload_url_input"
+                                style="font-weight: 700; font-size: 0.85rem; display: flex; align-items: center; gap: 6px; margin-bottom: 6px;">
+                                <span class="material-symbols-rounded" style="font-size: 1.05rem;">add_to_drive</span> Link de Google Drive
+                            </label>
+                            <input type="url" id="drive_upload_url_input" class="form-control" required
+                                placeholder="https://drive.google.com/drive/folders/..."
+                                style="width: 100%;">
+                        </div>
+
+                        <div style="display: flex; justify-content: flex-end; gap: 0.75rem; align-items: center;">
+                            <button type="button" class="btn-float btn-secondary" onclick="closeDriveUploadModal()">Cancelar</button>
+                            <button type="submit" class="btn-float btn-primary">
+                                <span class="material-symbols-rounded" style="font-size: 1rem;">save</span> Guardar
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Modal Notificaciones -->
+            <div class="modal-overlay" id="notificationsModal">
+                <div class="glass-panel modal-content" style="max-width: 560px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                        <div>
+                            <h2 style="display: flex; align-items: center; gap: 8px;">
+                                <span class="material-symbols-rounded" style="color: var(--neon-red);">notifications</span>
+                                Notificaciones
+                            </h2>
+                            <p class="text-muted" style="font-size: 0.82rem; margin-top: 2px;">Avisos recientes de aprobación y flujo de trabajo.</p>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 6px;">
+                            <button type="button" class="btn-float btn-secondary" onclick="markAllNotificationsRead()" style="font-size: 0.78rem; padding: 0.35rem 0.7rem;">
+                                Marcar leídas
+                            </button>
+                            <button type="button" class="btn-float btn-secondary btn-close-round" onclick="closeNotificationsModal()"
+                                style="padding: 0.3rem 0.5rem; border-radius: 50%;"><span
+                                    class="material-symbols-rounded">close</span></button>
+                        </div>
+                    </div>
+                    <div id="notifications-modal-list" style="display: flex; flex-direction: column; gap: 0.65rem; max-height: 400px; overflow-y: auto; padding-right: 4px;">
+                        <!-- Inyectado dinámicamente -->
                     </div>
                 </div>
             </div>
@@ -8359,6 +8675,8 @@
                     renderTimeline();
                     renderReviews();
                     renderDbStats(data.dbStats);
+                    fetchNotifications(true);
+                    renderUploadSection();
 
                     // Restaurar la vista activa previa al recargar la página para mantener al usuario en su vista actual
                     const savedView = localStorage.getItem('kinetica_active_view') || 'dashboard';
@@ -10033,6 +10351,7 @@
                     renderTable();
                     updateDashboard();
                     renderCreatedArtsCard();
+                    renderUploadSection();
                 } else {
                     showToast('Error: ' + (data.message || ''), 'error');
                 }
@@ -10117,6 +10436,7 @@
                     renderTable();
                     updateDashboard();
                     renderCreatedArtsCard();
+                    renderUploadSection();
                 } else {
                     showToast('Error: ' + (data.message || ''), 'error');
                 }
@@ -11914,8 +12234,89 @@
             menu.style.left = `${Math.max(8, leftPos)}px`;
         }
 
+        function buildProductionFlowStepper(item) {
+            const steps = [
+                { field: 'cm_planning', shortLabel: 'Plan', fullLabel: 'Planificación' },
+                { field: 'designer_design', shortLabel: 'Dis', fullLabel: 'Diseño' },
+                { field: 'agency_review', shortLabel: 'Rev', fullLabel: 'Revisión' },
+                { field: 'cm_publishing', shortLabel: 'Pub', fullLabel: 'Publicación' }
+            ];
+
+            const getStepVisual = (field, rawVal) => {
+                const val = (rawVal || 'Pendiente').trim();
+                if (val === 'Completado' || val === 'Aprobado' || val === 'Subido') {
+                    return {
+                        cls: 'is-done',
+                        icon: val === 'Aprobado' ? 'check_circle' : 'check',
+                        dotColor: '#10b981',
+                        label: val,
+                        done: true
+                    };
+                }
+                if (val === 'En Proceso') {
+                    return {
+                        cls: 'is-progress',
+                        icon: field === 'designer_design' ? 'draw' : 'autorenew',
+                        dotColor: '#3b82f6',
+                        label: field === 'designer_design' ? 'Diseñando' : 'En Proceso',
+                        done: false
+                    };
+                }
+                if (val === 'Listo') {
+                    return {
+                        cls: 'is-ready',
+                        icon: 'thumbs_up_down',
+                        dotColor: '#a855f7',
+                        label: 'Listo / En Revisión',
+                        done: false
+                    };
+                }
+                if (val === 'No Aprobado' || val === 'Rechazado') {
+                    return {
+                        cls: 'is-rejected',
+                        icon: 'close',
+                        dotColor: '#ef4444',
+                        label: val,
+                        done: false
+                    };
+                }
+                return {
+                    cls: 'is-pending',
+                    icon: 'more_horiz',
+                    dotColor: '#f59e0b',
+                    label: val || 'Pendiente',
+                    done: false
+                };
+            };
+
+            let html = '<div class="grid-flow-stepper">';
+            steps.forEach((step, idx) => {
+                const currentVal = item[step.field] || 'Pendiente';
+                const vis = getStepVisual(step.field, currentVal);
+                html += `
+                    <div class="grid-flow-node">
+                        <div class="grid-flow-tooltip">
+                            <span style="width:8px; height:8px; border-radius:50%; background:${vis.dotColor}; display:inline-block; flex-shrink:0;"></span>
+                            <span>${step.fullLabel}: <strong style="color:#fff;">${escapeHtml(vis.label)}</strong></span>
+                        </div>
+                        <button type="button" class="grid-flow-circle ${vis.cls}"
+                            onclick="toggleGridStatusDropdown(this, ${item.id}, '${step.field}', '${escapeHtml(currentVal)}', event)"
+                            aria-label="${step.fullLabel}: ${escapeHtml(vis.label)}">
+                            <span class="material-symbols-rounded">${vis.icon}</span>
+                        </button>
+                        <span class="grid-flow-label">${step.shortLabel}</span>
+                    </div>
+                `;
+                if (idx < steps.length - 1) {
+                    html += `<div class="grid-flow-line ${vis.done ? 'is-done' : ''}"></div>`;
+                }
+            });
+            html += '</div>';
+            return html;
+        }
+
         function selectGridStatus(pieceId, field, value, icon, color, label) {
-            if (activeTimelineDropdownBtn) {
+            if (activeTimelineDropdownBtn && activeTimelineDropdownBtn.classList.contains('tl-status-btn')) {
                 activeTimelineDropdownBtn.innerHTML = `
                     <span class="material-symbols-rounded" style="font-size:17px; color:${color};">${icon}</span>
                     <span>${label}</span>
@@ -12130,7 +12531,7 @@
             if (mockData.length === 0) {
                 tbody.innerHTML = `
                 <tr>
-                    <td colspan="12" style="text-align: center; padding: 3rem 1rem; color: var(--text-muted);">
+                    <td colspan="10" style="text-align: center; padding: 3rem 1rem; color: var(--text-muted);">
                         <div style="font-size: 2.2rem; margin-bottom: 0.5rem;"><span class="material-symbols-rounded">auto_awesome</span></div>
                         <strong>No hay piezas registradas en ${MONTH_NAMES[selectedMonthIndex]} ${selectedYear} para esta campaña.</strong>
                         <p style="font-size: 0.85rem; margin-top: 0.4rem;">Grilla en blanco lista para comenzar en cero en este mes. Tus meses anteriores siguen guardados en la línea de tiempo.</p>
@@ -12158,6 +12559,13 @@
 
                 const isApproved = item.designer_design === 'Aprobado' || item.in_timeline === 0 || item.in_timeline === false || item.in_timeline === '0';
 
+                const hasDriveLink = !!(item.drive_url && String(item.drive_url).trim() !== '');
+                const driveBtnHtml = hasDriveLink
+                    ? `<button type="button" class="btn-float btn-primary" style="padding: 0.35rem 0.65rem; font-size: 0.78rem; display: inline-flex; align-items: center; gap: 4px; white-space: nowrap;" onclick="window.open('${escapeHtml(String(item.drive_url).trim())}', '_blank', 'noopener,noreferrer')" title="Abrir carpeta/archivo original en Google Drive"><span class="material-symbols-rounded" style="font-size: 1rem;">folder_open</span> Ver originales</button>`
+                    : `<button type="button" class="btn-float btn-secondary" disabled style="padding: 0.35rem 0.65rem; font-size: 0.78rem; opacity: 0.5; cursor: not-allowed; display: inline-flex; align-items: center; gap: 4px; white-space: nowrap;" title="El diseñador aún no ha subido el link de originales"><span class="material-symbols-rounded" style="font-size: 1rem;">cloud_off</span> Sin subir</button>`;
+
+                const progressColor = progress === 100 ? '#10b981' : (progress >= 50 ? '#38bdf8' : (progress > 0 ? '#f43f5e' : 'rgba(148,163,184,0.35)'));
+
                 const tr = document.createElement('tr');
                 tr.id = `grid-row-${item.id}`;
                 tr.innerHTML = `
@@ -12166,20 +12574,17 @@
                 <td><span style="color:var(--neon-red); font-weight:600;">${item.type}</span><br>${item.topic}</td>
                 <td style="max-width: 220px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="${escapeHtml(item.copy || '')}">${escapeHtml(item.copy || '-')}<br><span class="text-muted">${escapeHtml(item.format)}</span></td>
                 <td><button class="btn-float btn-secondary" style="padding: 0.35rem 0.55rem; font-size: 0.8rem; display: inline-flex; align-items: center; gap: 4px;" onclick="openPieceGraphicBrief(${item.id})"><span><span class="material-symbols-rounded">gesture</span></span> Ver</button></td>
-                <td>${buildSelect(item, 'cm_planning')}</td>
-                <td>${buildSelect(item, 'designer_design')}</td>
-                <td>${buildSelect(item, 'agency_review')}</td>
-                <td>${buildSelect(item, 'cm_publishing')}</td>
+                <td style="text-align: center;">${buildProductionFlowStepper(item)}</td>
+                <td>${driveBtnHtml}</td>
                 <td><span class="status-badge ${badgeClass}">${overallStatus}</span></td>
                 <td>
                     <div style="font-weight:700; margin-bottom:4px;">${progress.toFixed(0)}%</div>
-                    <div class="progress-wrapper" style="height:6px;"><div class="progress-bar" style="width: ${progress}%"></div></div>
+                    <div class="progress-wrapper" style="height:6px;"><div class="progress-bar" style="width: ${progress}%; background: ${progressColor};"></div></div>
                 </td>
                 <td style="text-align: center; white-space: nowrap;">
-                    <button type="button" class="btn-float btn-secondary" style="padding: 0.32rem 0.65rem; font-size: 0.78rem; color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.4); display: inline-flex; align-items: center; gap: 4px; margin-right: 4px;" onclick="returnPieceToTimeline(${item.id})" title="${isApproved ? 'Esta pieza fue aprobada y retirada del Time Line. Haz clic para regresarla.' : 'Regresar al Time Line'}">
-                            Regresar al Time Line</button>
-                    <button class="btn-float btn-secondary" style="padding: 0.35rem 0.65rem; font-size: 0.8rem; margin: 0 4px;" onclick="openEditPieceModal(${item.id})" title="Modificar pieza"><span class="material-symbols-rounded">edit</span></button>
-                    <button class="btn-float btn-secondary" style="padding: 0.35rem 0.65rem; font-size: 0.8rem; color: #ef4444;" onclick="deletePiece(${item.id})" title="Eliminar pieza de BD"><span class="material-symbols-rounded">delete</span></button>
+                    <button type="button" class="btn-float btn-secondary" style="padding: 0.35rem 0.55rem; font-size: 0.8rem; color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.35); display: inline-flex; align-items: center; justify-content: center; margin: 0 2px;" onclick="returnPieceToTimeline(${item.id})" title="${isApproved ? 'Esta pieza fue aprobada y retirada del Time Line. Haz clic para regresarla.' : 'Regresar al Time Line'}" aria-label="Regresar al Time Line"><span class="material-symbols-rounded" style="font-size: 1.05rem;">history</span></button>
+                    <button type="button" class="btn-float btn-secondary" style="padding: 0.35rem 0.55rem; font-size: 0.8rem; border: 1px solid var(--card-border); display: inline-flex; align-items: center; justify-content: center; margin: 0 2px;" onclick="openEditPieceModal(${item.id})" title="Modificar pieza" aria-label="Modificar pieza"><span class="material-symbols-rounded" style="font-size: 1.05rem;">edit</span></button>
+                    <button type="button" class="btn-float btn-secondary" style="padding: 0.35rem 0.55rem; font-size: 0.8rem; color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.35); display: inline-flex; align-items: center; justify-content: center; margin: 0 2px;" onclick="deletePiece(${item.id})" title="Eliminar pieza de BD" aria-label="Eliminar pieza"><span class="material-symbols-rounded" style="font-size: 1.05rem;">delete</span></button>
                 </td>
             `;
                 tbody.appendChild(tr);
@@ -14871,6 +15276,7 @@
                 ['add_perm_dashboard', 'Dashboard'],
                 ['add_perm_timeline', 'Time Line'],
                 ['add_perm_reviews', 'Revisiones'],
+                ['add_perm_upload', 'Subir'],
                 ['add_perm_grid', 'Grillas'],
                 ['add_perm_reports', 'Reportes'],
                 ['add_perm_payments', 'Pagos'],
@@ -14922,6 +15328,7 @@
             const pDash = document.getElementById('add_perm_dashboard');
             const pTime = document.getElementById('add_perm_timeline');
             const pRev = document.getElementById('add_perm_reviews');
+            const pUpload = document.getElementById('add_perm_upload');
             const pGrid = document.getElementById('add_perm_grid');
             const pRep = document.getElementById('add_perm_reports');
             const pSet = document.getElementById('add_perm_settings');
@@ -14930,6 +15337,7 @@
                 if (pDash) pDash.checked = true;
                 if (pTime) pTime.checked = true;
                 if (pRev) pRev.checked = true;
+                if (pUpload) pUpload.checked = false;
                 if (pGrid) pGrid.checked = true;
                 if (pRep) pRep.checked = true;
                 if (pSet) pSet.checked = true;
@@ -14937,6 +15345,7 @@
                 if (pDash) pDash.checked = true;
                 if (pTime) pTime.checked = true;
                 if (pRev) pRev.checked = true;
+                if (pUpload) pUpload.checked = true;
                 if (pGrid) pGrid.checked = true;
                 if (pRep) pRep.checked = false;
                 if (pSet) pSet.checked = false;
@@ -14944,6 +15353,7 @@
                 if (pDash) pDash.checked = true;
                 if (pTime) pTime.checked = true;
                 if (pRev) pRev.checked = true;
+                if (pUpload) pUpload.checked = false;
                 if (pGrid) pGrid.checked = true;
                 if (pRep) pRep.checked = true;
                 if (pSet) pSet.checked = false;
@@ -14951,6 +15361,7 @@
                 if (pDash) pDash.checked = true;
                 if (pTime) pTime.checked = false;
                 if (pRev) pRev.checked = true;
+                if (pUpload) pUpload.checked = false;
                 if (pGrid) pGrid.checked = false;
                 if (pRep) pRep.checked = true;
                 if (pSet) pSet.checked = false;
@@ -14964,6 +15375,7 @@
             const pDash = document.getElementById('edit_perm_dashboard');
             const pTime = document.getElementById('edit_perm_timeline');
             const pRev = document.getElementById('edit_perm_reviews');
+            const pUpload = document.getElementById('edit_perm_upload');
             const pGrid = document.getElementById('edit_perm_grid');
             const pRep = document.getElementById('edit_perm_reports');
             const pSet = document.getElementById('edit_perm_settings');
@@ -14972,6 +15384,7 @@
                 if (pDash) pDash.checked = true;
                 if (pTime) pTime.checked = true;
                 if (pRev) pRev.checked = true;
+                if (pUpload) pUpload.checked = false;
                 if (pGrid) pGrid.checked = true;
                 if (pRep) pRep.checked = true;
                 if (pSet) pSet.checked = true;
@@ -14979,6 +15392,7 @@
                 if (pDash) pDash.checked = true;
                 if (pTime) pTime.checked = true;
                 if (pRev) pRev.checked = true;
+                if (pUpload) pUpload.checked = true;
                 if (pGrid) pGrid.checked = true;
                 if (pRep) pRep.checked = false;
                 if (pSet) pSet.checked = false;
@@ -14986,6 +15400,7 @@
                 if (pDash) pDash.checked = true;
                 if (pTime) pTime.checked = true;
                 if (pRev) pRev.checked = true;
+                if (pUpload) pUpload.checked = false;
                 if (pGrid) pGrid.checked = true;
                 if (pRep) pRep.checked = true;
                 if (pSet) pSet.checked = false;
@@ -14993,6 +15408,7 @@
                 if (pDash) pDash.checked = true;
                 if (pTime) pTime.checked = false;
                 if (pRev) pRev.checked = true;
+                if (pUpload) pUpload.checked = false;
                 if (pGrid) pGrid.checked = false;
                 if (pRep) pRep.checked = true;
                 if (pSet) pSet.checked = false;
@@ -15143,6 +15559,7 @@
             if (document.getElementById('add_perm_dashboard')?.checked) permissions.push('dashboard');
             if (document.getElementById('add_perm_timeline')?.checked) permissions.push('timeline');
             if (document.getElementById('add_perm_reviews')?.checked) permissions.push('reviews');
+            if (document.getElementById('add_perm_upload')?.checked) permissions.push('upload');
             if (document.getElementById('add_perm_grid')?.checked) permissions.push('grid');
             if (document.getElementById('add_perm_reports')?.checked) permissions.push('reports');
             if (document.getElementById('add_perm_payments')?.checked) permissions.push('payments');
@@ -15296,6 +15713,7 @@
                     'dashboard': '<span class="material-symbols-rounded">bar_chart</span> Dashboard',
                     'timeline': '<span class="material-symbols-rounded">timer</span> Timeline',
                     'reviews': '<span class="material-symbols-rounded">search</span> Revisiones',
+                    'upload': '<span class="material-symbols-rounded">cloud_upload</span> Subir',
                     'grid': '<span class="material-symbols-rounded">calendar_month</span> Grillas',
                     'reports': '<span class="material-symbols-rounded">trending_up</span> Reportes',
                     'settings': '<span class="material-symbols-rounded">settings</span> Config'
@@ -15364,6 +15782,7 @@
                 dashboard: 'Dashboard de Cumplimiento',
                 timeline: 'Línea de Tiempo',
                 reviews: 'Revisiones Multimedia',
+                upload: 'Subir Originales',
                 grid: 'Grillas & Marcas',
                 reports: 'Reportes de Campaña',
                 settings: 'Centro de Configuración'
@@ -16019,6 +16438,7 @@
             if (document.getElementById('edit_perm_dashboard')) document.getElementById('edit_perm_dashboard').checked = perms.includes('dashboard');
             if (document.getElementById('edit_perm_timeline')) document.getElementById('edit_perm_timeline').checked = perms.includes('timeline');
             if (document.getElementById('edit_perm_reviews')) document.getElementById('edit_perm_reviews').checked = perms.includes('reviews');
+            if (document.getElementById('edit_perm_upload')) document.getElementById('edit_perm_upload').checked = perms.includes('upload');
             if (document.getElementById('edit_perm_grid')) document.getElementById('edit_perm_grid').checked = perms.includes('grid');
             if (document.getElementById('edit_perm_reports')) document.getElementById('edit_perm_reports').checked = perms.includes('reports');
             if (document.getElementById('edit_perm_payments')) document.getElementById('edit_perm_payments').checked = perms.includes('payments');
@@ -16061,6 +16481,7 @@
             if (document.getElementById('edit_perm_dashboard')?.checked) permissions.push('dashboard');
             if (document.getElementById('edit_perm_timeline')?.checked) permissions.push('timeline');
             if (document.getElementById('edit_perm_reviews')?.checked) permissions.push('reviews');
+            if (document.getElementById('edit_perm_upload')?.checked) permissions.push('upload');
             if (document.getElementById('edit_perm_grid')?.checked) permissions.push('grid');
             if (document.getElementById('edit_perm_reports')?.checked) permissions.push('reports');
             if (document.getElementById('edit_perm_payments')?.checked) permissions.push('payments');
@@ -16288,7 +16709,14 @@
                 perms = typeof user.permissions === 'string' ? JSON.parse(user.permissions) : (user.permissions || []);
             } catch (e) { perms = []; }
             if (!Array.isArray(perms) || perms.length === 0) {
-                perms = user.role === 'admin' ? ['dashboard', 'timeline', 'reviews', 'grid', 'reports', 'payments', 'settings'] : ['dashboard', 'timeline', 'reviews', 'grid'];
+                const roleLow = (user.role || '').toLowerCase();
+                if (roleLow === 'admin') {
+                    perms = ['dashboard', 'timeline', 'reviews', 'grid', 'reports', 'payments', 'settings'];
+                } else if (roleLow === 'designer') {
+                    perms = ['dashboard', 'timeline', 'reviews', 'upload', 'grid'];
+                } else {
+                    perms = ['dashboard', 'timeline', 'reviews', 'grid'];
+                }
             } else if (user.role === 'admin' && !perms.includes('payments')) {
                 perms.push('payments');
             }
@@ -16298,6 +16726,7 @@
                 'dashboard': document.getElementById('nav-item-dashboard'),
                 'timeline': document.getElementById('nav-item-timeline'),
                 'reviews': document.getElementById('nav-item-reviews'),
+                'upload': document.getElementById('nav-item-upload'),
                 'grid': document.getElementById('nav-item-grid'),
                 'reports': document.getElementById('nav-item-reports'),
                 'payments': document.getElementById('nav-item-payments'),
@@ -16314,6 +16743,9 @@
                     }
                 }
             });
+
+            const mobileNavUploadEl = document.getElementById('mobile-nav-upload');
+            if (mobileNavUploadEl) mobileNavUploadEl.style.display = perms.includes('upload') ? 'flex' : 'none';
 
             // Si la vista actualmente activa no está permitida, cambiar a la primera permitida
             const currentActiveViewSection = document.querySelector('.view-section.active');
@@ -16334,6 +16766,8 @@
                 renderBrandCards();
             }
             renderReviews();
+            renderUploadSection();
+            fetchNotifications(true);
         }
 
         // ==================== CONTROL DE MODAL FULL-SCREEN DE LOG OUT ====================
@@ -18235,6 +18669,473 @@
         document.addEventListener('click', closeFloatingTimelineStatusMenu);
         window.addEventListener('scroll', closeFloatingTimelineStatusMenu, true);
 
+        // ==================== NOTIFICACIONES INTERNAS ====================
+        let userNotifications = [];
+        let lastKnownUnreadNotifIds = new Set();
+        let notificationsPollTimer = null;
+        let kineticaAudioCtx = null;
+
+        function unlockNotificationAudio() {
+            try {
+                const Ctx = window.AudioContext || window.webkitAudioContext;
+                if (!Ctx) return;
+                if (!kineticaAudioCtx) {
+                    kineticaAudioCtx = new Ctx();
+                }
+                if (kineticaAudioCtx.state === 'suspended') {
+                    kineticaAudioCtx.resume();
+                }
+            } catch (e) {}
+        }
+        document.addEventListener('pointerdown', unlockNotificationAudio, { once: true, passive: true });
+        document.addEventListener('keydown', unlockNotificationAudio, { once: true, passive: true });
+
+        function playSoftNotificationSound() {
+            try {
+                const Ctx = window.AudioContext || window.webkitAudioContext;
+                if (!Ctx) return;
+                if (!kineticaAudioCtx) kineticaAudioCtx = new Ctx();
+                if (kineticaAudioCtx.state === 'suspended') {
+                    kineticaAudioCtx.resume().catch(() => {});
+                }
+                const ctx = kineticaAudioCtx;
+                const now = ctx.currentTime;
+
+                // Dos notas suaves y cálidas (Do5 -> Mi5) con envolvente suave
+                const notes = [
+                    { freq: 523.25, start: 0.00, dur: 0.28 },
+                    { freq: 659.25, start: 0.13, dur: 0.38 }
+                ];
+
+                notes.forEach(n => {
+                    const osc = ctx.createOscillator();
+                    const gain = ctx.createGain();
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(n.freq, now + n.start);
+
+                    gain.gain.setValueAtTime(0.0001, now + n.start);
+                    gain.gain.linearRampToValueAtTime(0.07, now + n.start + 0.03);
+                    gain.gain.exponentialRampToValueAtTime(0.0001, now + n.start + n.dur);
+
+                    osc.connect(gain);
+                    gain.connect(ctx.destination);
+                    osc.start(now + n.start);
+                    osc.stop(now + n.start + n.dur + 0.02);
+                });
+            } catch (e) {}
+        }
+
+        function getPoppedNotifIdsForUser(userId) {
+            try {
+                const raw = sessionStorage.getItem(`kinetica_popped_notifs_${userId}`);
+                const arr = raw ? JSON.parse(raw) : [];
+                return new Set(Array.isArray(arr) ? arr.map(Number) : []);
+            } catch (e) {
+                return new Set();
+            }
+        }
+
+        function markNotifIdPopped(userId, notifId) {
+            try {
+                const set = getPoppedNotifIdsForUser(userId);
+                set.add(Number(notifId));
+                sessionStorage.setItem(`kinetica_popped_notifs_${userId}`, JSON.stringify(Array.from(set).slice(-60)));
+            } catch (e) {}
+        }
+
+        function showDesignerNotificationPopup(notif) {
+            if (!notif) return;
+            let stack = document.getElementById('kinetica-notif-popup-stack');
+            if (!stack) {
+                stack = document.createElement('div');
+                stack.id = 'kinetica-notif-popup-stack';
+                stack.style.cssText = 'position: fixed; bottom: 22px; right: 22px; z-index: 9999; display: flex; flex-direction: column; gap: 10px; max-width: 370px; width: calc(100vw - 32px); pointer-events: none;';
+                document.body.appendChild(stack);
+            }
+
+            const existing = document.getElementById(`notif-popup-${notif.id}`);
+            if (existing) return;
+
+            const canAccessUpload = document.getElementById('nav-item-upload')?.style.display !== 'none';
+            const card = document.createElement('div');
+            card.id = `notif-popup-${notif.id}`;
+            card.className = 'glass-panel';
+            card.style.cssText = 'pointer-events: auto; padding: 1rem 1.1rem; border-radius: 14px; border: 1px solid rgba(220, 38, 38, 0.45); border-left: 4px solid var(--neon-red); box-shadow: 0 14px 34px rgba(0,0,0,0.32); display: flex; flex-direction: column; gap: 8px; animation: fadeInUp 0.25s ease;';
+
+            card.innerHTML = `
+                <div style="display: flex; align-items: flex-start; justify-content: space-between; gap: 10px;">
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                        <span style="width: 32px; height: 32px; border-radius: 10px; background: rgba(220,38,38,0.14); color: var(--neon-red); display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                            <span class="material-symbols-rounded" style="font-size: 1.15rem;">notifications_active</span>
+                        </span>
+                        <div>
+                            <div style="font-weight: 800; font-size: 0.88rem; color: var(--text-main);">${escapeHtml(notif.title || 'Diseño aprobado')}</div>
+                            ${notif.brand_name ? `<div style="font-size: 0.72rem; font-weight: 700; color: var(--neon-red);">${escapeHtml(notif.brand_name)}</div>` : ''}
+                        </div>
+                    </div>
+                    <button type="button" onclick="this.closest('[id^=notif-popup-]').remove()" style="background: none; border: none; color: var(--text-muted); cursor: pointer; padding: 2px;" aria-label="Cerrar notificación">
+                        <span class="material-symbols-rounded" style="font-size: 1.05rem;">close</span>
+                    </button>
+                </div>
+                <p style="margin: 0; font-size: 0.82rem; color: var(--text-main); line-height: 1.4;">${escapeHtml(notif.message || '')}</p>
+                <div style="display: flex; justify-content: flex-end; gap: 6px; margin-top: 2px;">
+                    <button type="button" class="btn-float btn-secondary" style="padding: 0.3rem 0.65rem; font-size: 0.76rem;" onclick="markNotificationRead(${Number(notif.id)}); this.closest('[id^=notif-popup-]').remove();">Entendido</button>
+                    ${canAccessUpload ? `<button type="button" class="btn-float btn-primary" style="padding: 0.3rem 0.75rem; font-size: 0.76rem;" onclick="goToUploadFromNotification(${Number(notif.id)}); this.closest('[id^=notif-popup-]').remove();">Ir a Subir</button>` : ''}
+                </div>
+            `;
+
+            stack.appendChild(card);
+            setTimeout(() => {
+                if (card && card.parentNode) card.remove();
+            }, 12000);
+        }
+
+        async function fetchNotifications(silent = false) {
+            if (!activeSessionUserId) return;
+            try {
+                const res = await fetch(`api.php?action=get_notifications&user_id=${encodeURIComponent(activeSessionUserId)}`);
+                const data = await res.json();
+                if (!data.success) return;
+
+                const list = Array.isArray(data.notifications) ? data.notifications : [];
+                const unreadCount = parseInt(data.unread_count || 0, 10);
+
+                const activeUser = getActiveSessionUser();
+                const isDesignerSession = activeUser && (activeUser.role || '').toLowerCase() === 'designer';
+                const poppedIds = getPoppedNotifIdsForUser(activeSessionUserId);
+
+                const unreadNotifs = list.filter(n => Number(n.is_read) === 0);
+                let shouldPlayChime = false;
+
+                unreadNotifs.forEach(n => {
+                    const nid = Number(n.id);
+                    const isNewDuringPoll = !silent && !lastKnownUnreadNotifIds.has(nid);
+                    const isUnpoppedForDesigner = isDesignerSession && !poppedIds.has(nid);
+
+                    if (isNewDuringPoll || isUnpoppedForDesigner) {
+                        markNotifIdPopped(activeSessionUserId, nid);
+                        if (isDesignerSession) {
+                            showDesignerNotificationPopup(n);
+                            shouldPlayChime = true;
+                        } else if (isNewDuringPoll) {
+                            showToast(`🔔 ${n.title}: ${n.message}`, 'info');
+                        }
+                    }
+                });
+
+                if (shouldPlayChime) {
+                    playSoftNotificationSound();
+                }
+
+                lastKnownUnreadNotifIds = new Set(unreadNotifs.map(n => Number(n.id)));
+
+                userNotifications = list;
+                updateNotificationBadges(unreadCount);
+                renderNotificationsModalList();
+            } catch (e) {
+                // Silencioso en polling
+            }
+        }
+
+        function updateNotificationBadges(unreadCount) {
+            const countText = unreadCount > 99 ? '99+' : String(unreadCount);
+            ['sidebar-notif-badge', 'mobile-notif-badge'].forEach(id => {
+                const el = document.getElementById(id);
+                if (!el) return;
+                if (unreadCount > 0) {
+                    el.innerText = countText;
+                    el.style.display = 'inline-flex';
+                } else {
+                    el.style.display = 'none';
+                }
+            });
+        }
+
+        function openNotificationsModal() {
+            fetchNotifications(true);
+            renderNotificationsModalList();
+            const modal = document.getElementById('notificationsModal');
+            if (modal) modal.classList.add('active');
+        }
+
+        function closeNotificationsModal() {
+            const modal = document.getElementById('notificationsModal');
+            if (modal) modal.classList.remove('active');
+        }
+
+        function renderNotificationsModalList() {
+            const container = document.getElementById('notifications-modal-list');
+            if (!container) return;
+
+            if (!userNotifications || userNotifications.length === 0) {
+                container.innerHTML = `
+                    <div style="text-align: center; padding: 2rem 1rem; color: var(--text-muted);">
+                        <span class="material-symbols-rounded" style="font-size: 2.2rem; opacity: 0.6;">notifications_off</span>
+                        <p style="margin-top: 0.5rem; font-size: 0.9rem;">No tienes notificaciones por ahora.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            const canAccessUpload = document.getElementById('nav-item-upload')?.style.display !== 'none';
+
+            container.innerHTML = userNotifications.map(n => {
+                const isUnread = Number(n.is_read) === 0;
+                const dateStr = n.created_at ? String(n.created_at).replace('T', ' ').slice(0, 16) : '';
+                const goUploadBtn = (n.type === 'design_approved' && canAccessUpload)
+                    ? `<button type="button" class="btn-float btn-primary" style="padding: 0.28rem 0.65rem; font-size: 0.76rem;" onclick="goToUploadFromNotification(${Number(n.id)})">Ir a Subir</button>`
+                    : '';
+
+                return `
+                    <div style="padding: 0.85rem 1rem; border-radius: 12px; border: 1px solid ${isUnread ? 'rgba(220,38,38,0.4)' : 'var(--card-border)'}; background: ${isUnread ? 'rgba(220,38,38,0.06)' : 'rgba(150,150,150,0.04)'}; display: flex; flex-direction: column; gap: 6px;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; gap: 8px;">
+                            <strong style="font-size: 0.88rem; color: var(--text-main); display: flex; align-items: center; gap: 6px;">
+                                ${isUnread ? '<span style="width:8px; height:8px; border-radius:50%; background:var(--neon-red); display:inline-block;"></span>' : ''}
+                                ${escapeHtml(n.title || 'Notificación')}
+                            </strong>
+                            <span style="font-size: 0.72rem; color: var(--text-muted);">${escapeHtml(dateStr)}</span>
+                        </div>
+                        <p style="font-size: 0.83rem; color: var(--text-main); margin: 0; line-height: 1.4;">${escapeHtml(n.message || '')}</p>
+                        <div style="display: flex; justify-content: flex-end; gap: 6px; margin-top: 2px;">
+                            ${goUploadBtn}
+                            ${isUnread ? `<button type="button" class="btn-float btn-secondary" style="padding: 0.28rem 0.65rem; font-size: 0.76rem;" onclick="markNotificationRead(${Number(n.id)})">Marcar leída</button>` : ''}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        async function markNotificationRead(notifId) {
+            try {
+                await fetch('api.php?action=mark_notification_read', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ id: notifId })
+                });
+                fetchNotifications(true);
+            } catch (e) {}
+        }
+
+        async function markAllNotificationsRead() {
+            if (!activeSessionUserId) return;
+            try {
+                await fetch('api.php?action=mark_notification_read', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ mark_all: true, user_id: activeSessionUserId })
+                });
+                fetchNotifications(true);
+            } catch (e) {}
+        }
+
+        function goToUploadFromNotification(notifId) {
+            markNotificationRead(notifId);
+            closeNotificationsModal();
+            const navEl = document.getElementById('nav-item-upload');
+            if (navEl && navEl.style.display !== 'none') {
+                switchView('upload', navEl);
+            }
+        }
+
+        // ==================== SECCIÓN SUBIR (SOLO DISEÑADOR) ====================
+        let uploadTabMode = 'pending'; // 'pending' | 'archived'
+
+        function setUploadTab(mode) {
+            uploadTabMode = mode === 'archived' ? 'archived' : 'pending';
+            const btnPending = document.getElementById('upload-tab-pending');
+            const btnArchived = document.getElementById('upload-tab-archived');
+            if (btnPending) btnPending.className = `btn-float ${uploadTabMode === 'pending' ? 'btn-primary' : 'btn-secondary'}`;
+            if (btnArchived) btnArchived.className = `btn-float ${uploadTabMode === 'archived' ? 'btn-primary' : 'btn-secondary'}`;
+            renderUploadSection();
+        }
+
+        function getApprovedUploadPiecesForDesigner() {
+            const allowedKeys = getAllowedBrandKeysForActiveUser();
+            const pending = [];
+            const archived = [];
+
+            allowedKeys.forEach(brandKey => {
+                const brandMeta = brandsMetadata[brandKey] || {};
+                const brandName = brandMeta.name || brandKey;
+                const pieces = mockDataByBrand[brandKey] || [];
+
+                pieces.forEach(p => {
+                    const isApproved = (p.designer_design || '').trim() === 'Aprobado';
+                    if (!isApproved) return;
+
+                    const hasDrive = !!(p.drive_url && String(p.drive_url).trim() !== '');
+                    const isArchived = Number(p.drive_archived) === 1 || hasDrive;
+
+                    const entry = { ...p, brandKey, brandName };
+                    if (isArchived) {
+                        archived.push(entry);
+                    } else {
+                        pending.push(entry);
+                    }
+                });
+            });
+
+            return { pending, archived };
+        }
+
+        function renderUploadSection() {
+            const container = document.getElementById('upload-pieces-container');
+            const pendingCountEl = document.getElementById('upload-pending-count');
+            const archivedCountEl = document.getElementById('upload-archived-count');
+            const navBadge = document.getElementById('nav-upload-badge');
+
+            const { pending, archived } = getApprovedUploadPiecesForDesigner();
+
+            if (pendingCountEl) pendingCountEl.innerText = String(pending.length);
+            if (archivedCountEl) archivedCountEl.innerText = String(archived.length);
+
+            if (navBadge) {
+                if (pending.length > 0) {
+                    navBadge.innerText = String(pending.length);
+                    navBadge.style.display = 'inline-block';
+                } else {
+                    navBadge.style.display = 'none';
+                }
+            }
+
+            if (!container) return;
+
+            const list = uploadTabMode === 'archived' ? archived : pending;
+
+            if (list.length === 0) {
+                container.innerHTML = `
+                    <div class="glass-panel" style="grid-column: 1 / -1; padding: 2.5rem 1.5rem; text-align: center; color: var(--text-muted);">
+                        <span class="material-symbols-rounded" style="font-size: 2.5rem; opacity: 0.6;">
+                            ${uploadTabMode === 'archived' ? 'inventory_2' : 'cloud_done'}
+                        </span>
+                        <h3 style="margin-top: 0.6rem; color: var(--text-main);">
+                            ${uploadTabMode === 'archived' ? 'No hay piezas archivadas aún' : 'No tienes piezas aprobadas pendientes por subir'}
+                        </h3>
+                        <p style="font-size: 0.86rem; margin-top: 0.35rem;">
+                            ${uploadTabMode === 'archived'
+                                ? 'Cuando guardes el enlace de Google Drive de una pieza aprobada, aparecerá archivada aquí.'
+                                : 'Cuando la agencia apruebe un diseño de tus marcas, aparecerá aquí para que subas el enlace de Google Drive.'}
+                        </p>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = list.map(item => {
+                const isArch = uploadTabMode === 'archived';
+                const driveUrl = String(item.drive_url || '').trim();
+                return `
+                    <div class="glass-panel" style="padding: 1.15rem; display: flex; flex-direction: column; justify-content: space-between; gap: 0.9rem; border-left: 4px solid ${isArch ? '#10b981' : 'var(--neon-red)'};">
+                        <div>
+                            <div style="display: flex; justify-content: space-between; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 0.55rem;">
+                                <span style="font-size: 0.76rem; font-weight: 800; background: rgba(220,38,38,0.12); color: var(--neon-red); padding: 3px 10px; border-radius: 999px;">
+                                    ${escapeHtml(item.brandName)}
+                                </span>
+                                <span style="font-size: 0.74rem; font-weight: 700; color: ${isArch ? '#10b981' : '#f59e0b'};">
+                                    ${isArch ? 'Archivada' : 'Aprobada • Pendiente'}
+                                </span>
+                            </div>
+                            <h3 style="font-size: 1rem; margin: 0 0 0.35rem 0; color: var(--text-main);">${escapeHtml(item.topic || 'Sin título')}</h3>
+                            <div style="font-size: 0.8rem; color: var(--text-muted); display: flex; flex-wrap: wrap; gap: 0.6rem;">
+                                <span><strong>Tipo:</strong> ${escapeHtml(item.type || '-')}</span>
+                                <span><strong>Formato:</strong> ${escapeHtml(item.format || '-')}</span>
+                                <span><strong>Fecha:</strong> ${escapeHtml(item.date || item.publish_date || '-')}</span>
+                            </div>
+                        </div>
+                        <div style="display: flex; gap: 0.5rem; flex-wrap: wrap; justify-content: flex-end; border-top: 1px solid var(--card-border); padding-top: 0.75rem;">
+                            ${isArch ? `
+                                <button type="button" class="btn-float btn-primary" style="font-size: 0.8rem; padding: 0.42rem 0.85rem;" onclick="window.open('${escapeHtml(driveUrl)}', '_blank', 'noopener,noreferrer')">
+                                    <span class="material-symbols-rounded" style="font-size: 1rem;">folder_open</span> Ver originales
+                                </button>
+                                <button type="button" class="btn-float btn-secondary" style="font-size: 0.8rem; padding: 0.42rem 0.85rem;" onclick="openDriveUploadModal(${item.id}, '${escapeHtml(item.brandKey)}')">
+                                    <span class="material-symbols-rounded" style="font-size: 1rem;">edit</span> Editar link
+                                </button>
+                            ` : `
+                                <button type="button" class="btn-float btn-primary" style="font-size: 0.82rem; padding: 0.45rem 0.95rem; width: 100%; justify-content: center;" onclick="openDriveUploadModal(${item.id}, '${escapeHtml(item.brandKey)}')">
+                                    <span class="material-symbols-rounded" style="font-size: 1.05rem;">add_to_drive</span> Subir link de Drive
+                                </button>
+                            `}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function openDriveUploadModal(pieceId, brandKey) {
+            let piece = null;
+            let resolvedBrandName = brandKey || '';
+            if (brandKey && mockDataByBrand[brandKey]) {
+                piece = mockDataByBrand[brandKey].find(p => Number(p.id) === Number(pieceId));
+                resolvedBrandName = brandsMetadata[brandKey]?.name || brandKey;
+            }
+            if (!piece) {
+                for (const b in mockDataByBrand) {
+                    const found = (mockDataByBrand[b] || []).find(p => Number(p.id) === Number(pieceId));
+                    if (found) {
+                        piece = found;
+                        resolvedBrandName = brandsMetadata[b]?.name || b;
+                        break;
+                    }
+                }
+            }
+            if (!piece) {
+                showToast('No se encontró la pieza seleccionada', 'error');
+                return;
+            }
+
+            document.getElementById('drive_upload_piece_id').value = piece.id;
+            document.getElementById('drive_modal_piece_title').innerText = piece.topic || 'Pieza aprobada';
+            document.getElementById('drive_modal_brand_badge').innerText = resolvedBrandName;
+            document.getElementById('drive_upload_url_input').value = piece.drive_url || '';
+
+            const modal = document.getElementById('driveUploadModal');
+            if (modal) modal.classList.add('active');
+        }
+
+        function closeDriveUploadModal() {
+            const modal = document.getElementById('driveUploadModal');
+            if (modal) modal.classList.remove('active');
+        }
+
+        async function saveDriveUploadLink(e) {
+            e.preventDefault();
+            const pieceId = parseInt(document.getElementById('drive_upload_piece_id').value, 10);
+            const driveUrl = (document.getElementById('drive_upload_url_input').value || '').trim();
+            const uName = getActiveSessionUser()?.name || 'Diseñador';
+
+            if (!pieceId || !driveUrl) {
+                showToast('Ingresa el enlace de Google Drive', 'error');
+                return;
+            }
+
+            try {
+                const res = await fetch('api.php?action=save_drive_link', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        id: pieceId,
+                        drive_url: driveUrl,
+                        user_name: uName
+                    })
+                });
+                const data = await res.json();
+                if (data.success) {
+                    updatePieceLocalState(pieceId, {
+                        drive_url: data.drive_url || driveUrl,
+                        drive_archived: 1
+                    });
+                    closeDriveUploadModal();
+                    showToast('Enlace guardado y pieza archivada en Subir', 'success');
+                    renderUploadSection();
+                    renderTable();
+                } else {
+                    showToast('Error: ' + (data.message || 'No se pudo guardar'), 'error');
+                }
+            } catch (err) {
+                showToast('Error de red al guardar el enlace de Drive', 'error');
+            }
+        }
+
         // Navegación entre vistas principales con persistencia ante recarga
         function switchView(viewId, element) {
             document.querySelectorAll('.view-section').forEach(section => section.classList.remove('active'));
@@ -18260,6 +19161,8 @@
                 renderTimeline();
             } else if (viewId === 'reviews') {
                 renderReviews();
+            } else if (viewId === 'upload') {
+                renderUploadSection();
             } else if (viewId === 'payments') {
                 renderPaymentsView();
             }
@@ -18312,6 +19215,12 @@
 
             // Cargar datos y sincronizar sesión activa del usuario
             loadDashboardData();
+
+            if (!notificationsPollTimer) {
+                notificationsPollTimer = setInterval(() => {
+                    fetchNotifications(false);
+                }, 10000);
+            }
         };
 
         function initKineticaDatePickers() {
@@ -18575,6 +19484,10 @@
         <button type="button" class="mobile-bottom-nav-btn" data-mobile-view="reviews" onclick="switchView('reviews')">
             <span class="material-symbols-rounded">priority</span>
             <span>Revisiones</span>
+        </button>
+        <button type="button" class="mobile-bottom-nav-btn" id="mobile-nav-upload" data-mobile-view="upload" onclick="switchView('upload')" style="display: none;">
+            <span class="material-symbols-rounded">cloud_upload</span>
+            <span>Subir</span>
         </button>
         <button type="button" class="mobile-bottom-nav-btn" data-mobile-view="payments" onclick="switchView('payments')">
             <span class="material-symbols-rounded">payments</span>

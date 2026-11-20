@@ -109,6 +109,8 @@ CREATE TABLE IF NOT EXISTS content_grid (
     copy_text TEXT,
     content_format VARCHAR(50),
     media_url LONGTEXT,
+    drive_url TEXT,
+    drive_archived TINYINT(1) DEFAULT 0,
     
     -- Fases de Cumplimiento
     cm_planning VARCHAR(50) DEFAULT 'Pendiente',
@@ -123,6 +125,20 @@ CREATE TABLE IF NOT EXISTS content_grid (
     in_timeline TINYINT(1) DEFAULT 1,
     
     FOREIGN KEY (campaign_id) REFERENCES campaigns(id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Tabla de Notificaciones Internas
+CREATE TABLE IF NOT EXISTS notifications (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    piece_id INT NULL,
+    campaign_id INT NULL,
+    brand_name VARCHAR(150) DEFAULT '',
+    title VARCHAR(200) NOT NULL,
+    message TEXT NOT NULL,
+    type VARCHAR(50) DEFAULT 'design_approved',
+    is_read TINYINT(1) DEFAULT 0,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Inserción de Datos Iniciales

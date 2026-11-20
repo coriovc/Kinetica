@@ -47,6 +47,14 @@ try {
     if (!$colTimeline) {
         $pdo->exec("ALTER TABLE content_grid ADD COLUMN in_timeline TINYINT(1) DEFAULT 1 AFTER observations");
     }
+    $colDriveUrl = $pdo->query("SHOW COLUMNS FROM content_grid LIKE 'drive_url'")->fetch();
+    if (!$colDriveUrl) {
+        $pdo->exec("ALTER TABLE content_grid ADD COLUMN drive_url TEXT NULL AFTER media_url");
+    }
+    $colDriveArch = $pdo->query("SHOW COLUMNS FROM content_grid LIKE 'drive_archived'")->fetch();
+    if (!$colDriveArch) {
+        $pdo->exec("ALTER TABLE content_grid ADD COLUMN drive_archived TINYINT(1) DEFAULT 0 AFTER drive_url");
+    }
     $pdo->exec("ALTER TABLE content_grid 
         MODIFY cm_planning VARCHAR(50) DEFAULT 'Pendiente',
         MODIFY designer_design VARCHAR(50) DEFAULT 'Pendiente',
@@ -173,7 +181,110 @@ try {
         consent_time TIME NOT NULL,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci");
+
+    // Crear tabla de notificaciones internas si no existe
+    $pdo->exec("CREATE TABLE IF NOT EXISTS notifications (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        user_id INT NOT NULL,
+        piece_id INT NULL,
+        campaign_id INT NULL,
+        brand_name VARCHAR(150) DEFAULT '',
+        title VARCHAR(200) NOT NULL,
+        message TEXT NOT NULL,
+        type VARCHAR(50) DEFAULT 'design_approved',
+        is_read TINYINT(1) DEFAULT 0,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci");
 } catch (\Exception $e) {}
+
+/**
+ * Notifica al usuario diseñador a cargo de la marca cuando una pieza es aprobada
+ * para que pueda subir los archivos originales.
+ */
+function notifyBrandDesignerOnApproval(PDO $pdo, int $pieceId) {
+    try {
+        $stmtPiece = $pdo->prepare("SELECT id, campaign_id, topic FROM content_grid WHERE id = :id LIMIT 1");
+        $stmtPiece->execute(['id' => $pieceId]);
+        $piece = $stmtPiece->fetch();
+        if (!$piece) return;
+
+        $cid = (int)$piece['campaign_id'];
+        $topic = trim($piece['topic'] ?? 'Sin título');
+
+        $stmtCamp = $pdo->prepare("SELECT id, client_name, campaign_name FROM campaigns WHERE id = :cid LIMIT 1");
+        $stmtCamp->execute(['cid' => $cid]);
+        $camp = $stmtCamp->fetch();
+        if (!$camp) return;
+
+        $brandName = trim($camp['client_name'] ?: $camp['campaign_name'] ?: 'Marca');
+        $brandNameLower = mb_strtolower($brandName, 'UTF-8');
+        $campNameLower = mb_strtolower(trim($camp['campaign_name'] ?? ''), 'UTF-8');
+
+        $targetUserIds = [];
+
+        // 1. Buscar diseñadores asignados en la tabla responsibles para esta campaña
+        $stmtResp = $pdo->prepare("SELECT person_name FROM responsibles WHERE campaign_id = :cid AND role = 'designer'");
+        $stmtResp->execute(['cid' => $cid]);
+        $respNames = $stmtResp->fetchAll(\PDO::FETCH_COLUMN);
+
+        $stmtDesigners = $pdo->query("SELECT id, name, assigned_brands FROM users WHERE LOWER(role) = 'designer' AND (status IS NULL OR status = 'activo')");
+        $designers = $stmtDesigners->fetchAll();
+
+        foreach ($designers as $u) {
+            $uId = (int)$u['id'];
+            $uNameLower = mb_strtolower(trim($u['name'] ?? ''), 'UTF-8');
+            $matched = false;
+
+            foreach ($respNames as $rName) {
+                if ($uNameLower !== '' && $uNameLower === mb_strtolower(trim($rName), 'UTF-8')) {
+                    $matched = true;
+                    break;
+                }
+            }
+
+            if (!$matched && !empty($u['assigned_brands'])) {
+                $assigned = json_decode($u['assigned_brands'], true);
+                if (is_array($assigned)) {
+                    foreach ($assigned as $ab) {
+                        $abLower = mb_strtolower(trim((string)$ab), 'UTF-8');
+                        if ($abLower !== '' && ($abLower === $brandNameLower || ($campNameLower !== '' && $abLower === $campNameLower))) {
+                            $matched = true;
+                            break;
+                        }
+                    }
+                }
+            }
+
+            if ($matched) {
+                $targetUserIds[$uId] = true;
+            }
+        }
+
+        if (empty($targetUserIds)) return;
+
+        $title = 'Diseño aprobado - Subir originales';
+        $message = "El diseño de la pieza \"$topic\" ($brandName) fue aprobado. Ya puedes subir los archivos originales en la sección Subir.";
+
+        $stmtDup = $pdo->prepare("SELECT id FROM notifications WHERE user_id = :uid AND piece_id = :pid AND type = 'design_approved' AND is_read = 0 LIMIT 1");
+        $stmtIns = $pdo->prepare("INSERT INTO notifications (user_id, piece_id, campaign_id, brand_name, title, message, type) VALUES (:uid, :pid, :cid, :brand, :title, :msg, 'design_approved')");
+
+        foreach (array_keys($targetUserIds) as $uid) {
+            $stmtDup->execute(['uid' => $uid, 'pid' => $pieceId]);
+            if (!$stmtDup->fetch()) {
+                $stmtIns->execute([
+                    'uid' => $uid,
+                    'pid' => $pieceId,
+                    'cid' => $cid,
+                    'brand' => $brandName,
+                    'title' => $title,
+                    'msg' => $message
+                ]);
+            }
+        }
+    } catch (\Exception $e) {
+        // Silencioso para no interrumpir el flujo principal de aprobación
+    }
+}
 
 // Obtener dirección IP real del cliente de forma segura para trazabilidad legal
 function getClientIpAddress() {
@@ -829,6 +940,8 @@ switch ($action) {
                     'copy' => $item['copy_text'],
                     'format' => $item['content_format'],
                     'media_url' => $item['media_url'] ?? '',
+                    'drive_url' => $item['drive_url'] ?? '',
+                    'drive_archived' => isset($item['drive_archived']) ? (int)$item['drive_archived'] : 0,
                     'cm_planning' => $item['cm_planning'] ?? 'Pendiente',
                     'designer_design' => $item['designer_design'] ?? 'Pendiente',
                     'agency_review' => $item['agency_review'] ?? 'Pendiente',
@@ -954,6 +1067,10 @@ switch ($action) {
 
                 $updateProg = $pdo->prepare("UPDATE content_grid SET progress = :prog, overall_status = :status WHERE id = :id");
                 $updateProg->execute(['prog' => $progress, 'status' => $overall_status, 'id' => $id]);
+
+                if ($field === 'designer_design' && $value === 'Aprobado') {
+                    notifyBrandDesignerOnApproval($pdo, $id);
+                }
 
                 // Registrar en log
                 logActivity($pdo, 'Actualización', "Pieza #$id ('{$row['topic']}'): $field cambiado a '$value' (Avance: {$progress}%)");
@@ -1269,6 +1386,7 @@ switch ($action) {
                 // Al aprobar, se retira de la Línea de Tiempo (in_timeline = 0)
                 $stmtUp = $pdo->prepare("UPDATE content_grid SET designer_design = 'Aprobado', agency_review = 'Completado', in_timeline = 0, progress = 75.00, overall_status = 'En Producción' WHERE id = :id");
                 $stmtUp->execute(['id' => $id]);
+                notifyBrandDesignerOnApproval($pdo, $id);
                 logActivity($pdo, 'Revisión Aprobada', "Pieza #$id ('$topic') fue aprobada por $user_name y retirada de la Línea de Tiempo", $user_name);
                 echo json_encode([
                     'success' => true, 
@@ -1353,6 +1471,92 @@ switch ($action) {
             ]);
         } catch (\PDOException $e) {
             echo json_encode(['success' => false, 'message' => 'Error al regresar a Línea de Tiempo: ' . $e->getMessage()]);
+        }
+        break;
+
+    case 'save_drive_link':
+        $data = json_decode(file_get_contents('php://input'), true);
+        $id = (int)($data['id'] ?? $data['piece_id'] ?? 0);
+        $driveUrl = trim((string)($data['drive_url'] ?? ''));
+        $userName = trim((string)($data['user_name'] ?? 'Diseñador'));
+
+        if ($id <= 0 || $driveUrl === '') {
+            echo json_encode(['success' => false, 'message' => 'Debes ingresar el enlace de Google Drive']);
+            exit;
+        }
+        if (!filter_var($driveUrl, FILTER_VALIDATE_URL)) {
+            echo json_encode(['success' => false, 'message' => 'El enlace ingresado no es una URL válida']);
+            exit;
+        }
+        try {
+            $stmt = $pdo->prepare("SELECT id, topic FROM content_grid WHERE id = :id LIMIT 1");
+            $stmt->execute(['id' => $id]);
+            $piece = $stmt->fetch();
+            if (!$piece) {
+                echo json_encode(['success' => false, 'message' => 'Pieza no encontrada']);
+                exit;
+            }
+
+            $stmtUp = $pdo->prepare("UPDATE content_grid SET drive_url = :drive_url, drive_archived = 1 WHERE id = :id");
+            $stmtUp->execute(['drive_url' => $driveUrl, 'id' => $id]);
+
+            $topic = $piece['topic'] ?? 'Sin título';
+            logActivity($pdo, 'Originales Subidos', "Pieza #$id ('$topic') - Link de Google Drive guardado y archivado por $userName", $userName);
+
+            echo json_encode([
+                'success' => true,
+                'message' => 'Enlace de Google Drive guardado y pieza archivada con éxito',
+                'id' => $id,
+                'drive_url' => $driveUrl,
+                'drive_archived' => 1
+            ]);
+        } catch (\PDOException $e) {
+            echo json_encode(['success' => false, 'message' => 'Error al guardar el enlace: ' . $e->getMessage()]);
+        }
+        break;
+
+    case 'get_notifications':
+        $userId = (int)($_GET['user_id'] ?? 0);
+        if ($userId <= 0) {
+            echo json_encode(['success' => true, 'notifications' => [], 'unread_count' => 0]);
+            exit;
+        }
+        try {
+            $stmt = $pdo->prepare("SELECT * FROM notifications WHERE user_id = :uid ORDER BY is_read ASC, created_at DESC, id DESC LIMIT 50");
+            $stmt->execute(['uid' => $userId]);
+            $rows = $stmt->fetchAll();
+
+            $stmtUnread = $pdo->prepare("SELECT COUNT(*) FROM notifications WHERE user_id = :uid AND is_read = 0");
+            $stmtUnread->execute(['uid' => $userId]);
+            $unreadCount = (int)$stmtUnread->fetchColumn();
+
+            echo json_encode([
+                'success' => true,
+                'notifications' => $rows,
+                'unread_count' => $unreadCount
+            ]);
+        } catch (\PDOException $e) {
+            echo json_encode(['success' => false, 'message' => 'Error al obtener notificaciones: ' . $e->getMessage()]);
+        }
+        break;
+
+    case 'mark_notification_read':
+        $data = json_decode(file_get_contents('php://input'), true);
+        $notifId = (int)($data['id'] ?? 0);
+        $userId = (int)($data['user_id'] ?? 0);
+        $markAll = !empty($data['mark_all']);
+
+        try {
+            if ($markAll && $userId > 0) {
+                $stmt = $pdo->prepare("UPDATE notifications SET is_read = 1 WHERE user_id = :uid");
+                $stmt->execute(['uid' => $userId]);
+            } elseif ($notifId > 0) {
+                $stmt = $pdo->prepare("UPDATE notifications SET is_read = 1 WHERE id = :id");
+                $stmt->execute(['id' => $notifId]);
+            }
+            echo json_encode(['success' => true]);
+        } catch (\PDOException $e) {
+            echo json_encode(['success' => false, 'message' => 'Error al actualizar notificación']);
         }
         break;
 
