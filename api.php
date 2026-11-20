@@ -201,7 +201,7 @@ try {
  * Notifica al usuario diseñador a cargo de la marca cuando una pieza es aprobada
  * para que pueda subir los archivos originales.
  */
-function notifyBrandDesignerOnApproval(PDO $pdo, int $pieceId) {
+function notifyBrandDesignerOnApproval(PDO $pdo, int $pieceId, string $approverName = '') {
     try {
         $stmtPiece = $pdo->prepare("SELECT id, campaign_id, topic FROM content_grid WHERE id = :id LIMIT 1");
         $stmtPiece->execute(['id' => $pieceId]);
@@ -262,8 +262,11 @@ function notifyBrandDesignerOnApproval(PDO $pdo, int $pieceId) {
 
         if (empty($targetUserIds)) return;
 
+        $approverClean = trim($approverName);
         $title = 'Diseño aprobado - Subir originales';
-        $message = "El diseño de la pieza \"$topic\" ($brandName) fue aprobado. Ya puedes subir los archivos originales en la sección Subir.";
+        $message = $approverClean !== ''
+            ? "$approverClean aprobó el diseño de la pieza \"$topic\" ($brandName). Ya puedes subir los archivos originales en la sección Subir."
+            : "El diseño de la pieza \"$topic\" ($brandName) fue aprobado. Ya puedes subir los archivos originales en la sección Subir.";
 
         $stmtDup = $pdo->prepare("SELECT id FROM notifications WHERE user_id = :uid AND piece_id = :pid AND type = 'design_approved' AND is_read = 0 LIMIT 1");
         $stmtIns = $pdo->prepare("INSERT INTO notifications (user_id, piece_id, campaign_id, brand_name, title, message, type) VALUES (:uid, :pid, :cid, :brand, :title, :msg, 'design_approved')");
@@ -283,6 +286,86 @@ function notifyBrandDesignerOnApproval(PDO $pdo, int $pieceId) {
         }
     } catch (\Exception $e) {
         // Silencioso para no interrumpir el flujo principal de aprobación
+    }
+}
+
+/**
+ * Notifica a los roles Agencia, Admin y Community Manager cuando el diseñador
+ * marca una pieza como Lista para ser revisada.
+ */
+function notifyReviewersDesignReady(PDO $pdo, int $pieceId, string $designerName = '') {
+    try {
+        $stmtPiece = $pdo->prepare("SELECT id, campaign_id, topic FROM content_grid WHERE id = :id LIMIT 1");
+        $stmtPiece->execute(['id' => $pieceId]);
+        $piece = $stmtPiece->fetch();
+        if (!$piece) return;
+
+        $cid = (int)$piece['campaign_id'];
+        $topic = trim($piece['topic'] ?? 'Sin título');
+
+        $stmtCamp = $pdo->prepare("SELECT id, client_name, campaign_name FROM campaigns WHERE id = :cid LIMIT 1");
+        $stmtCamp->execute(['cid' => $cid]);
+        $camp = $stmtCamp->fetch();
+        if (!$camp) return;
+
+        $brandName = trim($camp['client_name'] ?: $camp['campaign_name'] ?: 'Marca');
+        $brandNameLower = mb_strtolower($brandName, 'UTF-8');
+        $campNameLower = mb_strtolower(trim($camp['campaign_name'] ?? ''), 'UTF-8');
+
+        $stmtUsers = $pdo->query("SELECT id, name, role, assigned_brands FROM users WHERE LOWER(role) IN ('admin', 'agency', 'agencia', 'community_manager', 'community', 'comunity') AND (status IS NULL OR status = 'activo')");
+        $candidates = $stmtUsers->fetchAll();
+
+        $targetUserIds = [];
+        foreach ($candidates as $u) {
+            $uId = (int)$u['id'];
+            $roleLow = strtolower(trim($u['role'] ?? ''));
+
+            // Los administradores y agencia reciben todas; los community solo si tienen la marca o no tienen filtro explícito
+            if ($roleLow === 'admin' || $roleLow === 'agency' || $roleLow === 'agencia' || empty(trim((string)($u['assigned_brands'] ?? '')))) {
+                $targetUserIds[$uId] = true;
+                continue;
+            }
+
+            $assigned = json_decode($u['assigned_brands'], true);
+            if (!is_array($assigned) || count($assigned) === 0) {
+                $targetUserIds[$uId] = true;
+                continue;
+            }
+            foreach ($assigned as $ab) {
+                $abLower = mb_strtolower(trim((string)$ab), 'UTF-8');
+                if ($abLower !== '' && ($abLower === $brandNameLower || ($campNameLower !== '' && $abLower === $campNameLower))) {
+                    $targetUserIds[$uId] = true;
+                    break;
+                }
+            }
+        }
+
+        if (empty($targetUserIds)) return;
+
+        $designerClean = trim($designerName);
+        $title = 'Diseño listo para revisión';
+        $message = $designerClean !== ''
+            ? "$designerClean marcó como listo el diseño de la pieza \"$topic\" ($brandName) para ser revisado."
+            : "El diseño de la pieza \"$topic\" ($brandName) ya está listo para ser revisado.";
+
+        $stmtDup = $pdo->prepare("SELECT id FROM notifications WHERE user_id = :uid AND piece_id = :pid AND type = 'design_ready' AND is_read = 0 LIMIT 1");
+        $stmtIns = $pdo->prepare("INSERT INTO notifications (user_id, piece_id, campaign_id, brand_name, title, message, type) VALUES (:uid, :pid, :cid, :brand, :title, :msg, 'design_ready')");
+
+        foreach (array_keys($targetUserIds) as $uid) {
+            $stmtDup->execute(['uid' => $uid, 'pid' => $pieceId]);
+            if (!$stmtDup->fetch()) {
+                $stmtIns->execute([
+                    'uid' => $uid,
+                    'pid' => $pieceId,
+                    'cid' => $cid,
+                    'brand' => $brandName,
+                    'title' => $title,
+                    'msg' => $message
+                ]);
+            }
+        }
+    } catch (\Exception $e) {
+        // Silencioso para no interrumpir el flujo principal
     }
 }
 
@@ -1032,6 +1115,7 @@ switch ($action) {
         $id = (int)$data['id'];
         $field = $data['field'];
         $value = $data['value'];
+        $actorName = trim((string)($data['user_name'] ?? ''));
 
         $allowed_fields = ['cm_planning', 'designer_design', 'agency_review', 'cm_publishing', 'observations', 'copy_text', 'topic', 'graphic_desc', 'in_timeline', 'media_url'];
         if (!in_array($field, $allowed_fields)) {
@@ -1069,7 +1153,9 @@ switch ($action) {
                 $updateProg->execute(['prog' => $progress, 'status' => $overall_status, 'id' => $id]);
 
                 if ($field === 'designer_design' && $value === 'Aprobado') {
-                    notifyBrandDesignerOnApproval($pdo, $id);
+                    notifyBrandDesignerOnApproval($pdo, $id, $actorName);
+                } elseif ($field === 'designer_design' && $value === 'Listo') {
+                    notifyReviewersDesignReady($pdo, $id, $actorName);
                 }
 
                 // Registrar en log
@@ -1386,7 +1472,7 @@ switch ($action) {
                 // Al aprobar, se retira de la Línea de Tiempo (in_timeline = 0)
                 $stmtUp = $pdo->prepare("UPDATE content_grid SET designer_design = 'Aprobado', agency_review = 'Completado', in_timeline = 0, progress = 75.00, overall_status = 'En Producción' WHERE id = :id");
                 $stmtUp->execute(['id' => $id]);
-                notifyBrandDesignerOnApproval($pdo, $id);
+                notifyBrandDesignerOnApproval($pdo, $id, $user_name);
                 logActivity($pdo, 'Revisión Aprobada', "Pieza #$id ('$topic') fue aprobada por $user_name y retirada de la Línea de Tiempo", $user_name);
                 echo json_encode([
                     'success' => true, 
@@ -1564,6 +1650,7 @@ switch ($action) {
         $data = json_decode(file_get_contents('php://input'), true);
         $id = (int)($data['id'] ?? $data['piece_id'] ?? 0);
         $rawMedia = $data['media_url'] ?? '';
+        $actorName = trim((string)($data['user_name'] ?? ''));
         if ($id <= 0) {
             echo json_encode(['success' => false, 'message' => 'ID inválido']);
             exit;
@@ -1572,6 +1659,7 @@ switch ($action) {
             $media_url = processMediaPayload($rawMedia, $id);
             $stmt = $pdo->prepare("UPDATE content_grid SET media_url = :media_url, designer_design = 'Listo' WHERE id = :id");
             $stmt->execute(['media_url' => $media_url, 'id' => $id]);
+            notifyReviewersDesignReady($pdo, $id, $actorName);
             logActivity($pdo, 'Material Subido', "Se adjuntó nuevo material visual a la pieza #$id");
             echo json_encode([
                 'success' => true, 

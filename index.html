@@ -11936,10 +11936,11 @@
             }
 
             try {
+                const actorName = getActiveSessionUser()?.name || '';
                 const res = await fetch('api.php?action=update_status', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ id: id, field: field, value: value })
+                    body: JSON.stringify({ id: id, field: field, value: value, user_name: actorName })
                 });
                 const data = await res.json();
                 if (data.success) {
@@ -18757,6 +18758,14 @@
             if (existing) return;
 
             const canAccessUpload = document.getElementById('nav-item-upload')?.style.display !== 'none';
+            const canAccessReviews = document.getElementById('nav-item-reviews')?.style.display !== 'none';
+            let actionBtnHtml = '';
+            if (notif.type === 'design_approved' && canAccessUpload) {
+                actionBtnHtml = `<button type="button" class="btn-float btn-primary" style="padding: 0.3rem 0.75rem; font-size: 0.76rem;" onclick="goToUploadFromNotification(${Number(notif.id)}); this.closest('[id^=notif-popup-]').remove();">Ir a Subir</button>`;
+            } else if (notif.type === 'design_ready' && canAccessReviews) {
+                actionBtnHtml = `<button type="button" class="btn-float btn-primary" style="padding: 0.3rem 0.75rem; font-size: 0.76rem;" onclick="goToReviewsFromNotification(${Number(notif.id)}); this.closest('[id^=notif-popup-]').remove();">Ir a Revisiones</button>`;
+            }
+
             const card = document.createElement('div');
             card.id = `notif-popup-${notif.id}`;
             card.className = 'glass-panel';
@@ -18769,7 +18778,7 @@
                             <span class="material-symbols-rounded" style="font-size: 1.15rem;">notifications_active</span>
                         </span>
                         <div>
-                            <div style="font-weight: 800; font-size: 0.88rem; color: var(--text-main);">${escapeHtml(notif.title || 'Diseño aprobado')}</div>
+                            <div style="font-weight: 800; font-size: 0.88rem; color: var(--text-main);">${escapeHtml(notif.title || 'Notificación')}</div>
                             ${notif.brand_name ? `<div style="font-size: 0.72rem; font-weight: 700; color: var(--neon-red);">${escapeHtml(notif.brand_name)}</div>` : ''}
                         </div>
                     </div>
@@ -18780,7 +18789,7 @@
                 <p style="margin: 0; font-size: 0.82rem; color: var(--text-main); line-height: 1.4;">${escapeHtml(notif.message || '')}</p>
                 <div style="display: flex; justify-content: flex-end; gap: 6px; margin-top: 2px;">
                     <button type="button" class="btn-float btn-secondary" style="padding: 0.3rem 0.65rem; font-size: 0.76rem;" onclick="markNotificationRead(${Number(notif.id)}); this.closest('[id^=notif-popup-]').remove();">Entendido</button>
-                    ${canAccessUpload ? `<button type="button" class="btn-float btn-primary" style="padding: 0.3rem 0.75rem; font-size: 0.76rem;" onclick="goToUploadFromNotification(${Number(notif.id)}); this.closest('[id^=notif-popup-]').remove();">Ir a Subir</button>` : ''}
+                    ${actionBtnHtml}
                 </div>
             `;
 
@@ -18800,8 +18809,6 @@
                 const list = Array.isArray(data.notifications) ? data.notifications : [];
                 const unreadCount = parseInt(data.unread_count || 0, 10);
 
-                const activeUser = getActiveSessionUser();
-                const isDesignerSession = activeUser && (activeUser.role || '').toLowerCase() === 'designer';
                 const poppedIds = getPoppedNotifIdsForUser(activeSessionUserId);
 
                 const unreadNotifs = list.filter(n => Number(n.is_read) === 0);
@@ -18810,16 +18817,12 @@
                 unreadNotifs.forEach(n => {
                     const nid = Number(n.id);
                     const isNewDuringPoll = !silent && !lastKnownUnreadNotifIds.has(nid);
-                    const isUnpoppedForDesigner = isDesignerSession && !poppedIds.has(nid);
+                    const isUnpopped = !poppedIds.has(nid);
 
-                    if (isNewDuringPoll || isUnpoppedForDesigner) {
+                    if (isNewDuringPoll || isUnpopped) {
                         markNotifIdPopped(activeSessionUserId, nid);
-                        if (isDesignerSession) {
-                            showDesignerNotificationPopup(n);
-                            shouldPlayChime = true;
-                        } else if (isNewDuringPoll) {
-                            showToast(`🔔 ${n.title}: ${n.message}`, 'info');
-                        }
+                        showDesignerNotificationPopup(n);
+                        shouldPlayChime = true;
                     }
                 });
 
@@ -18878,13 +18881,17 @@
             }
 
             const canAccessUpload = document.getElementById('nav-item-upload')?.style.display !== 'none';
+            const canAccessReviews = document.getElementById('nav-item-reviews')?.style.display !== 'none';
 
             container.innerHTML = userNotifications.map(n => {
                 const isUnread = Number(n.is_read) === 0;
                 const dateStr = n.created_at ? String(n.created_at).replace('T', ' ').slice(0, 16) : '';
-                const goUploadBtn = (n.type === 'design_approved' && canAccessUpload)
-                    ? `<button type="button" class="btn-float btn-primary" style="padding: 0.28rem 0.65rem; font-size: 0.76rem;" onclick="goToUploadFromNotification(${Number(n.id)})">Ir a Subir</button>`
-                    : '';
+                let goActionBtn = '';
+                if (n.type === 'design_approved' && canAccessUpload) {
+                    goActionBtn = `<button type="button" class="btn-float btn-primary" style="padding: 0.28rem 0.65rem; font-size: 0.76rem;" onclick="goToUploadFromNotification(${Number(n.id)})">Ir a Subir</button>`;
+                } else if (n.type === 'design_ready' && canAccessReviews) {
+                    goActionBtn = `<button type="button" class="btn-float btn-primary" style="padding: 0.28rem 0.65rem; font-size: 0.76rem;" onclick="goToReviewsFromNotification(${Number(n.id)})">Ir a Revisiones</button>`;
+                }
 
                 return `
                     <div style="padding: 0.85rem 1rem; border-radius: 12px; border: 1px solid ${isUnread ? 'rgba(220,38,38,0.4)' : 'var(--card-border)'}; background: ${isUnread ? 'rgba(220,38,38,0.06)' : 'rgba(150,150,150,0.04)'}; display: flex; flex-direction: column; gap: 6px;">
@@ -18897,7 +18904,7 @@
                         </div>
                         <p style="font-size: 0.83rem; color: var(--text-main); margin: 0; line-height: 1.4;">${escapeHtml(n.message || '')}</p>
                         <div style="display: flex; justify-content: flex-end; gap: 6px; margin-top: 2px;">
-                            ${goUploadBtn}
+                            ${goActionBtn}
                             ${isUnread ? `<button type="button" class="btn-float btn-secondary" style="padding: 0.28rem 0.65rem; font-size: 0.76rem;" onclick="markNotificationRead(${Number(n.id)})">Marcar leída</button>` : ''}
                         </div>
                     </div>
@@ -18934,6 +18941,15 @@
             const navEl = document.getElementById('nav-item-upload');
             if (navEl && navEl.style.display !== 'none') {
                 switchView('upload', navEl);
+            }
+        }
+
+        function goToReviewsFromNotification(notifId) {
+            markNotificationRead(notifId);
+            closeNotificationsModal();
+            const navEl = document.getElementById('nav-item-reviews');
+            if (navEl && navEl.style.display !== 'none') {
+                switchView('reviews', navEl);
             }
         }
 
