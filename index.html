@@ -1739,6 +1739,86 @@
             border-bottom-left-radius: 16px;
         }
 
+        /* Estilo Widget Bento para Métricas de Time Line (Modo Claro y Oscuro) */
+        .tl-metric-widget {
+            background: var(--widget-bg-light, radial-gradient(circle at 85% 85%, rgba(244, 63, 94, 0.14), #ffffff 72%)) !important;
+            border: 1px solid var(--widget-border-light, rgba(244, 63, 94, 0.24)) !important;
+            border-radius: 20px !important;
+            padding: 1rem 1.15rem !important;
+            color: var(--text-main) !important;
+            box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06), inset 0 1px 0 rgba(255, 255, 255, 0.9) !important;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            gap: 0.65rem;
+            text-align: left !important;
+            transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease, background 0.35s ease;
+        }
+
+        [data-theme="dark"] .tl-metric-widget {
+            background: var(--widget-bg, radial-gradient(circle at 85% 85%, rgba(244, 63, 94, 0.34), rgba(18, 12, 16, 0.97) 68%)) !important;
+            border: 1px solid var(--widget-border, rgba(255, 255, 255, 0.10)) !important;
+            color: #f8fafc !important;
+            box-shadow: 0 10px 26px rgba(0, 0, 0, 0.24), inset 0 1px 0 rgba(255, 255, 255, 0.08) !important;
+        }
+
+        .tl-metric-widget:hover {
+            transform: translateY(-2px);
+            border-color: var(--widget-accent, #f43f5e) !important;
+            box-shadow: 0 14px 30px rgba(15, 23, 42, 0.10), 0 0 18px var(--widget-glow, rgba(244, 63, 94, 0.20)) !important;
+        }
+
+        [data-theme="dark"] .tl-metric-widget:hover {
+            box-shadow: 0 14px 30px rgba(0, 0, 0, 0.34), 0 0 20px var(--widget-glow, rgba(244, 63, 94, 0.28)) !important;
+        }
+
+        .tl-metric-widget-top {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.72rem;
+            text-transform: uppercase;
+            font-weight: 800;
+            letter-spacing: 0.04em;
+            color: var(--text-muted);
+        }
+
+        [data-theme="dark"] .tl-metric-widget-top {
+            color: rgba(248, 250, 252, 0.85);
+        }
+
+        .tl-metric-widget-num {
+            font-size: 2rem;
+            font-weight: 800;
+            line-height: 1;
+            color: var(--text-main);
+            letter-spacing: -0.02em;
+        }
+
+        [data-theme="dark"] .tl-metric-widget-num {
+            color: #ffffff;
+        }
+
+        .tl-metric-widget-bar {
+            width: 100%;
+            height: 6px;
+            border-radius: 999px;
+            background: rgba(15, 23, 42, 0.09);
+            overflow: hidden;
+        }
+
+        [data-theme="dark"] .tl-metric-widget-bar {
+            background: rgba(255, 255, 255, 0.12);
+        }
+
+        .tl-metric-widget-bar-fill {
+            height: 100%;
+            border-radius: 999px;
+            background: var(--widget-accent, #f43f5e);
+            box-shadow: 0 0 10px var(--widget-glow, rgba(244, 63, 94, 0.45));
+            transition: width 0.35s ease;
+        }
+
         @keyframes pulseUrgent {
 
             0%,
@@ -4912,7 +4992,7 @@
                             <h2 style="font-size: 1.05rem; margin: 0; line-height: 1.15;">Kinetica</h2>
                             <p
                                 style="font-size: 0.66rem; color: var(--text-muted); text-transform: uppercase; font-weight: 700; margin: 2px 0 0 0;">
-                                Workspace V.1.5.10</p>
+                                Workspace V.1.5.50</p>
                         </div>
                     </div>
                     <div class="has-tooltip" style="flex-shrink: 0;">
@@ -5105,51 +5185,57 @@
                     </div>
                 </div>
 
-                <!-- Métricas Clave de Producción para Diseñador -->
+                <!-- Métricas Clave de Producción para Diseñador (Estilo Widgets Bento) -->
                 <div class="timeline-metrics-grid"
-                    style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1rem; margin-bottom: 1.5rem;">
-                    <div class="glass-panel"
-                        style="padding: 1.1rem; text-align: center; border-bottom: 3px solid var(--neon-red);">
-                        <div style="font-size: 1.85rem; font-weight: 800; color: #dc2626;" id="tl-stat-total">0</div>
-                        <div
-                            style="font-size: 0.72rem; text-transform: uppercase; color: var(--text-muted); font-weight: 700; margin-top: 2px;">
-                            <span class="material-symbols-rounded">border_all</span> Total Piezas
+                    style="display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 1rem; margin-bottom: 1.5rem;">
+                    <div class="glass-panel tl-metric-widget"
+                        style="--widget-accent: #f43f5e; --widget-border: rgba(244, 63, 94, 0.34); --widget-border-light: rgba(244, 63, 94, 0.25); --widget-glow: rgba(244, 63, 94, 0.30); --widget-bg: radial-gradient(circle at 85% 85%, rgba(225, 29, 72, 0.36), rgba(25, 11, 16, 0.97) 68%); --widget-bg-light: radial-gradient(circle at 85% 85%, rgba(244, 63, 94, 0.16), #ffffff 72%);">
+                        <div class="tl-metric-widget-top">
+                            <span class="material-symbols-rounded" style="font-size: 1.05rem; color: #f43f5e;">border_all</span>
+                            <span>Total Piezas</span>
                         </div>
+                        <div class="tl-metric-widget-num" id="tl-stat-total">0</div>
+                        <div class="tl-metric-widget-bar"><div class="tl-metric-widget-bar-fill" id="tl-bar-total" style="width: 100%;"></div></div>
                     </div>
-                    <div class="glass-panel"
-                        style="padding: 1.1rem; text-align: center; border-bottom: 3px solid #ef4444;">
-                        <div style="font-size: 1.85rem; font-weight: 800; color: #ef4444;" id="tl-stat-pending">0</div>
-                        <div
-                            style="font-size: 0.72rem; text-transform: uppercase; color: var(--text-muted); font-weight: 700; margin-top: 2px;">
-                            <span class="material-symbols-rounded">pending</span> Pendientes
+
+                    <div class="glass-panel tl-metric-widget"
+                        style="--widget-accent: #f97316; --widget-border: rgba(249, 115, 22, 0.34); --widget-border-light: rgba(249, 115, 22, 0.25); --widget-glow: rgba(249, 115, 22, 0.30); --widget-bg: radial-gradient(circle at 85% 85%, rgba(234, 88, 12, 0.38), rgba(24, 14, 10, 0.97) 68%); --widget-bg-light: radial-gradient(circle at 85% 85%, rgba(249, 115, 22, 0.16), #ffffff 72%);">
+                        <div class="tl-metric-widget-top">
+                            <span class="material-symbols-rounded" style="font-size: 1.05rem; color: #f97316;">pending</span>
+                            <span>Pendientes</span>
                         </div>
+                        <div class="tl-metric-widget-num" id="tl-stat-pending">0</div>
+                        <div class="tl-metric-widget-bar"><div class="tl-metric-widget-bar-fill" id="tl-bar-pending" style="width: 0%;"></div></div>
                     </div>
-                    <div class="glass-panel"
-                        style="padding: 1.1rem; text-align: center; border-bottom: 3px solid #f59e0b;">
-                        <div style="font-size: 1.85rem; font-weight: 800; color: #f59e0b;" id="tl-stat-in-design">0
+
+                    <div class="glass-panel tl-metric-widget"
+                        style="--widget-accent: #3b82f6; --widget-border: rgba(59, 130, 246, 0.34); --widget-border-light: rgba(59, 130, 246, 0.25); --widget-glow: rgba(59, 130, 246, 0.30); --widget-bg: radial-gradient(circle at 85% 85%, rgba(37, 99, 235, 0.38), rgba(10, 16, 30, 0.97) 68%); --widget-bg-light: radial-gradient(circle at 85% 85%, rgba(59, 130, 246, 0.16), #ffffff 72%);">
+                        <div class="tl-metric-widget-top">
+                            <span class="material-symbols-rounded" style="font-size: 1.05rem; color: #3b82f6;">gesture</span>
+                            <span>En Diseño</span>
                         </div>
-                        <div
-                            style="font-size: 0.72rem; text-transform: uppercase; color: var(--text-muted); font-weight: 700; margin-top: 2px;">
-                            <span class="material-symbols-rounded">gesture</span> En Diseño
-                        </div>
+                        <div class="tl-metric-widget-num" id="tl-stat-in-design">0</div>
+                        <div class="tl-metric-widget-bar"><div class="tl-metric-widget-bar-fill" id="tl-bar-in-design" style="width: 0%;"></div></div>
                     </div>
-                    <div class="glass-panel"
-                        style="padding: 1.1rem; text-align: center; border-bottom: 3px solid #3b82f6;">
-                        <div style="font-size: 1.85rem; font-weight: 800; color: #3b82f6;" id="tl-stat-in-review">0
+
+                    <div class="glass-panel tl-metric-widget"
+                        style="--widget-accent: #8b5cf6; --widget-border: rgba(139, 92, 246, 0.34); --widget-border-light: rgba(139, 92, 246, 0.25); --widget-glow: rgba(139, 92, 246, 0.30); --widget-bg: radial-gradient(circle at 85% 85%, rgba(139, 92, 246, 0.38), rgba(16, 13, 28, 0.97) 68%); --widget-bg-light: radial-gradient(circle at 85% 85%, rgba(139, 92, 246, 0.16), #ffffff 72%);">
+                        <div class="tl-metric-widget-top">
+                            <span class="material-symbols-rounded" style="font-size: 1.05rem; color: #8b5cf6;">recommend</span>
+                            <span>En Revisión</span>
                         </div>
-                        <div
-                            style="font-size: 0.72rem; text-transform: uppercase; color: var(--text-muted); font-weight: 700; margin-top: 2px;">
-                            <span class="material-symbols-rounded">recommend</span> En Revisión
-                        </div>
+                        <div class="tl-metric-widget-num" id="tl-stat-in-review">0</div>
+                        <div class="tl-metric-widget-bar"><div class="tl-metric-widget-bar-fill" id="tl-bar-in-review" style="width: 0%;"></div></div>
                     </div>
-                    <div class="glass-panel"
-                        style="padding: 1.1rem; text-align: center; border-bottom: 3px solid #10b981;">
-                        <div style="font-size: 1.85rem; font-weight: 800; color: #10b981;" id="tl-stat-completed">0
+
+                    <div class="glass-panel tl-metric-widget"
+                        style="--widget-accent: #10b981; --widget-border: rgba(16, 185, 129, 0.34); --widget-border-light: rgba(16, 185, 129, 0.25); --widget-glow: rgba(16, 185, 129, 0.30); --widget-bg: radial-gradient(circle at 85% 85%, rgba(16, 185, 129, 0.34), rgba(10, 22, 18, 0.97) 68%); --widget-bg-light: radial-gradient(circle at 85% 85%, rgba(16, 185, 129, 0.16), #ffffff 72%);">
+                        <div class="tl-metric-widget-top">
+                            <span class="material-symbols-rounded" style="font-size: 1.05rem; color: #10b981;">check_circle</span>
+                            <span>Listas / Aprobadas</span>
                         </div>
-                        <div
-                            style="font-size: 0.72rem; text-transform: uppercase; color: var(--text-muted); font-weight: 700; margin-top: 2px;">
-                            <span class="material-symbols-rounded">check_circle</span> Listas / Aprobadas
-                        </div>
+                        <div class="tl-metric-widget-num" id="tl-stat-completed">0</div>
+                        <div class="tl-metric-widget-bar"><div class="tl-metric-widget-bar-fill" id="tl-bar-completed" style="width: 0%;"></div></div>
                     </div>
                     <!--<div class="glass-panel"
                         style="padding: 1.1rem; text-align: center; border-bottom: 3px solid #ec4899;">
@@ -5250,54 +5336,58 @@
                     </div>
                 </div>
 
-                <!-- Resumen de Métricas de Revisión -->
+                <!-- Resumen de Métricas de Revisión (Estilo Widgets Bento) -->
                 <div
-                    style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1rem; margin-bottom: 1.25rem;">
-                    <div class="glass-panel"
-                        style="padding: 1rem 1.25rem; border-left: 4px solid var(--neon-red); cursor: pointer; transition: transform 0.2s;"
+                    style="display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 1rem; margin-bottom: 1.25rem;">
+                    <div class="glass-panel tl-metric-widget"
+                        style="cursor: pointer; --widget-accent: #f43f5e; --widget-border: rgba(244, 63, 94, 0.34); --widget-border-light: rgba(244, 63, 94, 0.25); --widget-glow: rgba(244, 63, 94, 0.30); --widget-bg: radial-gradient(circle at 85% 85%, rgba(225, 29, 72, 0.36), rgba(25, 11, 16, 0.97) 68%); --widget-bg-light: radial-gradient(circle at 85% 85%, rgba(244, 63, 94, 0.16), #ffffff 72%);"
                         onclick="setReviewsViewMode('active')" title="Ver Revisiones Activas">
-                        <div class="text-muted"
-                            style="font-size: 0.75rem; text-transform: uppercase; font-weight: 700; margin-bottom: 4px;">
-                            Total Piezas</div>
-                        <div style="font-size: 1.6rem; font-weight: 800; color: var(--text-main);" id="rev-stat-total">0
+                        <div class="tl-metric-widget-top">
+                            <span class="material-symbols-rounded" style="font-size: 1.05rem; color: #f43f5e;">border_all</span>
+                            <span>Total Piezas</span>
                         </div>
-                        <div style="font-size: 0.72rem; color: var(--text-muted); margin-top: 2px;">En el periodo
-                            seleccionado</div>
+                        <div class="tl-metric-widget-num" id="rev-stat-total">0</div>
+                        <div class="text-muted" style="font-size: 0.72rem;">En el periodo seleccionado</div>
+                        <div class="tl-metric-widget-bar"><div class="tl-metric-widget-bar-fill" id="rev-bar-total" style="width: 100%;"></div></div>
                     </div>
-                    <div class="glass-panel"
-                        style="padding: 1rem 1.25rem; border-left: 4px solid #38bdf8; cursor: pointer; transition: transform 0.2s;"
+
+                    <div class="glass-panel tl-metric-widget"
+                        style="cursor: pointer; --widget-accent: #38bdf8; --widget-border: rgba(56, 189, 248, 0.34); --widget-border-light: rgba(56, 189, 248, 0.25); --widget-glow: rgba(56, 189, 248, 0.30); --widget-bg: radial-gradient(circle at 85% 85%, rgba(14, 165, 233, 0.36), rgba(10, 18, 28, 0.97) 68%); --widget-bg-light: radial-gradient(circle at 85% 85%, rgba(56, 189, 248, 0.16), #ffffff 72%);"
                         onclick="setReviewsViewMode('active')" title="Ver Piezas Listas para Revisión">
-                        <div class="text-muted"
-                            style="font-size: 0.75rem; text-transform: uppercase; font-weight: 700; margin-bottom: 4px;">
-                            Listas para Revisión</div>
-                        <div style="font-size: 1.6rem; font-weight: 800; color: #38bdf8;" id="rev-stat-ready">0</div>
-                        <div style="font-size: 0.72rem; color: var(--text-muted); margin-top: 2px;">Esperando auditoría
+                        <div class="tl-metric-widget-top">
+                            <span class="material-symbols-rounded" style="font-size: 1.05rem; color: #38bdf8;">fact_check</span>
+                            <span>Listas para Revisión</span>
                         </div>
+                        <div class="tl-metric-widget-num" id="rev-stat-ready">0</div>
+                        <div class="text-muted" style="font-size: 0.72rem;">Esperando auditoría</div>
+                        <div class="tl-metric-widget-bar"><div class="tl-metric-widget-bar-fill" id="rev-bar-ready" style="width: 0%;"></div></div>
                     </div>
-                    <div class="glass-panel"
-                        style="padding: 1rem 1.25rem; border-left: 4px solid #f59e0b; cursor: pointer; transition: transform 0.2s;"
+
+                    <div class="glass-panel tl-metric-widget"
+                        style="cursor: pointer; --widget-accent: #f97316; --widget-border: rgba(249, 115, 22, 0.34); --widget-border-light: rgba(249, 115, 22, 0.25); --widget-glow: rgba(249, 115, 22, 0.30); --widget-bg: radial-gradient(circle at 85% 85%, rgba(234, 88, 12, 0.38), rgba(24, 14, 10, 0.97) 68%); --widget-bg-light: radial-gradient(circle at 85% 85%, rgba(249, 115, 22, 0.16), #ffffff 72%);"
                         onclick="setReviewsViewMode('active')" title="Ver Piezas Con Ajustes">
-                        <div class="text-muted"
-                            style="font-size: 0.75rem; text-transform: uppercase; font-weight: 700; margin-bottom: 4px;">
-                            Con Ajustes en Proceso</div>
-                        <div style="font-size: 1.6rem; font-weight: 800; color: #f59e0b;" id="rev-stat-adjustments">0
+                        <div class="tl-metric-widget-top">
+                            <span class="material-symbols-rounded" style="font-size: 1.05rem; color: #f97316;">tune</span>
+                            <span>Con Ajustes en Proceso</span>
                         </div>
-                        <div style="font-size: 0.72rem; color: var(--text-muted); margin-top: 2px;">En corrección por
-                            diseñador</div>
+                        <div class="tl-metric-widget-num" id="rev-stat-adjustments">0</div>
+                        <div class="text-muted" style="font-size: 0.72rem;">En corrección por diseñador</div>
+                        <div class="tl-metric-widget-bar"><div class="tl-metric-widget-bar-fill" id="rev-bar-adjustments" style="width: 0%;"></div></div>
                     </div>
-                    <div class="glass-panel"
-                        style="padding: 1rem 1.25rem; border-left: 4px solid #10b981; cursor: pointer; transition: transform 0.2s;"
+
+                    <div class="glass-panel tl-metric-widget"
+                        style="cursor: pointer; --widget-accent: #10b981; --widget-border: rgba(16, 185, 129, 0.34); --widget-border-light: rgba(16, 185, 129, 0.25); --widget-glow: rgba(16, 185, 129, 0.30); --widget-bg: radial-gradient(circle at 85% 85%, rgba(16, 185, 129, 0.34), rgba(10, 22, 18, 0.97) 68%); --widget-bg-light: radial-gradient(circle at 85% 85%, rgba(16, 185, 129, 0.16), #ffffff 72%);"
                         onclick="setReviewsViewMode('approved')" title="Clic para ver Piezas Aprobadas">
-                        <div style="display: flex; justify-content: space-between; align-items: center;">
-                            <div class="text-muted"
-                                style="font-size: 0.75rem; text-transform: uppercase; font-weight: 700; margin-bottom: 4px;">
-                                Aprobadas</div>
-                            <span style="font-size: 0.7rem; color: #10b981; font-weight: 700;">Ver lista <span
-                                    class="material-symbols-rounded">star</span></span>
+                        <div style="display: flex; justify-content: space-between; align-items: center; gap: 6px;">
+                            <div class="tl-metric-widget-top">
+                                <span class="material-symbols-rounded" style="font-size: 1.05rem; color: #10b981;">check_circle</span>
+                                <span>Aprobadas</span>
+                            </div>
+                            <span style="font-size: 0.7rem; color: #10b981; font-weight: 700; display: inline-flex; align-items: center; gap: 2px;">Ver lista <span class="material-symbols-rounded" style="font-size: 0.85rem;">star</span></span>
                         </div>
-                        <div style="font-size: 1.6rem; font-weight: 800; color: #10b981;" id="rev-stat-approved">0</div>
-                        <div style="font-size: 0.72rem; color: var(--text-muted); margin-top: 2px;">Retiradas de Línea
-                            de Tiempo (Clic para ver)</div>
+                        <div class="tl-metric-widget-num" id="rev-stat-approved">0</div>
+                        <div class="text-muted" style="font-size: 0.72rem;">Retiradas de Línea de Tiempo</div>
+                        <div class="tl-metric-widget-bar"><div class="tl-metric-widget-bar-fill" id="rev-bar-approved" style="width: 0%;"></div></div>
                     </div>
                 </div>
 
@@ -9744,6 +9834,18 @@
             if (elCompleted) elCompleted.innerText = statCompleted;
             if (elUrgent) elUrgent.innerText = statUrgent;
 
+            const pctOfTotal = (n) => statTotal > 0 ? Math.min(100, Math.round((n / statTotal) * 100)) : 0;
+            const barTotal = document.getElementById('tl-bar-total');
+            const barPending = document.getElementById('tl-bar-pending');
+            const barInDesign = document.getElementById('tl-bar-in-design');
+            const barInReview = document.getElementById('tl-bar-in-review');
+            const barCompleted = document.getElementById('tl-bar-completed');
+            if (barTotal) barTotal.style.width = statTotal > 0 ? '100%' : '0%';
+            if (barPending) barPending.style.width = pctOfTotal(statPending) + '%';
+            if (barInDesign) barInDesign.style.width = pctOfTotal(statInDesign) + '%';
+            if (barInReview) barInReview.style.width = pctOfTotal(statInReview) + '%';
+            if (barCompleted) barCompleted.style.width = pctOfTotal(statCompleted) + '%';
+
             // Renderizado del stream
             if (filtered.length === 0) {
                 stream.innerHTML = `
@@ -10246,6 +10348,16 @@
             if (elApproved) elApproved.innerText = statApproved;
             if (elBadgeActive) elBadgeActive.innerText = statActive;
             if (elBadgeApproved) elBadgeApproved.innerText = statApproved;
+
+            const revPct = (n) => statTotal > 0 ? Math.min(100, Math.round((n / statTotal) * 100)) : 0;
+            const rBarTotal = document.getElementById('rev-bar-total');
+            const rBarReady = document.getElementById('rev-bar-ready');
+            const rBarAdj = document.getElementById('rev-bar-adjustments');
+            const rBarApp = document.getElementById('rev-bar-approved');
+            if (rBarTotal) rBarTotal.style.width = statTotal > 0 ? '100%' : '0%';
+            if (rBarReady) rBarReady.style.width = revPct(statReady) + '%';
+            if (rBarAdj) rBarAdj.style.width = revPct(statAdjustments) + '%';
+            if (rBarApp) rBarApp.style.width = revPct(statApproved) + '%';
 
             // Renderizar banner de modo activo
             const modeBanner = document.getElementById('rev-mode-banner');
