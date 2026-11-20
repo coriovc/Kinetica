@@ -5117,7 +5117,7 @@
                             <h2 style="font-size: 1.05rem; margin: 0; line-height: 1.15;">Kinetica</h2>
                             <p
                                 style="font-size: 0.66rem; color: var(--text-muted); text-transform: uppercase; font-weight: 700; margin: 2px 0 0 0;">
-                                Workspace V.1.5.70</p>
+                                Workspace V.1.5.80</p>
                         </div>
                     </div>
                     <div class="has-tooltip" style="flex-shrink: 0;">
@@ -5772,8 +5772,9 @@
                         <h1>Reportes de Campaña</h1>
                         <p class="text-muted">Métricas consolidadas de la base de datos MySQL por mes y acumulado.</p>
                     </div>
-                    <button class="btn-float btn-secondary" onclick="loadDashboardData(true)"><span
-                            class="material-symbols-rounded">sync</span> Sincronizar Datos</button>
+                    <button type="button" class="btn-float btn-secondary btn-sync-unified" onclick="loadDashboardData(true)" title="Actualizar">
+                        <span class="material-symbols-rounded">sync</span> Actualizar
+                    </button>
                 </div>
                 <div class="glass-panel">
                     <h3 style="margin-bottom: 1rem;">Resumen de Campañas en Base de Datos</h3>
@@ -6055,7 +6056,7 @@
                                     <p class="text-muted" style="font-size: 0.82rem; margin: 0;">Revisa la información de quienes solicitan acceso, complétala (cédula, teléfono, marcas, rol y privilegios) y aprueba su ingreso.</p>
                                 </div>
                             </div>
-                            <button type="button" class="btn-float btn-secondary" onclick="loadAccessRequests()">
+                            <button type="button" class="btn-float btn-secondary btn-sync-unified" onclick="loadAccessRequests()" title="Actualizar">
                                 <span class="material-symbols-rounded">sync</span> Actualizar
                             </button>
                         </div>
@@ -6175,8 +6176,9 @@
                                 </div>
                                 <div style="display: flex; align-items: center; gap: 0.65rem; flex-wrap: wrap;">
                                     <span id="cfg-logs-count-label" class="text-muted" style="font-size: 0.78rem; font-weight: 700;"></span>
-                                    <button class="btn-float btn-secondary" onclick="loadActivityLogs()"><span
-                                            class="material-symbols-rounded">sync</span> Refrescar Registro</button>
+                                    <button type="button" class="btn-float btn-secondary btn-sync-unified" onclick="loadActivityLogs()" title="Actualizar">
+                                        <span class="material-symbols-rounded">sync</span> Actualizar
+                                    </button>
                                 </div>
                             </div>
                             <div style="display: flex; flex-wrap: wrap; gap: 0.65rem; align-items: center; margin-bottom: 1rem; padding: 0.75rem; border-radius: 12px; background: rgba(150, 150, 150, 0.05); border: 1px solid var(--card-border);">
@@ -6252,8 +6254,8 @@
                                     <h3>Auditoría de Consentimiento Legal (Fecha, Hora, IP y Checkboxes)</h3>
                                     <p class="text-muted">Trazabilidad inmutable de aceptaciones independientes en formularios.</p>
                                 </div>
-                                <button type="button" class="btn-float btn-secondary" onclick="loadLegalAuditData()">
-                                    <span class="material-symbols-rounded">sync</span> Actualizar Auditoría
+                                <button type="button" class="btn-float btn-secondary btn-sync-unified" onclick="loadLegalAuditData()" title="Actualizar">
+                                    <span class="material-symbols-rounded">sync</span> Actualizar
                                 </button>
                             </div>
                             <div class="table-container" style="max-height: 340px; overflow-y: auto;">
@@ -6315,8 +6317,8 @@
                                     </div>
                                 </div>
                                 <div style="display: flex; align-items: center; gap: 0.65rem; flex-wrap: wrap;">
-                                    <button type="button" class="btn-float btn-secondary" onclick="renderSettingsTrashList()" title="Actualizar lista">
-                                        <span class="material-symbols-rounded">sync</span> Refrescar
+                                    <button type="button" class="btn-float btn-secondary btn-sync-unified" onclick="renderSettingsTrashList()" title="Actualizar">
+                                        <span class="material-symbols-rounded">sync</span> Actualizar
                                     </button>
                                     <button type="button" class="btn-float" id="btn-empty-trash-5m" onclick="emptyTrashMedia('older_5_months')"
                                         style="background: rgba(245, 158, 11, 0.14); color: #f59e0b; border: 1px solid rgba(245, 158, 11, 0.4);">
