@@ -4407,7 +4407,7 @@
                         <h2 style="font-size: 1.25rem;">Kinetica</h2>
                         <p
                             style="font-size: 0.7rem; color: var(--text-muted); text-transform: uppercase; font-weight: 600;">
-                            Workspace V.1.22.21</p>
+                            Workspace V.1.22.31</p>
                     </div>
                 </div>
                 <!-- Botón contraer en la barra lateral sólo icono -->
@@ -5012,13 +5012,50 @@
                             <p class="text-muted">Explora y gestiona las publicaciones de cada marca para el mes en
                                 curso.</p>
                         </div>
-                        <button class="btn-float btn-primary" onclick="openModal()">
-                            <span style="font-size: 1.1rem;">+</span> Nueva Pieza
-                        </button>
+                        <div style="display: flex; gap: 0.65rem; align-items: center; flex-wrap: wrap;">
+                            <button type="button" class="btn-float btn-secondary" onclick="openCreatedArtsSubview('brands')" style="display: inline-flex; align-items: center; gap: 6px;">
+                                <span class="material-symbols-rounded" style="font-size: 1.05rem; color: var(--neon-red);">photo_library</span>
+                                Ver Artes Creados
+                            </button>
+                            <button class="btn-float btn-primary" onclick="openModal()">
+                                <span style="font-size: 1.1rem;">+</span> Nueva Pieza
+                            </button>
+                        </div>
                     </div>
 
                     <div class="brands-grid" id="brand-cards-grid">
                         <!-- Tarjetas de marcas inyectadas -->
+                    </div>
+                </div>
+
+                <!-- Subsección Dinámica: Ver Artes Creados -->
+                <div id="brand-created-arts-subview" style="display: none;">
+                    <div style="margin-bottom: 1.25rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+                        <button type="button" class="btn-float btn-secondary" onclick="closeCreatedArtsSubview()" style="padding: 0.5rem 1.25rem;">
+                            <span id="created-arts-back-label">← Volver a Marcas</span>
+                        </button>
+                        <div style="display: flex; align-items: center; gap: 0.65rem; flex-wrap: wrap;">
+                            <select id="created-arts-brand-filter" class="form-control" onchange="renderCreatedArtsCard()" style="width: auto; min-width: 185px; font-size: 0.84rem; font-weight: 700;">
+                                <option value="TODAS">Todas las Marcas</option>
+                            </select>
+                            <span id="created-arts-count-badge"
+                                style="background: rgba(220,38,38,0.15); color: var(--neon-red); font-size: 0.78rem; font-weight: 700; padding: 6px 12px; border-radius: 20px; border: 1px solid rgba(220,38,38,0.3);">
+                                0 artes
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="glass-panel" style="border-left: 4px solid var(--neon-red);">
+                        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 1.1rem;">
+                            <span class="material-symbols-rounded" style="font-size: 1.8rem; color: var(--neon-red);">photo_library</span>
+                            <div>
+                                <h2 style="margin: 0; font-size: 1.25rem; font-weight: 800; color: var(--text-main);">Artes Creados</h2>
+                                <p class="text-muted" style="margin: 2px 0 0 0; font-size: 0.8rem;">Vista dinámica de todos los artes subidos con acceso directo a la grilla o eliminación.</p>
+                            </div>
+                        </div>
+                        <div id="created-arts-gallery" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(290px, 1fr)); gap: 1rem;">
+                            <!-- Inyectado dinámicamente por renderCreatedArtsCard() -->
+                        </div>
                     </div>
                 </div>
 
@@ -5029,7 +5066,13 @@
                             style="padding: 0.5rem 1.25rem;">
                             ← Volver a Marcas
                         </button>
-                        <button class="btn-float btn-primary" onclick="openModal()">+ Agregar Pieza al Mes</button>
+                        <div style="display: flex; gap: 0.65rem; align-items: center; flex-wrap: wrap;">
+                            <button type="button" class="btn-float btn-secondary" onclick="openCreatedArtsSubview('detail')" style="display: inline-flex; align-items: center; gap: 6px;">
+                                <span class="material-symbols-rounded" style="font-size: 1.05rem; color: var(--neon-red);">photo_library</span>
+                                Ver Artes Creados
+                            </button>
+                            <button class="btn-float btn-primary" onclick="openModal()">+ Agregar Pieza al Mes</button>
+                        </div>
                     </div>
 
                     <!-- Banner Cabecera de Marca -->
@@ -5051,37 +5094,6 @@
                             <div>Community Manager: <strong id="det-cm" style="color:#fff;">-</strong></div>
                             <div>Diseñador: <strong id="det-designer" style="color:#fff;">-</strong></div>
                             <div>Agencia (revisión): <strong id="det-agency" style="color:#fff;">Kinetica</strong></div>
-                        </div>
-                    </div>
-
-                    <!-- Tarjeta de Ver Artes Creados -->
-                    <div class="glass-panel" id="created-arts-card"
-                        style="margin-bottom: 1.5rem; border-left: 4px solid var(--neon-red);">
-                        <div
-                            style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.8rem; margin-bottom: 1rem;">
-                            <div style="display: flex; align-items: center; gap: 10px;">
-                                <span style="font-size: 1.4rem;"><span
-                                        class="material-symbols-rounded">image</span></span>
-                                <div>
-                                    <h3
-                                        style="margin: 0; font-size: 1.15rem; font-weight: 800; color: var(--text-main);">
-                                        Ver Artes Creados</h3>
-                                    <p style="margin: 2px 0 0 0; font-size: 0.78rem; color: var(--text-muted);">
-                                        Todos los artes subidos ordenados cronológicamente por orden de carga.
-                                    </p>
-                                </div>
-                            </div>
-                            <div style="display: flex; align-items: center; gap: 8px;">
-                                <span id="created-arts-count-badge"
-                                    style="background: rgba(220,38,38,0.15); color: var(--neon-red); font-size: 0.78rem; font-weight: 700; padding: 4px 10px; border-radius: 20px; border: 1px solid rgba(220,38,38,0.3);">
-                                    0 artes
-                                </span>
-                            </div>
-                        </div>
-                        <!-- Galería de Artes Creados -->
-                        <div id="created-arts-gallery"
-                            style="display: flex; gap: 14px; overflow-x: auto; padding-bottom: 10px; scrollbar-width: thin;">
-                            <!-- Inyectado dinámicamente por renderCreatedArtsCard() -->
                         </div>
                     </div>
 
@@ -8579,6 +8591,16 @@
             }
         }
 
+        function linkifyEscapedText(rawText) {
+            const escaped = escapeHtml(rawText || '');
+            return escaped.replace(/(https?:\/\/[^\s<>"']+|www\.[^\s<>"']+)/gi, (url) => {
+                const cleanUrl = url.replace(/[.,;:!?)]+$/, '');
+                const trailing = url.slice(cleanUrl.length);
+                const href = /^https?:\/\//i.test(cleanUrl) ? cleanUrl : `https://${cleanUrl}`;
+                return `<a href="${href}" target="_blank" rel="noopener noreferrer" onclick="event.stopPropagation();" style="color: #3b82f6; text-decoration: underline; font-weight: 700; word-break: break-all;">${cleanUrl}</a>${trailing}`;
+            });
+        }
+
         let currentViewingPieceId = null;
 
         // Modal de Brief y Descripción Gráfica para el Diseñador <span class="material-symbols-rounded">person</span>‍<span class="material-symbols-rounded">palette</span>
@@ -8623,7 +8645,7 @@
             const formatBadgeStyle = formatBadgeColors[piece.format] || 'background: rgba(220,38,38,0.15); color: var(--neon-red); border: 1px solid rgba(220,38,38,0.3);';
 
             const graphicDescText = piece.graphic_desc && piece.graphic_desc.trim() !== ''
-                ? escapeHtml(piece.graphic_desc).replace(/\n/g, '<br>')
+                ? linkifyEscapedText(piece.graphic_desc).replace(/\n/g, '<br>')
                 : '<em style="color:var(--text-muted);">Sin descripción gráfica registrada para esta pieza. Haz clic en "Modificar Esta Pieza" para redactar las especificaciones para el diseñador.</em>';
 
             const copyText = piece.copy && piece.copy.trim() !== ''
@@ -8860,12 +8882,71 @@
             }
 
             document.getElementById('brands-container-view').style.display = 'none';
+            const artsSub = document.getElementById('brand-created-arts-subview');
+            if (artsSub) artsSub.style.display = 'none';
             document.getElementById('brand-detail-view').style.display = 'block';
 
             updateActiveMonthData();
         }
 
+        let createdArtsReturnMode = 'brands';
+
+        function openCreatedArtsSubview(sourceMode = 'brands') {
+            createdArtsReturnMode = sourceMode;
+            const brandsView = document.getElementById('brands-container-view');
+            const detailView = document.getElementById('brand-detail-view');
+            const artsSub = document.getElementById('brand-created-arts-subview');
+            const backLbl = document.getElementById('created-arts-back-label');
+            const filterSel = document.getElementById('created-arts-brand-filter');
+
+            if (brandsView) brandsView.style.display = 'none';
+            if (detailView) detailView.style.display = 'none';
+            if (artsSub) artsSub.style.display = 'block';
+            if (backLbl) {
+                backLbl.textContent = sourceMode === 'detail' ? '← Volver a la Grilla de Marca' : '← Volver a Marcas';
+            }
+
+            if (filterSel) {
+                const allowedKeys = getAllowedBrandKeysForActiveUser();
+                filterSel.innerHTML = '<option value="TODAS">Todas las Marcas</option>' +
+                    allowedKeys.filter(k => brandsMetadata[k] && brandsMetadata[k].status !== 'oculto')
+                        .map(k => `<option value="${escapeHtml(k)}">${escapeHtml(brandsMetadata[k].name || k)}</option>`)
+                        .join('');
+                filterSel.value = (sourceMode === 'detail' && currentBrand && currentBrand !== 'TODAS') ? currentBrand : 'TODAS';
+            }
+
+            renderCreatedArtsCard();
+        }
+
+        function closeCreatedArtsSubview() {
+            const artsSub = document.getElementById('brand-created-arts-subview');
+            if (artsSub) artsSub.style.display = 'none';
+            if (createdArtsReturnMode === 'detail' && currentBrand && currentBrand !== 'TODAS') {
+                document.getElementById('brand-detail-view').style.display = 'block';
+            } else {
+                document.getElementById('brands-container-view').style.display = 'block';
+                renderBrandCards();
+            }
+        }
+
+        function viewArtInBrandGrid(pieceId, brandKey) {
+            const artsSub = document.getElementById('brand-created-arts-subview');
+            if (artsSub) artsSub.style.display = 'none';
+            const targetBrand = brandKey || currentBrand;
+            if (targetBrand && targetBrand !== 'TODAS' && brandsMetadata[targetBrand]) {
+                selectBrandAndOpenDetail(targetBrand);
+            } else {
+                document.getElementById('brands-container-view').style.display = 'none';
+                document.getElementById('brand-detail-view').style.display = 'block';
+            }
+            setTimeout(() => {
+                scrollToPieceInGrid(pieceId);
+            }, 90);
+        }
+
         function backToBrandsList() {
+            const artsSub = document.getElementById('brand-created-arts-subview');
+            if (artsSub) artsSub.style.display = 'none';
             document.getElementById('brand-detail-view').style.display = 'none';
             document.getElementById('brands-container-view').style.display = 'block';
             renderBrandCards();
@@ -9157,7 +9238,7 @@
                 // Descripción gráfica sin espacio en blanco inicial
                 const rawGraphic = (p.graphic_desc || '').trim();
                 const graphicSnippet = rawGraphic !== ''
-                    ? escapeHtml(rawGraphic)
+                    ? linkifyEscapedText(rawGraphic)
                     : '<em style="color:var(--text-muted); font-size:0.85rem;">Sin descripción gráfica registrada. Haz clic en "Modificar" para agregar las especificaciones.</em>';
 
                 const copySnippet = p.copy && p.copy.trim() !== ''
@@ -11871,16 +11952,35 @@
             const badge = document.getElementById('created-arts-count-badge');
             if (!gallery) return;
 
-            // Recolectar piezas con artes de la marca activa
+            const filterSel = document.getElementById('created-arts-brand-filter');
+            const selectedBrandFilter = filterSel ? filterSel.value : ((currentBrand && currentBrand !== 'TODAS') ? currentBrand : 'TODAS');
+
+            // Recolectar piezas con artes según el filtro de marca
             let piecesWithArts = [];
-            const pool = (currentBrand && currentBrand !== 'TODAS')
-                ? (mockDataByBrand[currentBrand] || mockData)
-                : mockData;
+            let pool = [];
+            if (selectedBrandFilter && selectedBrandFilter !== 'TODAS') {
+                pool = mockDataByBrand[selectedBrandFilter] || [];
+            } else {
+                const seenIds = new Set();
+                for (const b in mockDataByBrand) {
+                    (mockDataByBrand[b] || []).forEach(p => {
+                        if (p && !seenIds.has(p.id)) {
+                            seenIds.add(p.id);
+                            pool.push(p);
+                        }
+                    });
+                }
+                (mockData || []).forEach(p => {
+                    if (p && !seenIds.has(p.id)) {
+                        seenIds.add(p.id);
+                        pool.push(p);
+                    }
+                });
+            }
 
             pool.forEach(p => {
                 const mediaList = getPieceMediaList(p);
                 if (mediaList.length > 0) {
-                    // Orden de carga: menor tiempo de subida de sus artes
                     const firstUpload = mediaList.reduce((min, m) => Math.min(min, m.uploaded_at || Infinity), Infinity);
                     piecesWithArts.push({
                         piece: p,
@@ -11890,8 +11990,8 @@
                 }
             });
 
-            // Orden de carga cronológico
-            piecesWithArts.sort((a, b) => a.sortTime - b.sortTime);
+            // Orden de carga cronológico (más reciente primero)
+            piecesWithArts.sort((a, b) => b.sortTime - a.sortTime);
 
             const totalArts = piecesWithArts.reduce((acc, item) => acc + item.mediaList.length, 0);
 
@@ -11980,10 +12080,13 @@
                         </div>
                     </div>
 
-                    <!-- Pie: Botón Ver en Tabla -->
-                    <div class="created-art-piece-footer">
-                        <button type="button" class="btn-float btn-secondary" style="padding: 4px 8px; font-size: 0.72rem; width: 100%; text-align: center; justify-content: center;" onclick="scrollToPieceInGrid(${p.id})">
-                            <span class="material-symbols-rounded">search</span> Ver en Grilla
+                    <!-- Pie: Botón Ver en Grilla y Borrar -->
+                    <div class="created-art-piece-footer" style="display: flex; gap: 6px;">
+                        <button type="button" class="btn-float btn-secondary" style="padding: 5px 10px; font-size: 0.74rem; flex: 1; justify-content: center;" onclick="viewArtInBrandGrid(${p.id}, '${escapeQuote(p.brand_name || '')}')">
+                            <span class="material-symbols-rounded" style="font-size: 0.95rem;">table_rows</span> Ver en Grilla
+                        </button>
+                        <button type="button" class="btn-float btn-secondary" style="padding: 5px 10px; font-size: 0.74rem; color: #ef4444;" onclick="deletePieceMediaItem(${p.id}, 0)" title="Borrar arte">
+                            <span class="material-symbols-rounded" style="font-size: 0.95rem;">delete</span> Borrar
                         </button>
                     </div>
                 </div>
