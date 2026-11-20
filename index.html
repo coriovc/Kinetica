@@ -682,6 +682,56 @@
                         box-shadow 0.45s ease !important;
         }
 
+        /* ==================== SKELETON LOADERS ==================== */
+        @keyframes kineticaShimmer {
+            0% {
+                background-position: 200% 0;
+            }
+            100% {
+                background-position: -200% 0;
+            }
+        }
+
+        .kinetica-skeleton {
+            display: block;
+            border-radius: 8px;
+            background: linear-gradient(90deg, rgba(148, 163, 184, 0.14) 25%, rgba(148, 163, 184, 0.28) 50%, rgba(148, 163, 184, 0.14) 75%);
+            background-size: 200% 100%;
+            animation: kineticaShimmer 1.45s infinite ease-in-out;
+        }
+
+        [data-theme="dark"] .kinetica-skeleton {
+            background: linear-gradient(90deg, rgba(255, 255, 255, 0.05) 25%, rgba(220, 38, 38, 0.14) 50%, rgba(255, 255, 255, 0.05) 75%);
+            background-size: 200% 100%;
+        }
+
+        .view-is-loading .metric-card-top .num,
+        .view-is-loading .compliance-box .num {
+            color: transparent !important;
+            position: relative;
+        }
+
+        .view-is-loading .metric-card-top .num::after,
+        .view-is-loading .compliance-box .num::after {
+            content: '';
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            width: 48px;
+            height: 22px;
+            border-radius: 8px;
+            background: linear-gradient(90deg, rgba(148, 163, 184, 0.16) 25%, rgba(148, 163, 184, 0.32) 50%, rgba(148, 163, 184, 0.16) 75%);
+            background-size: 200% 100%;
+            animation: kineticaShimmer 1.45s infinite ease-in-out;
+        }
+
+        [data-theme="dark"] .view-is-loading .metric-card-top .num::after,
+        [data-theme="dark"] .view-is-loading .compliance-box .num::after {
+            background: linear-gradient(90deg, rgba(255, 255, 255, 0.06) 25%, rgba(220, 38, 38, 0.16) 50%, rgba(255, 255, 255, 0.06) 75%);
+            background-size: 200% 100%;
+        }
+
         .sidebar-user-name {
             font-weight: 800;
             font-size: 0.82rem;
@@ -4529,13 +4579,16 @@
                 min-height: 42px;
             }
 
-            /* Notificaciones toast centradas arriba en móvil */
+            /* Notificaciones toast centradas abajo en móvil */
             #toast-container {
-                left: 0.75rem !important;
-                right: 0.75rem !important;
-                top: calc(0.75rem + env(safe-area-inset-top)) !important;
-                bottom: auto !important;
-                max-width: none !important;
+                left: 50% !important;
+                right: auto !important;
+                top: auto !important;
+                bottom: calc(84px + env(safe-area-inset-bottom)) !important;
+                transform: translateX(-50%) !important;
+                align-items: center !important;
+                width: max-content !important;
+                max-width: calc(100vw - 24px) !important;
             }
         }
         /* ==================== FLUJO DE PRODUCCIÓN (STEPPER EN GRILLAS) ==================== */
@@ -4859,7 +4912,7 @@
                             <h2 style="font-size: 1.05rem; margin: 0; line-height: 1.15;">Kinetica</h2>
                             <p
                                 style="font-size: 0.66rem; color: var(--text-muted); text-transform: uppercase; font-weight: 700; margin: 2px 0 0 0;">
-                                Workspace V.1.22.31</p>
+                                Workspace V.1.5.10</p>
                         </div>
                     </div>
                     <div class="has-tooltip" style="flex-shrink: 0;">
@@ -8552,7 +8605,7 @@
 
     <!-- Contenedor para Notificaciones Toast Flotantes -->
     <div id="toast-container"
-        style="position: fixed; bottom: 24px; right: 24px; z-index: 99999; display: flex; flex-direction: column; gap: 10px; pointer-events: none;">
+        style="position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); z-index: 99999; display: flex; flex-direction: column; align-items: center; gap: 10px; pointer-events: none; max-width: calc(100vw - 24px);">
     </div>
 
     <script>
@@ -8648,7 +8701,7 @@
                 ? 'linear-gradient(135deg, #059669, #047857)'
                 : (type === 'error' ? 'linear-gradient(135deg, #dc2626, #b91c1c)' : 'linear-gradient(135deg, #1f2937, #111827)');
 
-            toast.style.cssText = `background: ${bg}; color: #fff; padding: 10px 16px; border-radius: 10px; font-size: 0.84rem; font-weight: 600; box-shadow: 0 10px 25px rgba(0,0,0,0.3); opacity: 0; transform: translateY(12px) scale(0.95); transition: all 0.28s cubic-bezier(0.16, 1, 0.3, 1); pointer-events: auto; display: flex; align-items: center; justify-content: space-between; gap: 10px; border: 1px solid rgba(255,255,255,0.15);`;
+            toast.style.cssText = `background: ${bg}; color: #fff; padding: 10px 18px; border-radius: 999px; font-size: 0.84rem; font-weight: 600; box-shadow: 0 10px 25px rgba(0,0,0,0.3); opacity: 0; transform: translateY(12px) scale(0.95); transition: all 0.28s cubic-bezier(0.16, 1, 0.3, 1); pointer-events: auto; display: flex; align-items: center; justify-content: space-between; gap: 10px; border: 1px solid rgba(255,255,255,0.15);`;
 
             toast.innerHTML = `
             <div style="display:flex; align-items:center; gap: 8px;">
@@ -8771,8 +8824,91 @@
         }
 
         // ==================== CARGA DE DATOS DESDE BASE DE DATOS ====================
+        function showPanelSkeletonLoaders() {
+            // 1. Dashboard Skeleton
+            const dashView = document.getElementById('view-dashboard');
+            if (dashView) dashView.classList.add('view-is-loading');
+            const funnelBox = document.getElementById('funnel-bars-container');
+            if (funnelBox) {
+                funnelBox.innerHTML = `
+                    <div style="display:flex; flex-direction:column; gap:0.85rem; padding:0.35rem 0;">
+                        <div class="kinetica-skeleton" style="width:45%; height:18px;"></div>
+                        <div class="kinetica-skeleton" style="width:100%; height:150px; border-radius:14px;"></div>
+                        <div style="display:grid; grid-template-columns:repeat(4,1fr); gap:0.6rem;">
+                            <div class="kinetica-skeleton" style="height:26px;"></div>
+                            <div class="kinetica-skeleton" style="height:26px;"></div>
+                            <div class="kinetica-skeleton" style="height:26px;"></div>
+                            <div class="kinetica-skeleton" style="height:26px;"></div>
+                        </div>
+                    </div>
+                `;
+            }
+
+            // 2. Marcas Skeleton
+            const brandsGrid = document.getElementById('brand-cards-grid');
+            if (brandsGrid) {
+                brandsGrid.innerHTML = Array.from({ length: 4 }).map(() => `
+                    <div class="brand-card" style="pointer-events:none; min-height: 170px; display:flex; flex-direction:column; justify-content:space-between; gap:1rem;">
+                        <div style="display:flex; justify-content:space-between; align-items:center;">
+                            <div class="kinetica-skeleton" style="width:44px; height:44px; border-radius:12px;"></div>
+                            <div class="kinetica-skeleton" style="width:82px; height:22px; border-radius:999px;"></div>
+                        </div>
+                        <div style="display:flex; flex-direction:column; gap:8px;">
+                            <div class="kinetica-skeleton" style="width:72%; height:18px;"></div>
+                            <div class="kinetica-skeleton" style="width:52%; height:13px;"></div>
+                        </div>
+                        <div class="kinetica-skeleton" style="width:100%; height:8px; border-radius:999px;"></div>
+                    </div>
+                `).join('');
+            }
+
+            // 3. Time Line Skeleton
+            const tlStream = document.getElementById('timeline-stream');
+            if (tlStream) {
+                tlStream.innerHTML = Array.from({ length: 3 }).map(() => `
+                    <div class="glass-panel" style="padding:1.1rem; margin-bottom:1rem; display:flex; flex-direction:column; gap:0.75rem;">
+                        <div style="display:flex; justify-content:space-between; align-items:center; gap:10px;">
+                            <div class="kinetica-skeleton" style="width:120px; height:22px; border-radius:999px;"></div>
+                            <div class="kinetica-skeleton" style="width:85px; height:16px;"></div>
+                        </div>
+                        <div class="kinetica-skeleton" style="width:60%; height:20px;"></div>
+                        <div class="kinetica-skeleton" style="width:92%; height:14px;"></div>
+                        <div style="display:flex; gap:0.65rem; margin-top:4px;">
+                            <div class="kinetica-skeleton" style="width:130px; height:32px; border-radius:10px;"></div>
+                            <div class="kinetica-skeleton" style="width:130px; height:32px; border-radius:10px;"></div>
+                        </div>
+                    </div>
+                `).join('');
+            }
+
+            // 4. Revisiones Skeleton
+            const revStream = document.getElementById('reviews-stream');
+            if (revStream) {
+                revStream.innerHTML = Array.from({ length: 3 }).map(() => `
+                    <div class="glass-panel" style="padding:1.1rem; margin-bottom:1rem; display:flex; flex-direction:column; gap:0.8rem;">
+                        <div style="display:flex; justify-content:space-between; align-items:center;">
+                            <div class="kinetica-skeleton" style="width:110px; height:22px; border-radius:999px;"></div>
+                            <div class="kinetica-skeleton" style="width:90px; height:22px; border-radius:999px;"></div>
+                        </div>
+                        <div class="kinetica-skeleton" style="width:55%; height:20px;"></div>
+                        <div class="kinetica-skeleton" style="width:100%; height:140px; border-radius:12px;"></div>
+                        <div style="display:flex; gap:0.6rem; justify-content:flex-end;">
+                            <div class="kinetica-skeleton" style="width:100px; height:34px; border-radius:10px;"></div>
+                            <div class="kinetica-skeleton" style="width:100px; height:34px; border-radius:10px;"></div>
+                        </div>
+                    </div>
+                `).join('');
+            }
+        }
+
+        function hidePanelSkeletonLoaders() {
+            const dashView = document.getElementById('view-dashboard');
+            if (dashView) dashView.classList.remove('view-is-loading');
+        }
+
         async function loadDashboardData(isManual = false) {
             const loaderStart = Date.now();
+            showPanelSkeletonLoaders();
             if (isManual && window.M3LoadingIndicator) {
                 window.M3LoadingIndicator.showOverlay('Sincronizando base de datos...', 'Actualizando métricas y registros');
             }
@@ -8839,6 +8975,7 @@
                     showToast('No se pudo conectar con api.php', 'error');
                 }
             } finally {
+                hidePanelSkeletonLoaders();
                 const minDelay = window.M3LoadingIndicator?.MIN_DELAY_MS ?? 1000;
                 const elapsed = Date.now() - loaderStart;
                 const remaining = Math.max(0, minDelay - elapsed);
@@ -15763,6 +15900,7 @@
             } catch (e) {
                 showToast('Error de red al crear usuario', 'error');
             } finally {
+                hidePanelSkeletonLoaders();
                 const minDelay = window.M3LoadingIndicator?.MIN_DELAY_MS ?? 1000;
                 setTimeout(() => {
                     window.M3LoadingIndicator?.hideOverlay();
@@ -17302,6 +17440,7 @@
             } catch (err) {
                 showToast('Error de conexión con el servidor al reiniciar la base de datos', 'error');
             } finally {
+                hidePanelSkeletonLoaders();
                 const minDelay = window.M3LoadingIndicator?.MIN_DELAY_MS ?? 1000;
                 setTimeout(() => {
                     window.M3LoadingIndicator?.hideOverlay();
@@ -17482,6 +17621,7 @@
                 console.error('Error al guardar pieza:', err);
                 showToast('Error de red al comunicarse con el servidor', 'error');
             } finally {
+                hidePanelSkeletonLoaders();
                 const minDelay = window.M3LoadingIndicator?.MIN_DELAY_MS ?? 1000;
                 const elapsed = Date.now() - saveStart;
                 setTimeout(() => {
