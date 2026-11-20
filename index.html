@@ -615,6 +615,131 @@
             box-shadow: 0 8px 22px rgba(220, 38, 38, 0.24);
         }
 
+        /* ==================== ANIMACIONES DE ICONOS EN BARRA LATERAL ==================== */
+        @keyframes sidebarIconPop {
+            0% { transform: scale(0.82); }
+            55% { transform: scale(1.22) rotate(-6deg); }
+            100% { transform: scale(1.06) rotate(0deg); }
+        }
+
+        @keyframes sidebarBellRing {
+            0%, 100% { transform: rotate(0deg); }
+            20% { transform: rotate(18deg) scale(1.12); }
+            40% { transform: rotate(-16deg) scale(1.12); }
+            60% { transform: rotate(12deg) scale(1.08); }
+            80% { transform: rotate(-8deg); }
+        }
+
+        .sidebar .menu-item .material-symbols-rounded,
+        .sidebar .sidebar-btn-full .material-symbols-rounded,
+        .sidebar .sidebar-nav-btn .material-symbols-rounded,
+        .sidebar .sidebar-timeline-card .material-symbols-rounded {
+            transition: transform 0.28s cubic-bezier(0.34, 1.56, 0.64, 1), color 0.2s ease;
+            display: inline-block;
+        }
+
+        .sidebar .menu-item:hover .material-symbols-rounded {
+            transform: scale(1.18) rotate(-6deg);
+            color: var(--neon-red);
+        }
+
+        .sidebar .menu-item.active .material-symbols-rounded {
+            animation: sidebarIconPop 0.42s cubic-bezier(0.34, 1.56, 0.64, 1);
+            transform: scale(1.06);
+        }
+
+        #nav-item-upload:hover .material-symbols-rounded {
+            transform: translateY(-3px) scale(1.16);
+        }
+
+        #nav-item-reports:hover .material-symbols-rounded {
+            transform: translateY(-2px) scale(1.16) rotate(5deg);
+        }
+
+        #sidebar-notif-btn:hover .material-symbols-rounded {
+            animation: sidebarBellRing 0.55s ease;
+            color: var(--neon-red);
+        }
+
+        #sidebar-darkmode-btn:hover .material-symbols-rounded {
+            transform: rotate(28deg) scale(1.16);
+            color: var(--neon-red);
+        }
+
+        #sidebar-settings-btn:hover .material-symbols-rounded {
+            transform: rotate(90deg) scale(1.14);
+            color: var(--neon-red);
+        }
+
+        #sidebar-logout-btn:hover .material-symbols-rounded {
+            transform: translateX(3px) scale(1.14);
+        }
+
+        .sidebar-timeline-card:hover > div:first-child .material-symbols-rounded {
+            transform: scale(1.16) rotate(-8deg);
+        }
+
+        .sidebar-nav-btn:first-of-type:hover .material-symbols-rounded {
+            transform: translateX(-2px) scale(1.15);
+        }
+
+        .sidebar-nav-btn:last-of-type:hover .material-symbols-rounded {
+            transform: translateX(2px) scale(1.15);
+        }
+
+        .sidebar-collapse-icon-btn:hover svg {
+            transform: scale(1.15);
+        }
+
+        /* ==================== ANIMACIONES DE ICONOS EN CONFIGURACIÓN, TIME LINE Y REVISIONES ==================== */
+        .config-nav .config-tab-btn .material-symbols-rounded,
+        #view-timeline .header-flex .material-symbols-rounded,
+        #view-reviews .header-flex .material-symbols-rounded,
+        .tl-metric-widget-top .material-symbols-rounded {
+            transition: transform 0.28s cubic-bezier(0.34, 1.56, 0.64, 1), color 0.2s ease;
+            display: inline-block;
+        }
+
+        .config-nav .config-tab-btn:hover .material-symbols-rounded {
+            transform: scale(1.18) rotate(-8deg);
+        }
+
+        .config-nav .config-tab-btn.active .material-symbols-rounded {
+            animation: sidebarIconPop 0.42s cubic-bezier(0.34, 1.56, 0.64, 1);
+            transform: scale(1.08);
+        }
+
+        #view-timeline .header-flex .btn-float:hover .material-symbols-rounded,
+        #view-reviews .header-flex .btn-float:hover .material-symbols-rounded,
+        .btn-sync-unified:hover .material-symbols-rounded {
+            transform: rotate(180deg) scale(1.12);
+        }
+
+        .btn-sync-unified {
+            display: inline-flex !important;
+            align-items: center !important;
+            gap: 6px !important;
+        }
+
+        .btn-sync-unified .material-symbols-rounded {
+            transition: transform 0.28s cubic-bezier(0.34, 1.56, 0.64, 1);
+            display: inline-block;
+        }
+
+        #view-timeline .header-flex .btn-primary:hover .material-symbols-rounded,
+        #view-reviews .header-flex .btn-primary:hover .material-symbols-rounded {
+            transform: scale(1.18) rotate(90deg);
+        }
+
+        #view-reviews .header-flex > div:first-child > div:first-child:hover .material-symbols-rounded,
+        #view-timeline .header-flex > div:first-child > div:first-child:hover .material-symbols-rounded {
+            transform: scale(1.2) rotate(-10deg);
+        }
+
+        .tl-metric-widget:hover .tl-metric-widget-top .material-symbols-rounded {
+            transform: scale(1.22) rotate(-8deg);
+        }
+
         @keyframes monthContentReveal {
             0% {
                 opacity: 0.35;
@@ -4992,7 +5117,7 @@
                             <h2 style="font-size: 1.05rem; margin: 0; line-height: 1.15;">Kinetica</h2>
                             <p
                                 style="font-size: 0.66rem; color: var(--text-muted); text-transform: uppercase; font-weight: 700; margin: 2px 0 0 0;">
-                                Workspace V.1.5.50</p>
+                                Workspace V.1.5.70</p>
                         </div>
                     </div>
                     <div class="has-tooltip" style="flex-shrink: 0;">
@@ -5176,8 +5301,8 @@
                         </p>
                     </div>
                     <div style="display: flex; gap: 0.75rem; flex-wrap: wrap;">
-                        <button class="btn-float btn-secondary" onclick="renderTimeline()">
-                            <span><span class="material-symbols-rounded">sync</span></span> Actualizar
+                        <button type="button" class="btn-float btn-secondary btn-sync-unified" onclick="renderTimeline()" title="Actualizar">
+                            <span class="material-symbols-rounded">sync</span> Actualizar
                         </button>
                         <button class="btn-float btn-primary" onclick="openModal()">
                             <span style="font-size: 1.1rem;">+</span> Nueva Pieza
@@ -5327,8 +5452,8 @@
                             ajustes directamente al diseñador.</p>
                     </div>
                     <div style="display: flex; gap: 0.75rem; flex-wrap: wrap; align-items: center;">
-                        <button class="btn-float btn-secondary" onclick="renderReviews()" title="Actualizar Revisiones">
-                            <span><span class="material-symbols-rounded">sync</span></span>
+                        <button type="button" class="btn-float btn-secondary btn-sync-unified" onclick="renderReviews()" title="Actualizar">
+                            <span class="material-symbols-rounded">sync</span> Actualizar
                         </button>
                         <button class="btn-float btn-primary" onclick="openModal()">
                             <span style="font-size: 1.1rem;">+</span> Nueva Pieza
@@ -5617,8 +5742,8 @@
                         <p class="text-muted">Piezas aprobadas de tus marcas asignadas listas para adjuntar el enlace de Google Drive con los archivos originales.</p>
                     </div>
                     <div style="display: flex; gap: 0.75rem; flex-wrap: wrap; align-items: center;">
-                        <button type="button" class="btn-float btn-secondary" onclick="renderUploadSection()" title="Actualizar lista">
-                            <span class="material-symbols-rounded">sync</span>
+                        <button type="button" class="btn-float btn-secondary btn-sync-unified" onclick="renderUploadSection()" title="Actualizar">
+                            <span class="material-symbols-rounded">sync</span> Actualizar
                         </button>
                     </div>
                 </div>
